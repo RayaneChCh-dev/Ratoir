@@ -11,6 +11,7 @@
 [ext_resource type="Script" path="res://scripts/hud.gd" id="9_hud"]
 
 [ext_resource type="PackedScene" path="res://scenes/rat.tscn" id="10_rat"]
+[ext_resource type="PackedScene" path="res://scenes/ui/onboarding.tscn" id="11_onboarding"]
 
 [sub_resource type="ProceduralSkyMaterial" id="SkyMat"]
 sky_top_color = Color(0.55, 0.72, 0.9, 1)
@@ -145,3 +146,4 @@ script = ExtResource("2_joystick")
 [node name="Rat" parent="." instance=ExtResource("10_rat")]
 position = Vector3(0, 0, -10.4)
 
+[node name="Onboarding" parent="." instance=ExtResource("11_onboarding")]
