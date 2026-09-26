@@ -25,6 +25,7 @@ func _run() -> void:
 	var scene = load("res://scenes/main.tscn").instantiate()
 	get_tree().root.add_child(scene)
 	await get_tree().process_frame
+	game.reset()  # équivaut à appuyer sur PLAY : enlève la pause de l'écran d'accueil
 	var rat: Node = scene.get_node_or_null("Rat")
 	if rat:
 		rat.process_mode = Node.PROCESS_MODE_DISABLED  # pas de sabotage pendant ce test
