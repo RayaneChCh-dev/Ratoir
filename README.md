@@ -5,7 +5,7 @@
 <p align="center"><img src="docs/images/screenshot.png" width="300" alt="Capture du jeu : le cuisinier bleu tient une assiette, le trou du rat est dans le mur du fond"></p>
 
 Projet de hackathon réalisé avec **Godot 4.7** et exporté pour le **navigateur mobile** (HTML5, hébergé sur itch.io).
-Un commentateur IA réagit en direct à la partie et un juge IA note les plats (voir [le concept complet](docs/CONCEPT.md)).
+Un critique affamé commente la partie à voix haute (voix Gradium). Le juge IA et le rat arrivent ensuite (voir [le concept complet](docs/CONCEPT.md)).
 
 ---
 
@@ -14,6 +14,7 @@ Un commentateur IA réagit en direct à la partie et un juge IA note les plats (
 - [Le jeu en 30 secondes](#le-jeu-en-30-secondes)
 - [État d'avancement](#état-davancement)
 - [Démarrer (développeurs)](#démarrer-développeurs)
+- [Entendre le critique](#entendre-le-critique)
 - [Contrôles](#contrôles)
 - [Tester sur téléphone](#tester-sur-téléphone)
 - [Publier sur itch.io](#publier-sur-itchio)
@@ -36,7 +37,7 @@ Un commentateur IA réagit en direct à la partie et un juge IA note les plats (
 | ★★      | 10                 |
 | ★★★     | 15                 |
 
-- **L'IA** : un commentateur sportif (texte + voix) commente la partie, un juge donne un nom absurde et une critique à chaque plat, et un récap' personnalisé est généré à la fin. L'IA ne bloque **jamais** le jeu (banques de répliques pré-générées en secours).
+- **Le critique** : une voix anglaise, affamée et impatiente. Toutes les quelques secondes, elle commente l'action que tu as faite le plus (prendre une tomate, découper, cuire, livrer). Le jeu n'attend jamais la voix. Le juge de plats et le récap' de fin ne sont pas encore là.
 
 ## État d'avancement
 
@@ -46,7 +47,7 @@ Un commentateur IA réagit en direct à la partie et un juge IA note les plats (
 | 2 | Boucle de cuisine complète (ramasser, découper, cuire, livrer, score) + passage en portrait | ✅ Terminé |
 | 3 | Le rat et ses sabotages + « taper le rat » | ⏳ À faire |
 | 4 | Manche complète : écran titre, chrono, écran de fin avec étoiles, équilibrage | ⏳ À faire |
-| 5 | Journal d'événements + commentateur IA (texte + voix) | ⏳ À faire |
+| 5 | Critique vocal : phrase selon l'action dominante + voix Gradium | ✅ Démo jouable |
 | 6 | Juge de plats + personnalité du rat + récap' final IA | ⏳ À faire |
 | 7 | Polish : vrais modèles 3D, animations, sons, effets | ⏳ À faire |
 | 8 | Déploiement itch.io, tests sur téléphones, script et répétition de la démo | ⏳ À faire |
@@ -67,6 +68,34 @@ Chaque phase restante a sa fiche détaillée dans [`docs/phases/`](docs/phases/R
 > 💡 Sur ordinateur, la souris simule le doigt (`emulate_touch_from_mouse`) : clique-glisse n'importe où pour faire apparaître le joystick. Le clavier marche aussi.
 
 Avant de coder, lis [`docs/CONTRIBUTING.md`](docs/CONTRIBUTING.md) (règles pour ne pas se marcher dessus dans les scènes Godot) et [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md).
+
+## Entendre le critique
+
+Deux programmes : le proxy qui appelle Gradium, puis le jeu.
+
+```bash
+cp server/.env.example server/.env
+```
+
+Dans `server/.env`, renseigne `GRADIUM_API_KEY`. Laisse `GRADIUM_VOICE_ID` vide pour la voix anglaise Mark. Ce fichier est ignoré par git.
+
+Terminal 1 :
+
+```bash
+python3 server/speak.py
+```
+
+Tu dois voir `critic proxy on http://127.0.0.1:8787/speak`. Laisse ce terminal ouvert.
+
+Terminal 2 :
+
+```bash
+godot --path .
+```
+
+Après environ deux secondes, le sous-titre « I'm hungry. The chef had better hurry. » s'affiche et la voix le lit. Ensuite, joue : la phrase suivante suit l'action la plus fréquente sur environ 4 secondes.
+
+Si le proxy est arrêté, le sous-titre s'affiche quand même et la cuisine continue.
 
 ## Contrôles
 
@@ -103,7 +132,7 @@ Détails et checklist de démo : [`docs/phases/PHASE-8-demo.md`](docs/phases/PHA
 
 ```
 Ratoir/
-├── project.godot            # configuration Godot (portrait 720×1280, rendu Compatibility, autoload GameState)
+├── project.godot            # configuration Godot (portrait 720×1280, rendu Compatibility, autoloads GameState et Commentator)
 ├── export_presets.cfg       # preset d'export « Web » (sans threads)
 ├── scenes/
 │   ├── main.tscn            # la cuisine : sol, murs, trou du rat, stations, joueur, caméra, UI
@@ -114,6 +143,7 @@ Ratoir/
 │   └── delivery_counter.tscn# comptoir de livraison
 ├── scripts/
 │   ├── game_state.gd        # autoload : score, étoiles, journal d'événements
+│   ├── ai/commentator.gd    # autoload : critique vocal (fenêtre d'actions + sous-titre)
 │   ├── cook.gd              # base du cuisinier : objet tenu en main
 │   ├── player.gd            # déplacement du joueur (joystick + clavier)
 │   ├── touch_joystick.gd    # joystick tactile flottant plein écran
@@ -125,6 +155,9 @@ Ratoir/
 │   ├── progress_bar_3d.gd   # barre de progression au-dessus des stations
 │   └── hud.gd               # affichage du score
 ├── shaders/checker_floor.gdshader  # carrelage du sol
+├── server/
+│   ├── speak.py             # proxy local : texte → voix Gradium (WAV)
+│   └── .env.example         # GRADIUM_API_KEY, sans valeur (le vrai .env est ignoré)
 ├── tools/
 │   ├── export_web.sh        # export HTML5 + zip itch.io
 │   └── serve_https.py       # serveur HTTPS local pour tester sur téléphone
