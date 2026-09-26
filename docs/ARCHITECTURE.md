@@ -96,7 +96,7 @@ Le rat traverse le joueur ; seul `ContactArea` déclenche le renversement.
 | `round_started` / `round_ended(level, score, health)` | signaux | Début/fin d'un niveau |
 | `event_logged(entry)` | signal | Le commentateur l'écoute (Phase 5) |
 
-Chaque niveau dure 90 s au niveau 1, puis 5 s de moins par niveau (minimum 60 s). Le score est cumulatif : atteindre 5, 10, 15… plats valide le niveau suivant. Un chrono expiré retire une vie et relance le niveau ; un dégât direct du rat passe par `take_damage()`. La Phase 3 doit connecter les sabotages qui touchent le joueur et appliquer `difficulty_scale()` à la vitesse/fréquence du rat. Voir [PHASE-4](phases/PHASE-4-manche.md).
+Chaque niveau dure 90 s au niveau 1, puis 5 s de moins par niveau (minimum 60 s). Le score est cumulatif : atteindre 5, 10, 15… plats valide le niveau suivant. Un chrono expiré retire une vie et relance le niveau ; un dégât direct du rat passe par `take_damage()`. Le renversement au contact retire une vie via `take_damage()` ; le vol et l’extinction de plaque ne retirent pas de vie. Le rat écoute `difficulty_changed` : vitesse multipliée et délai de sortie divisé par `difficulty_scale()`, sans modifier la ressource de profil. Le délai de fuite après un coup reste de 10 s. Voir [PHASE-4](phases/PHASE-4-manche.md).
 
 ### `Item` (`scripts/item.gd`) : un ingrédient
 - `enum State { RAW, CHOPPED, COOKED }` : tomate crue → tranches → assiette.
@@ -135,7 +135,7 @@ Chaque niveau dure 90 s au niveau 1, puis 5 s de moins par niveau (minimum 60 s)
 - Poursuite limitée à 4 s, trajet normal à 6 s. Retour/fuite bloqués : retour caché au trou au bout de 6 s ; un objet volé est laissé au sol avant ce secours.
 - Le vol est enregistré à l’arrivée au trou. `hit() -> bool` indique si le coup est accepté, lâche l’objet, puis impose une fuite et 10 s caché.
 - `FloorItem` transfère l’objet à un `Cook` libre dans sa zone, y compris si ses mains se libèrent après son entrée ; le rebond est arrêté au ramassage.
-- Phase 4 devra remplacer la protection locale par les signaux de manche et arrêter le rat à la fin.
+- À chaque `round_started`, le rat retourne caché au trou avec 5 s de protection ; un objet volé est déposé au sol et reste récupérable. La pause de fin de partie fige le rat, le joueur et les stations. Le HUD reste actif et le joystick est remis à zéro.
 
 ### `IngredientSpawn`, `DeliveryCounter`
 - Le bac donne `Item.new()` à tout `Cook` qui arrive les mains vides.

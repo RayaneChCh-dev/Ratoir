@@ -3,6 +3,7 @@ extends RichTextLabel
 
 
 func _ready() -> void:
+	process_mode = Node.PROCESS_MODE_ALWAYS
 	GameState.score_changed.connect(_refresh.unbind(1))
 	GameState.level_changed.connect(_refresh.unbind(2))
 	GameState.health_changed.connect(_refresh.unbind(1))

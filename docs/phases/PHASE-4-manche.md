@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Statut** | ⏳ À faire |
+| **Statut** | 🚧 En cours — progression et rat connectés |
 | **Dépend de** | Phase 2 ✅ (l'équilibrage final dépend aussi de la Phase 3) |
 | **Débloque** | Phase 6 (récap' sur l'écran de fin), Phase 8 (démo) |
 | **Profil** | Dev gameplay/UI Godot |
@@ -149,3 +149,14 @@ Méthode :
 - Récap' généré par IA → Phase 6 (cette phase prévoit la zone de texte et un texte de secours).
 - Nom et réplique du rat pendant le compte à rebours → Phase 6.
 - Habillage graphique définitif des écrans → Phase 7.
+
+## 9. Intégration après merge de la Phase 3
+
+- `staging` intégré à `phase-4/level-progression`.
+- Difficulté du rat connectée aux niveaux : vitesse × multiplicateur, délai de sortie ÷ multiplicateur, plafond 2×. Le profil partagé reste inchangé.
+- Un renversement au contact retire une vie une seule fois ; les autres sabotages ne retirent pas de vie.
+- Chaque début de manche cache le rat, rétablit 5 s de protection et rend son éventuel objet volé récupérable au sol.
+- À zéro vie, la pause fige le gameplay ; le HUD affiche la fin et le joystick est relâché.
+- Test automatisé : `godot --headless --path . res://tests/phase4_integration.tscn` (progression, dégâts, expiration, pause, reset et plafonds).
+
+Restent à réaliser : titre/déverrouillage audio, compte à rebours, alerte visuelle du chrono, écran de résultat/rejouer, équilibrage avec joueurs et validation sur téléphone. Le reset de progression est testé ; le parcours complet Rejouer avec rechargement de cuisine reste à implémenter.
