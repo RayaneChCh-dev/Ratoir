@@ -13,4 +13,7 @@ Thumbs.db
 .idea/
 
 # Secrets du serveur relais IA (Phase 5)
+.env
 server/.env
+__pycache__/
+*.pyc

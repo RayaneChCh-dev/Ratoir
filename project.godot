@@ -17,6 +17,7 @@ config/features=PackedStringArray("4.7", "GL Compatibility")
 [autoload]
 
 GameState="*res://scripts/game_state.gd"
+Commentator="*res://scripts/ai/commentator.gd"
 
 [display]
 
