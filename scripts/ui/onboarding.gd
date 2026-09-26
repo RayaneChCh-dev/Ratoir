@@ -50,6 +50,16 @@ func _show_game_over() -> void:
 	_open()
 
 
+func _show_victory() -> void:
+	_title.text = "VICTOIRE !"
+	_title.add_theme_font_size_override("font_size", 96)
+	_subtitle.text = "Les 3 manches sont réussies  ·  %d plat%s servi%s" % [
+		GameState.score, "s" if GameState.score > 1 else "", "s" if GameState.score > 1 else ""]
+	_steps_card.visible = false
+	_button.text = "REJOUER"
+	_open()
+
+
 func _open() -> void:
 	get_tree().paused = true
 	visible = true
@@ -73,6 +83,8 @@ func _on_play_pressed() -> void:
 func _on_round_state_changed(state: int) -> void:
 	if state == GameState.RoundState.GAME_OVER:
 		_show_game_over()
+	elif state == GameState.RoundState.WON:
+		_show_victory()
 
 
 func _start_pulse() -> void:
