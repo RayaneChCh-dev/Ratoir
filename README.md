@@ -5,7 +5,7 @@
 <p align="center"><img src="docs/images/screenshot.png" width="300" alt="Capture du jeu : le cuisinier bleu tient une assiette, le trou du rat est dans le mur du fond"></p>
 
 Projet de hackathon réalisé avec **Godot 4.7** et exporté pour le **navigateur mobile** (HTML5, hébergé sur itch.io).
-Un critique affamé commente la partie à voix haute (voix Gradium). Le juge IA et le rat arrivent ensuite (voir [le concept complet](docs/CONCEPT.md)).
+Le chef cuisine dans la cuisine, un rat sabote, un juge en salle note chaque plat, et un critique commente avec neuf phrases déjà enregistrées (voir [le concept complet](docs/CONCEPT.md)).
 
 ---
 
@@ -27,19 +27,14 @@ Un critique affamé commente la partie à voix haute (voix Gradium). Le juge IA 
 
 - **Format** : portrait, plein écran, sur téléphone (dans le navigateur).
 - **Vue** : 3D en plongée façon *Overcooked*. La caméra ne tourne jamais ; elle suit le joueur en glissant quand il s'éloigne du centre de l'écran.
-- **Boucle** : prendre une tomate au bac → la **découper** → la **cuire** → la **livrer** au comptoir → **+1 point**.
-- **L'ennemi** : un **rat** sort d'un trou dans le mur pour saboter (éteindre la plaque, renverser le plat, voler un ingrédient…). Pour l'instant, le chef ne peut rien contre lui : il faut l'éviter et réparer ses dégâts.
-- **Progression** : une partie dure 3 manches, à 5, 10 puis 15 plats cumulés. Le chrono passe de 90 s à 75 s puis 60 s, la recette accélère un peu, et le rat court plus vite. Pas de vies : si le chrono arrive à 0 avant l'objectif, la partie se termine. La 3e manche réussie gagne la partie. Un plat renversé est perdu, sans autre pénalité.
-- **Musique** : le morceau monte d'intensité à chaque manche — une minute de soundtrack par manche, bouclée tant que le chrono de la manche dure.
-- **Étoiles** : le score cumulé donne des étoiles :
-
-| Étoiles | Points nécessaires |
-|:-------:|:------------------:|
-| ★       | 5                  |
-| ★★      | 10                 |
-| ★★★     | 15                 |
-
-- **Le critique** : une voix anglaise, affamée et impatiente. Toutes les quelques secondes, elle commente l'action que tu as faite le plus (prendre une tomate, découper, cuire, livrer). Le jeu n'attend jamais la voix. Le juge de plats et le récap' de fin ne sont pas encore là.
+- **Deux pièces** : la **cuisine** (bac, découpe, plaque, comptoir) et la **salle**, où le juge est assis.
+- **Boucle** : prendre une tomate au bac → la **découper** → la **cuire** → la **livrer** au comptoir → **+1 point**. Tout se fait au contact, sans bouton.
+- **L'ennemi** : un **rat** sort d'un trou pour éteindre la plaque, renverser le plat ou voler un ingrédient. On rallume la plaque au contact. En manche 3, quand il court plus vite que le chef, un bac à **pièges** apparaît : on en prend un et on le pose (bouton **POSER** ou <kbd>E</kbd>).
+- **Progression** : 3 manches, à 5, 10 puis 15 plats cumulés. Le chrono passe de 90 s à 75 s puis 60 s, la recette accélère, et le rat court plus vite (4 m/s, 5,6 m/s, puis 7,2 m/s ; le chef reste à 6 m/s). Pas de vies : chrono à 0 avant l'objectif = partie terminée. La 3e manche réussie = victoire.
+- **Écrans** : **PLAY** au départ (la partie est en pause tant qu'on n'a pas touché), **VICTOIRE !** ou **PARTIE TERMINÉE**, puis **REJOUER**.
+- **Le juge** : à chaque livraison, l'assiette va jusqu'à sa table. Il donne un nom de plat, une note sur 5 et une phrase, tirés d'une banque locale. Ça ne met pas le jeu en pause.
+- **Le critique** : neuf phrases anglaises déjà enregistrées. Toutes les quelques secondes, il commente l'action la plus fréquente (prendre, découper, cuire, livrer). Le jeu n'attend jamais la voix.
+- **Musique** : une minute de morceau par manche, bouclée tant que le chrono dure. Elle démarre après **PLAY** (geste exigé par le navigateur).
 
 ## État d'avancement
 
@@ -48,10 +43,10 @@ Un critique affamé commente la partie à voix haute (voix Gradium). Le juge IA 
 | 1 | Squelette : scène 3D, caméra, joueur, joystick tactile, export Web | ✅ Terminé |
 | 2 | Boucle de cuisine complète (ramasser, découper, cuire, livrer, score) + passage en portrait | ✅ Terminé |
 | 3 | Le rat et ses sabotages (le coup pour le taper est désactivé pour l'instant) | ✅ Terminé |
-| 4 | Manche complète : partie à 3 manches jouable ; écran titre et écran de fin illustré à faire | ⏳ En cours |
-| 5 | Critique vocal : phrase selon l'action dominante + voix Gradium | ✅ Démo jouable |
-| 6 | Juge de plats + personnalité du rat + récap' final IA | ⏳ À faire |
-| 7 | Polish : vrais modèles 3D, animations, sons, effets | ⏳ À faire |
+| 4 | Manche : 3 niveaux, chrono, écran PLAY, victoire et défaite | ✅ Jouable |
+| 5 | Critique vocal : neuf phrases MP3 selon l'action dominante | ✅ Démo jouable |
+| 6 | Juge de plats local ; personnalité du rat et récap' IA encore à faire | ⏳ En cours |
+| 7 | Modèles 3D du chef, du rat, du juge et de la cuisine branchés ; sons et effets encore à faire | ⏳ En cours |
 | 8 | Déploiement itch.io, tests sur téléphones, script et répétition de la démo | ⏳ À faire |
 | 9 | Recettes à plusieurs ingrédients, plan de dressage, commandes | 💡 Plus tard |
 
@@ -80,15 +75,17 @@ Les neuf phrases sont déjà enregistrées dans `assets/audio/critic/` (voix Mar
 godot --path .
 ```
 
-Après environ deux secondes, la voix dit « I'm hungry. The chef had better hurry. » Il n'y a pas de sous-titre. Ensuite, joue : la phrase suivante suit l'action la plus fréquente sur environ 4 secondes.
+Appuie sur **PLAY**. La voix dit « I'm hungry. The chef had better hurry. » Il n'y a pas de sous-titre. Ensuite, la phrase suivante suit l'action la plus fréquente sur environ 4 secondes.
 
 ## Contrôles
 
 | Action | Téléphone | Ordinateur |
 |--------|-----------|------------|
 | Se déplacer | Poser le pouce **n'importe où** et glisser (joystick flottant) | Clic-glisser, ou <kbd>Z</kbd><kbd>Q</kbd><kbd>S</kbd><kbd>D</kbd> / <kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> / flèches |
-| Ramasser, poser, livrer | **Automatique au contact** : il suffit de marcher jusqu'au tapis coloré devant un meuble | idem |
-| Taper le rat | *Désactivé pour l'instant* (voir CONCEPT §8.3) | — |
+| Ramasser, poser, livrer | **Automatique au contact** : marcher jusqu'au tapis devant un meuble | idem |
+| Poser un piège | Bouton **POSER** (manche 3, seulement si un piège est en main) | <kbd>E</kbd> |
+| Taper le rat | *Désactivé* (voir CONCEPT §8.3). La parade jouable est le piège | — |
+| Commencer / rejouer | **PLAY**, puis **REJOUER** | idem |
 
 ## Tester sur téléphone
 
@@ -117,44 +114,37 @@ Détails et checklist de démo : [`docs/phases/PHASE-8-demo.md`](docs/phases/PHA
 
 ```
 Ratoir/
-├── project.godot            # configuration Godot (portrait 720×1280, rendu Compatibility, autoloads GameState et Commentator)
-├── export_presets.cfg       # preset d'export « Web » (sans threads)
+├── project.godot                 # portrait 720×1280, rendu Compatibility
+│                                 # autoloads : GameState, Commentator
+├── export_presets.cfg            # export Web, sans threads
 ├── scenes/
-│   ├── main.tscn            # la cuisine : sol, murs, trou du rat, stations, joueur, caméra, UI
-│   ├── player.tscn          # le cuisinier (CharacterBody3D)
-│   ├── chop_station.tscn    # station Découpe
-│   ├── cook_station.tscn    # station Cuisson
-│   ├── ingredient_spawn.tscn# bac à tomates
-│   └── delivery_counter.tscn# comptoir de livraison
+│   ├── main.tscn                 # cuisine, salle, joueur, rat, juge, musique, UI
+│   ├── player.tscn               # le chef
+│   ├── rat.tscn                  # le rat et ses sabotages
+│   ├── judge.tscn                # le juge à table, bulle de note
+│   ├── chop_station.tscn         # découpe
+│   ├── cook_station.tscn         # cuisson
+│   ├── ingredient_spawn.tscn     # bac à tomates
+│   ├── delivery_counter.tscn     # comptoir : +1 point
+│   ├── trap_bin.tscn             # bac à pièges (manche 3)
+│   ├── rat_trap.tscn             # piège posé au sol
+│   └── ui/
+│       ├── game_hud.tscn         # niveau, chrono, score / objectif
+│       └── onboarding.tscn       # PLAY, VICTOIRE, PARTIE TERMINÉE
 ├── scripts/
-│   ├── game_state.gd        # autoload : score, étoiles, journal d'événements
-│   ├── ai/commentator.gd    # autoload : critique vocal (fenêtre d'actions, voix seule)
-│   ├── cook.gd              # base du cuisinier : objet tenu en main
-│   ├── player.gd            # déplacement du joueur (joystick + clavier)
-│   ├── touch_joystick.gd    # joystick tactile flottant plein écran
-│   ├── camera_follow.gd     # caméra en plongée qui suit le joueur, bornée à la cuisine
-│   ├── item.gd              # ingrédient : brut → découpé → cuit
-│   ├── station.gd           # Découpe / Cuisson (transformation temporisée)
-│   ├── ingredient_spawn.gd  # donne une tomate au contact
-│   ├── delivery_counter.gd  # livre un plat cuit → +1 point
-│   ├── progress_bar_3d.gd   # barre de progression au-dessus des stations
-│   └── hud.gd               # affichage du score
-├── shaders/checker_floor.gdshader  # carrelage du sol
-├── server/
-│   ├── speak.py             # ancien proxy Gradium, plus utilisé par le jeu
-│   └── .env.example         # GRADIUM_API_KEY, sans valeur (le vrai .env est ignoré)
-├── assets/audio/critic/     # neuf phrases du critique, déjà enregistrées
-├── assets/models/           # modèles 3D (.glb) : characters/chef.glb…
-├── tools/
-│   ├── export_web.sh        # export HTML5 + zip itch.io
-│   ├── optimize_glb.py      # allège un .glb (textures, animations fusionnées) sans Blender
-│   └── serve_https.py       # serveur HTTPS local pour tester sur téléphone
-└── docs/
-    ├── CONCEPT.md           # le concept complet du jeu (document de référence)
-    ├── ARCHITECTURE.md      # comment le code est organisé, contrats entre modules
-    ├── ASSETS.md            # trouver / générer / intégrer de meilleurs modèles 3D
-    ├── CONTRIBUTING.md      # règles de travail en équipe (git + Godot)
-    └── phases/              # une fiche détaillée par phase
+│   ├── game_state.gd             # manche, chrono, score, journal
+│   ├── soundtrack.gd             # une minute de morceau par manche
+│   ├── ai/commentator.gd         # neuf phrases MP3, selon l'action dominante
+│   ├── judge/                    # note locale, data/judge_bank.json
+│   ├── rat/                      # machine à états et sabotages
+│   └── ui/                       # HUD et écrans d'accueil / fin
+├── assets/
+│   ├── audio/sizzling_bistro_panic.mp3
+│   ├── audio/critic/             # neuf phrases du critique
+│   └── models/                   # chef, rat, juge, meubles, plats
+├── data/judge_bank.json          # noms de plats et critiques du juge
+├── server/                       # ancien proxy Gradium, plus appelé en jeu
+└── docs/                         # concept, architecture, phases
 ```
 
 ## Documentation
