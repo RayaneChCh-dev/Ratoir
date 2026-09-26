@@ -3,6 +3,7 @@ extends TouchScreenButton
 
 
 func _ready() -> void:
+	visible = false  # caché d'emblée : _process ne tourne pas tant que le jeu est en pause (écran d'accueil)
 	get_viewport().size_changed.connect(_place)
 	_place()
 
