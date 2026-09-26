@@ -37,14 +37,35 @@ Que le jeu soit **agréable à regarder et à écouter**, pas seulement fonction
 - [ ] Remplir `CREDITS.md` au fur et à mesure.
 
 ### Étape 2 — Intégrer le chef et les meubles (dès maintenant, **en se coordonnant** avec la personne de la Phase 3, qui modifie aussi `player.tscn` et les stations)
-- [ ] Chef dans `player.tscn` → `Model` ([ASSETS.md §7](../ASSETS.md#7-intégrer-un-modèle-dans-godot-pas-à-pas)), et animations idle/walk branchées dans `player.gd`.
-- [ ] Meubles : plan de travail, planche, plaque, caisse, passe-plat (garder `Area3D`, `ItemSlot`, `Rug`, `ApproachPoint`).
+- [x] Chef dans `player.tscn` → `Model` ([ASSETS.md §7](../ASSETS.md#7-intégrer-un-modèle-dans-godot-pas-à-pas)), animations **walk** et **run** branchées dans `player.gd`.
+- [ ] Animation **idle** du chef (Meshy → *Animate* → Idle, puis `tools/optimize_glb.py --anim-from`). En attendant, pose figée.
+- [x] Meubles : **découpe**, **cuisinière**, **caisse de tomates** et **comptoir de livraison** (`pass.glb`) sont intégrés. `counter.glb` (plan de travail simple) est disponible pour du décor.
+- [x] **Assiette cuisinée** (`food/plate_dish.glb`) : visuel de l'état `COOKED` dans `item.gd` (constante `MODELS`).
+- [ ] **Tomate crue** et **tranches** : il manque les modèles ; formes simples en attendant (ajouter une ligne dans `Item.MODELS`).
+- [ ] **Poêle** (`kitchen/frying_pan.glb`, prête) : à afficher dans la main du chef pendant le coup sur le rat (Phase 3 ou 7).
+
+  Méthode suivie pour chaque meuble : modèle mis à l'échelle × 1,4 (1,4 m au sol, pieds à `y = 0`) sous un nœud `Model` ; l'ancien cube `Counter` est gardé **invisible** pour la collision ; `ItemSlot` remonté sur le dessus du modèle ; `Area3D`, `Rug`, `Progress` et `Label3D` inchangés. Sur la cuisinière, le disque **`Burner`** est conservé, posé sur le brûleur, car la Phase 3 le colore (orange allumé / gris éteint).
 - [ ] Tomate, tranches et assiette dans `item.gd` (constante `MODELS`).
 - [ ] Trou du rat (arche).
 
-### Étape 3 — Intégrer le rat (après la Phase 3)
+### Étape 3 — Intégrer le rat (après la Phase 3) ✅ fait
+**Le modèle est branché dans `scenes/rat.tscn`** (nœud `Model/Visual`, `rat.gd` appelle `set_speed()` à chaque image et `set_stunned()` sur un coup, avec 0,8 s assommé sur place avant la fuite). Étapes suivies, pour référence :
+
+**Le modèle est prêt** : `scenes/models/rat_model.tscn` (rat animé `run` + version assommée, déjà à la bonne échelle, ≈ 1,2 m de long, regarde vers +Z). À brancher dans `scenes/rat.tscn` par la personne de la Phase 3 :
+1. Sous `Rat/Model`, supprimer `Body` et `Tail`, puis instancier `scenes/models/rat_model.tscn` et le nommer **`Visual`**. Garder `HoldPoint` (le remonter vers la bouche : ≈ `(0, 0.45, 0.55)`).
+2. Dans `rat.gd`, à la fin de `_physics_process` : `$Model/Visual.set_speed(Vector2(velocity.x, velocity.z).length())`.
+3. Sur un coup (`hit()`) : `$Model/Visual.set_stunned(true)`. Conseil : rester **assommé sur place ≈ 0,8 s** (le joueur voit son coup réussir), puis `set_stunned(false)` et fuir en courant.
+4. Le rat est plus gros que la capsule d'origine : passer le rayon de `CollisionShape3D` à ≈ 0,4 m et celui de `ContactArea` à ≈ 0,6 m.
+
 - [ ] Modèle dans `rat.tscn` → `Model`, avec animation `run` ou procédurale ([ASSETS.md §6](../ASSETS.md#6-animer-les-personnages)).
 - [ ] État « assommé » : petites étoiles qui tournent au-dessus de sa tête.
+
+### Étape 3 bis — Cuisine v2 ✅ fait
+- Cuisine réduite à ≈ 10 × 12,5 m d'après l'image de référence, salle du restaurant en décor, décor KayKit (frigo, hotte, étagères, comptoirs, ustensiles, tables, chaises).
+- Ambiance : carrelage (`kitchen_tiles`, `wall_tiles`), parquet, tapis (`rug`), lumières chaudes (soleil, hotte, bougies), vignettage.
+- HUD : niveau, chrono, cœurs, étoile + progression. Icônes dessinées en code en attendant les PNG (voir ASSETS §10 bis).
+- La scène est générée par un script Python gardé hors dépôt ; pour ajuster un meuble, modifier directement `scenes/main.tscn` dans l'éditeur.
+- À venir quand les modèles arrivent : plantes, bougies, trou du rat en 3D.
 
 ### Étape 4 — Effets et sons (§4)
 

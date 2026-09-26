@@ -5,7 +5,7 @@
 <p align="center"><img src="docs/images/screenshot.png" width="300" alt="Capture du jeu : le cuisinier bleu tient une assiette, le trou du rat est dans le mur du fond"></p>
 
 Projet de hackathon réalisé avec **Godot 4.7** et exporté pour le **navigateur mobile** (HTML5, hébergé sur itch.io).
-Un commentateur IA réagit en direct à la partie et un juge IA note les plats (voir [le concept complet](docs/CONCEPT.md)).
+Un critique affamé commente la partie à voix haute (voix Gradium). Le juge IA et le rat arrivent ensuite (voir [le concept complet](docs/CONCEPT.md)).
 
 ---
 
@@ -14,6 +14,7 @@ Un commentateur IA réagit en direct à la partie et un juge IA note les plats (
 - [Le jeu en 30 secondes](#le-jeu-en-30-secondes)
 - [État d'avancement](#état-davancement)
 - [Démarrer (développeurs)](#démarrer-développeurs)
+- [Entendre le critique](#entendre-le-critique)
 - [Contrôles](#contrôles)
 - [Tester sur téléphone](#tester-sur-téléphone)
 - [Publier sur itch.io](#publier-sur-itchio)
@@ -27,8 +28,10 @@ Un commentateur IA réagit en direct à la partie et un juge IA note les plats (
 - **Format** : portrait, plein écran, sur téléphone (dans le navigateur).
 - **Vue** : 3D en plongée façon *Overcooked*. La caméra ne tourne jamais ; elle suit le joueur en glissant quand il s'éloigne du centre de l'écran.
 - **Boucle** : prendre une tomate au bac → la **découper** → la **cuire** → la **livrer** au comptoir → **+1 point**.
-- **L'ennemi** : un **rat** sort d'un trou dans le mur pour saboter (éteindre la plaque, renverser le plat, voler un ingrédient…). Le joueur peut le **taper** pour le faire fuir.
-- **Fin de manche** : quand le temps est écoulé, le score donne des étoiles :
+- **L'ennemi** : un **rat** sort d'un trou dans le mur pour saboter (éteindre la plaque, renverser le plat, voler un ingrédient…). Pour l'instant, le chef ne peut rien contre lui : il faut l'éviter et réparer ses dégâts.
+- **Progression** : une partie dure 3 manches, à 5, 10 puis 15 plats cumulés. Le chrono passe de 90 s à 75 s puis 60 s, la recette accélère un peu, et le rat court plus vite. Pas de vies : si le chrono arrive à 0 avant l'objectif, la partie se termine. La 3e manche réussie gagne la partie. Un plat renversé est perdu, sans autre pénalité.
+- **Musique** : le morceau monte d'intensité à chaque manche — une minute de soundtrack par manche, bouclée tant que le chrono de la manche dure.
+- **Étoiles** : le score cumulé donne des étoiles :
 
 | Étoiles | Points nécessaires |
 |:-------:|:------------------:|
@@ -36,7 +39,7 @@ Un commentateur IA réagit en direct à la partie et un juge IA note les plats (
 | ★★      | 10                 |
 | ★★★     | 15                 |
 
-- **L'IA** : un commentateur sportif (texte + voix) commente la partie, un juge donne un nom absurde et une critique à chaque plat, et un récap' personnalisé est généré à la fin. L'IA ne bloque **jamais** le jeu (banques de répliques pré-générées en secours).
+- **Le critique** : une voix anglaise, affamée et impatiente. Toutes les quelques secondes, elle commente l'action que tu as faite le plus (prendre une tomate, découper, cuire, livrer). Le jeu n'attend jamais la voix. Le juge de plats et le récap' de fin ne sont pas encore là.
 
 ## État d'avancement
 
@@ -44,12 +47,13 @@ Un commentateur IA réagit en direct à la partie et un juge IA note les plats (
 |------:|---------|------|
 | 1 | Squelette : scène 3D, caméra, joueur, joystick tactile, export Web | ✅ Terminé |
 | 2 | Boucle de cuisine complète (ramasser, découper, cuire, livrer, score) + passage en portrait | ✅ Terminé |
-| 3 | Le rat et ses sabotages + « taper le rat » | ⏳ À faire |
-| 4 | Manche complète : écran titre, chrono, écran de fin avec étoiles, équilibrage | ⏳ À faire |
-| 5 | Journal d'événements + commentateur IA (texte + voix) | ⏳ À faire |
+| 3 | Le rat et ses sabotages (le coup pour le taper est désactivé pour l'instant) | ✅ Terminé |
+| 4 | Manche complète : partie à 3 manches jouable ; écran titre et écran de fin illustré à faire | ⏳ En cours |
+| 5 | Critique vocal : phrase selon l'action dominante + voix Gradium | ✅ Démo jouable |
 | 6 | Juge de plats + personnalité du rat + récap' final IA | ⏳ À faire |
 | 7 | Polish : vrais modèles 3D, animations, sons, effets | ⏳ À faire |
 | 8 | Déploiement itch.io, tests sur téléphones, script et répétition de la démo | ⏳ À faire |
+| 9 | Recettes à plusieurs ingrédients, plan de dressage, commandes | 💡 Plus tard |
 
 Chaque phase restante a sa fiche détaillée dans [`docs/phases/`](docs/phases/README.md), avec la répartition possible entre coéquipiers.
 
@@ -68,13 +72,23 @@ Chaque phase restante a sa fiche détaillée dans [`docs/phases/`](docs/phases/R
 
 Avant de coder, lis [`docs/CONTRIBUTING.md`](docs/CONTRIBUTING.md) (règles pour ne pas se marcher dessus dans les scènes Godot) et [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md).
 
+## Entendre le critique
+
+Les neuf phrases sont déjà enregistrées dans `assets/audio/critic/` (voix Mark). Le jeu les joue tout seul : pas besoin de lancer le proxy ni d'une clé Gradium.
+
+```bash
+godot --path .
+```
+
+Après environ deux secondes, la voix dit « I'm hungry. The chef had better hurry. » Il n'y a pas de sous-titre. Ensuite, joue : la phrase suivante suit l'action la plus fréquente sur environ 4 secondes.
+
 ## Contrôles
 
 | Action | Téléphone | Ordinateur |
 |--------|-----------|------------|
 | Se déplacer | Poser le pouce **n'importe où** et glisser (joystick flottant) | Clic-glisser, ou <kbd>Z</kbd><kbd>Q</kbd><kbd>S</kbd><kbd>D</kbd> / <kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> / flèches |
 | Ramasser, poser, livrer | **Automatique au contact** : il suffit de marcher jusqu'au tapis coloré devant un meuble | idem |
-| Taper le rat | Bouton dans le coin (arrive en phase 3) | <kbd>Espace</kbd> (phase 3) |
+| Taper le rat | *Désactivé pour l'instant* (voir CONCEPT §8.3) | — |
 
 ## Tester sur téléphone
 
@@ -103,7 +117,7 @@ Détails et checklist de démo : [`docs/phases/PHASE-8-demo.md`](docs/phases/PHA
 
 ```
 Ratoir/
-├── project.godot            # configuration Godot (portrait 720×1280, rendu Compatibility, autoload GameState)
+├── project.godot            # configuration Godot (portrait 720×1280, rendu Compatibility, autoloads GameState et Commentator)
 ├── export_presets.cfg       # preset d'export « Web » (sans threads)
 ├── scenes/
 │   ├── main.tscn            # la cuisine : sol, murs, trou du rat, stations, joueur, caméra, UI
@@ -114,6 +128,7 @@ Ratoir/
 │   └── delivery_counter.tscn# comptoir de livraison
 ├── scripts/
 │   ├── game_state.gd        # autoload : score, étoiles, journal d'événements
+│   ├── ai/commentator.gd    # autoload : critique vocal (fenêtre d'actions, voix seule)
 │   ├── cook.gd              # base du cuisinier : objet tenu en main
 │   ├── player.gd            # déplacement du joueur (joystick + clavier)
 │   ├── touch_joystick.gd    # joystick tactile flottant plein écran
@@ -125,8 +140,14 @@ Ratoir/
 │   ├── progress_bar_3d.gd   # barre de progression au-dessus des stations
 │   └── hud.gd               # affichage du score
 ├── shaders/checker_floor.gdshader  # carrelage du sol
+├── server/
+│   ├── speak.py             # ancien proxy Gradium, plus utilisé par le jeu
+│   └── .env.example         # GRADIUM_API_KEY, sans valeur (le vrai .env est ignoré)
+├── assets/audio/critic/     # neuf phrases du critique, déjà enregistrées
+├── assets/models/           # modèles 3D (.glb) : characters/chef.glb…
 ├── tools/
 │   ├── export_web.sh        # export HTML5 + zip itch.io
+│   ├── optimize_glb.py      # allège un .glb (textures, animations fusionnées) sans Blender
 │   └── serve_https.py       # serveur HTTPS local pour tester sur téléphone
 └── docs/
     ├── CONCEPT.md           # le concept complet du jeu (document de référence)

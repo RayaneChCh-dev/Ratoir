@@ -1,0 +1,31 @@
+[gd_scene format=3]
+[ext_resource type="Script" path="res://scripts/rat/rat.gd" id="1"]
+[ext_resource type="Resource" path="res://data/rat_profiles/default.tres" id="2"]
+[ext_resource type="PackedScene" path="res://scenes/models/rat_model.tscn" id="3"]
+[sub_resource type="SphereShape3D" id="BodyShape"]
+radius = 0.4
+[sub_resource type="SphereShape3D" id="ContactShape"]
+radius = 0.6
+[node name="Rat" type="CharacterBody3D"]
+collision_layer = 4
+collision_mask = 1
+script = ExtResource("1")
+profile = ExtResource("2")
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+position = Vector3(0, 0.4, 0)
+shape = SubResource("BodyShape")
+[node name="Model" type="Node3D" parent="."]
+[node name="Visual" parent="Model" instance=ExtResource("3")]
+[node name="HoldPoint" type="Marker3D" parent="Model"]
+position = Vector3(0, 0.45, 0.55)
+[node name="ContactArea" type="Area3D" parent="."]
+collision_layer = 0
+collision_mask = 2
+[node name="CollisionShape3D" type="CollisionShape3D" parent="ContactArea"]
+position = Vector3(0, 0.4, 0)
+shape = SubResource("ContactShape")
+[node name="Alert" type="Label3D" parent="."]
+text = "!"
+font_size = 80
+billboard = 1
+modulate = Color(1, 0.3, 0.1, 1)

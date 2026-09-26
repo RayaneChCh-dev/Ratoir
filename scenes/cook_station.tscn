@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" path="res://scripts/station.gd" id="1_station"]
 [ext_resource type="Script" path="res://scripts/progress_bar_3d.gd" id="2_progress"]
+[ext_resource type="PackedScene" path="res://assets/models/kitchen/stove.glb" id="3_model"]
 
 [sub_resource type="BoxShape3D" id="Shape_area"]
 size = Vector3(2.6, 1, 2.6)
@@ -20,28 +21,35 @@ script = ExtResource("1_station")
 accepts = 1
 produces = 2
 duration = 2.5
+can_be_switched_off = true
 
 [node name="Rug" type="MeshInstance3D" parent="."]
 position = Vector3(0, 0.01, 0)
 mesh = SubResource("Mesh_rug")
 
 [node name="Counter" type="CSGBox3D" parent="."]
+visible = false
 position = Vector3(0, 0.5, 0)
 use_collision = true
 size = Vector3(1.4, 1, 1.4)
 material = SubResource("Mat_counter")
 
+[node name="Model" parent="." instance=ExtResource("3_model")]
+transform = Transform3D(1.4, 0, 0, 0, 1.4, 0, 0, 0, 1.4, 0, 0.462, 0)
+
 [node name="Burner" type="CSGCylinder3D" parent="."]
-position = Vector3(0, 1.025, 0)
-radius = 0.45
-height = 0.05
+position = Vector3(0, 0.915, 0.05)
+radius = 0.3
+height = 0.02
 sides = 24
 material = SubResource("Mat_burner")
 
 [node name="ItemSlot" type="Node3D" parent="."]
-position = Vector3(0, 1.06, 0)
+position = Vector3(0, 0.94, 0)
 
 [node name="Area3D" type="Area3D" parent="."]
+collision_layer = 0
+collision_mask = 2
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
 position = Vector3(0, 0.5, 0)
@@ -52,10 +60,13 @@ position = Vector3(0, 2.0, 0)
 script = ExtResource("2_progress")
 
 [node name="Label3D" type="Label3D" parent="."]
-position = Vector3(0, 2.45, 0)
+position = Vector3(0, 2.1, 1.7)
 billboard = 1
 no_depth_test = true
 pixel_size = 0.011
 text = "Cuisson"
 font_size = 40
 outline_size = 12
+
+[node name="ApproachPoint" type="Marker3D" parent="."]
+position = Vector3(0, 0, 1.1)

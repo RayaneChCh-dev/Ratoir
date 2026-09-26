@@ -6,5 +6,6 @@ extends Node3D
 
 func _physics_process(_delta: float) -> void:
 	for body in _area.get_overlapping_bodies():
-		if body is Cook and body.held_item == null:
+		if body is Cook and body.held_item == null and body.held_trap == null:
 			body.hold(Item.new())
+			GameState.log_event("tomato_taken", "tomate crue")

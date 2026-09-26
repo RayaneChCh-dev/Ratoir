@@ -18,9 +18,11 @@ main.tscn (Node3D « Main »)
 │   ├── CookStation ─────── cook_station.tscn  (station.gd)
 │   └── DeliveryCounter ─── delivery_counter.tscn
 ├── Player ─────────────────── player.tscn (player.gd → hérite de cook.gd)
+├── Rat ────────────────────── rat.tscn (rat/rat.gd, profil default.tres)
 └── UI (CanvasLayer)
     ├── Score (RichTextLabel) ── hud.gd
-    └── TouchJoystick (Control plein écran) ── touch_joystick.gd
+    ├── TouchJoystick (Control plein écran) ── touch_joystick.gd
+    └── HitButton (TouchScreenButton) ── hit_button.tscn
 
 Autoload (singleton global) : GameState ── game_state.gd
 ```
@@ -33,7 +35,7 @@ Autoload (singleton global) : GameState ── game_state.gd
 | Fenêtre | 720 × 1280, `stretch_mode = canvas_items`, `aspect = expand` | Portrait ; s'adapte aux écrans plus longs sans bandes noires |
 | Orientation | `handheld/orientation = 1` (portrait) | Téléphone tenu verticalement |
 | `emulate_touch_from_mouse` | `true` | La souris simule le doigt sur PC : un seul code d'entrée à maintenir |
-| Actions d'entrée | `move_left/right/up/down` (ZQSD/WASD + flèches) | Clavier en secours sur PC |
+| Actions d'entrée | `move_left/right/up/down` (WASD + flèches), `hit` (Espace) | Clavier en secours sur PC |
 | Autoload | `GameState` | Score et journal accessibles partout |
 | Export | preset « Web », `thread_support = false` | Évite de devoir configurer `SharedArrayBuffer`/COOP-COEP sur itch.io |
 
@@ -56,39 +58,56 @@ Chaque personnage a un nœud enfant **`Model`** (Node3D) qui contient **uniqueme
 - Indentation par tabulations (voir `.editorconfig`).
 
 ### Couches de collision
-**Aujourd'hui, tout est sur la couche 1.** Les `Area3D` filtrent par type de script (`body is Cook`). À la Phase 3 on introduit les couches suivantes. La personne qui fait la Phase 3 les met en place **et** met à jour ce tableau :
+Les valeurs `collision_layer` et `collision_mask` sont des masques de bits :
 
-| Couche | Nom | Qui |
-|-------:|-----|-----|
-| 1 | `world` | murs, sol, meubles |
-| 2 | `player` | le cuisinier |
-| 3 | `rat` | le rat |
-| 4 | `pickup` | objets tombés au sol (ramassables) |
+| Objet | Couche (valeur) | Masque |
+|-------|----------------|--------|
+| Murs, sol, meubles | world (1) | — |
+| Joueur | player (2) | world (1) |
+| Rat | rat (4, troisième couche) | world (1) |
+| Zones des stations, bac, livraison, rat et objets au sol | aucune (0) | player (2) |
+
+Le rat traverse le joueur ; seul `ContactArea` déclenche le renversement.
 
 ## 4. Scripts et contrats
 
 ### `GameState` (autoload, `scripts/game_state.gd`)
 | Membre | Type | Rôle |
 |--------|------|------|
-| `score` | `int` | Points de la manche |
+| `score` | `int` | Plats livrés pendant la partie |
+| `level` | `int` | Niveau courant ; objectif = `level * 5` plats cumulés |
+| `health` | `int` | Santé (3 au départ, +1 à chaque niveau, maximum 3) |
+| `time_left` | `float` | Temps restant dans le niveau |
 | `STAR_THRESHOLDS` | `Array[int]` = `[5, 10, 15]` | Paliers d'étoiles |
 | `add_point()` | fonction | +1 point, émet `score_changed` |
 | `stars() -> int` | fonction | Étoiles (0 à 3) pour le score actuel |
+| `target_score() -> int` | fonction | Objectif cumulatif du niveau (`level * 5`) |
+| `round_duration_for_level() -> float` | fonction | 90 s au niveau 1, -5 s par niveau, minimum 60 s |
+| `difficulty_scale() -> float` | fonction | Multiplicateur de difficulté du rat : +15 % par niveau, plafonné à 2× |
+| `take_damage(amount, reason)` | fonction | Retire de la santé ; zéro santé termine et met le jeu en pause |
+| `reset()` | fonction | Repart au niveau 1, réinitialise score/santé/journal et relance le chrono |
 | `log_event(event: String, detail := "")` | fonction | Ajoute au journal et émet `event_logged` |
 | `events` | `Array[Dictionary]` | Journal complet de la manche |
 | `score_changed(score)` | signal | Le HUD l'écoute |
+| `level_changed(level, target_score)` | signal | Le HUD met à jour l'objectif |
+| `health_changed(health)` | signal | Le HUD met à jour les vies |
+| `time_changed(time_left)` | signal | Le HUD met à jour le chrono |
+| `difficulty_changed(level, scale)` | signal | Le rat ajuste sa vitesse et son intervalle de sortie |
+| `round_started` / `round_ended(level, score, health)` | signaux | Début/fin d'un niveau |
 | `event_logged(entry)` | signal | Le commentateur l'écoute (Phase 5) |
 
-*Phase 4 ajoutera* : l'état de la manche (`READY`, `PLAYING`, `ENDED`), le chrono, `start_round()`, `reset()` et les signaux `round_started`/`round_ended`. Voir [PHASE-4](phases/PHASE-4-manche.md).
+Chaque niveau dure 90 s au niveau 1, puis 5 s de moins par niveau (minimum 60 s). Le score est cumulatif : atteindre 5, 10, 15… plats valide le niveau suivant. Un chrono expiré retire une vie et relance le niveau ; un dégât direct du rat passe par `take_damage()`. Le renversement au contact retire une vie via `take_damage()` ; le vol et l’extinction de plaque ne retirent pas de vie. Le rat écoute `difficulty_changed` : vitesse multipliée et délai de sortie divisé par `difficulty_scale()`, sans modifier la ressource de profil. Le délai de fuite après un coup reste de 10 s. Voir [PHASE-4](phases/PHASE-4-manche.md).
 
 ### `Item` (`scripts/item.gd`) : un ingrédient
 - `enum State { RAW, CHOPPED, COOKED }` : tomate crue → tranches → assiette.
 - Assigner `item.state` reconstruit le visuel automatiquement (`_rebuild()`).
+- `get_item_name() -> String` : description française de l’état, utilisée dans les événements.
 - Créé par code : `Item.new()` (il n'y a pas de scène `.tscn`). Son origine est **en bas de l'objet** : il se pose sur un point.
 
 ### `Cook` (`scripts/cook.gd`) : la base du cuisinier
 - `held_item: Item` : l'objet tenu, ou `null`.
 - `hold(item)` : met l'objet dans les mains (sur `Model/HoldPoint`) ; il peut venir d'une station ou être neuf.
+- `has_item() -> bool` : mains occupées.
 - `take_item() -> Item` : retire l'objet des mains et le renvoie. **L'appelant doit le re-parenter ou le libérer.**
 - Le rat **n'est pas** un `Cook`. Les stations n'interagissent qu'avec les `Cook`.
 
@@ -97,6 +116,8 @@ Chaque personnage a un nœud enfant **`Model`** (Node3D) qui contient **uniqueme
 - Convertit l'entrée écran en direction au sol **à partir de la caméra**, pour que « haut » à l'écran corresponde toujours à « haut » dans le jeu.
 - `motion_mode = FLOATING`, `velocity.y = 0` et `y` forcé à 0 : aucun mouvement vertical possible.
 - Réglages : `speed` (6 m/s), `acceleration`, `turn_speed`.
+- **Visuel** : `Model/Chef` est le modèle `assets/models/characters/chef.glb` (échelle 0,95 : ≈ 2 m avec la toque, volontairement exagéré pour la lisibilité). `Model/HoldPoint` est devant ses mains.
+- **Animations** : `_update_animation()` trouve le premier `AnimationPlayer` sous `Model`, met toutes ses animations en boucle, puis joue `idle` (arrêt, < `idle_threshold`), `walk` ou `run` (au-dessus de `run_threshold` = 3 m/s). La cadence suit la vitesse réelle (`walk_anim_speed`, `run_anim_speed`) pour limiter l'effet de glisse.
 
 ### `Station` (`scripts/station.gd`) : Découpe et Cuisson
 - Réglages : `accepts` (état accepté), `produces` (état produit), `duration`, `rug_color`.
@@ -104,7 +125,19 @@ Chaque personnage a un nœud enfant **`Model`** (Node3D) qui contient **uniqueme
   1. Station vide et le cuisinier tient un objet à l'état `accepts` → l'objet est posé et la transformation démarre.
   2. Objet terminé (`produces`) et cuisinier les mains vides → il reprend l'objet.
 - Nœuds attendus dans la scène : `Rug`, `ItemSlot`, `Area3D`, `Progress` (`ProgressBar3D`).
-- *Phase 3 ajoutera* un état « sabotée » (ex. plaque éteinte) : voir [PHASE-3](phases/PHASE-3-rat.md).
+- Groupe `stations` ; `has_item()`, `is_transforming_item()`, `steal_item()`, `switch_off()`, `approach_point()`.
+- `is_transforming_item()` évite le nom natif Godot `Node.is_processing()`.
+- `can_be_switched_off` est activé uniquement sur la plaque. `switched_off` suspend `_elapsed` et grise `Burner`. Le prochain contact rallume, même mains pleines, sans autre interaction sur cette image.
+- `ApproachPoint` est placé devant le meuble ; `steal_item()` vide la station et réinitialise la progression.
+
+### `Rat`, `Sabotage`, `RatProfile`, `FloorItem`
+- Une instance de `rat.tscn`, groupe `rat`, lit `data/rat_profiles/default.tres`.
+- États : `HIDDEN`, `EMERGING`, `GOING`, `SABOTAGING`, `RETURNING`, `FLEEING`. Départ protégé de 5 s ; pauses pondérées par le profil.
+- `Sabotage.can_apply()` choisit une cible ; `is_valid()` revalide cette même cible sans la changer ; `target_position()` et `apply()` complètent le contrat commun.
+- Poursuite limitée à 4 s, trajet normal à 6 s. Retour/fuite bloqués : retour caché au trou au bout de 6 s ; un objet volé est laissé au sol avant ce secours.
+- Le vol est enregistré à l’arrivée au trou. `hit() -> bool` indique si le coup est accepté, lâche l’objet, puis impose une fuite et 10 s caché.
+- `FloorItem` transfère l’objet à un `Cook` libre dans sa zone, y compris si ses mains se libèrent après son entrée ; le rebond est arrêté au ramassage.
+- À chaque `round_started`, le rat retourne caché au trou avec 5 s de protection ; un objet volé est déposé au sol et reste récupérable. La pause de fin de partie fige le rat, le joueur et les stations. Le HUD reste actif et le joystick est remis à zéro.
 
 ### `IngredientSpawn`, `DeliveryCounter`
 - Le bac donne `Item.new()` à tout `Cook` qui arrive les mains vides.
@@ -113,7 +146,7 @@ Chaque personnage a un nœud enfant **`Model`** (Node3D) qui contient **uniqueme
 ### `TouchJoystick` (`scripts/touch_joystick.gd`)
 - `Control` plein écran avec `mouse_filter = IGNORE`. Il écoute `_input` (événements `InputEventScreenTouch`/`Drag`) et suit **un seul doigt** (`_touch_index`).
 - `output: Vector2` avec zone morte (`dead_zone`) et progression douce.
-- ⚠️ **Phase 3** : il faudra qu'il **ignore les appuis qui commencent sur le bouton TAPER** (sinon, appuyer sur le bouton fait aussi bouger le joueur).
+- `ignore_zones` référence le bouton TAPER : un appui commencé dessus ne démarre pas le joystick. `TouchScreenButton` accepte un deuxième doigt ; son placement suit la taille du viewport.
 
 ### `camera_follow.gd`
 - Caméra orthographique inclinée à −55° sur X, `keep_aspect = largeur`, `size = 10` (≈ 9 m visibles en largeur).
@@ -142,8 +175,11 @@ Toujours passer par `GameState.log_event(event, detail)`. `t` (secondes depuis l
 | `rat_hit` | Player | `"bonk ! le rat est assommé"` | 3 |
 | `rat_fled` | Rat | `"le rat retourne dans son trou"` | 3 |
 | `item_recovered` | Player | `"tomate récupérée au sol"` | 3 |
+| `judge_verdict` | Judge | `"Velouté à la sauvette : 5/5, « Je vais l'encadrer. »"` | ✅ 6 |
 | `timer_milestone` | GameState | `"30 s restantes"` / `"10 s restantes"` | 4 |
 | `round_end` | GameState | `"score 9, 1 étoile"` | 4 |
+| `level_up` | GameState | `"niveau 2"` | 4 |
+| `player_damaged` | GameState | `"rat"` | 4 |
 
 ## 6. Ajouter une nouvelle station (exemple)
 

@@ -7,7 +7,7 @@
 
 ## 1. Le pitch
 
-**Ratoir** est un jeu de cuisine en 3D pour téléphone. Le joueur est un cuisinier qui doit servir **le plus de plats possible avant la fin du chrono**. Un **rat** sort régulièrement d'un trou dans le mur pour **saboter** la cuisine. Le joueur peut **le taper** pour le faire fuir, mais chaque seconde passée à chasser le rat est une seconde de moins pour cuisiner.
+**Ratoir** est un jeu de cuisine en 3D pour téléphone. Le joueur est un cuisinier qui doit servir **le plus de plats possible avant la fin du chrono**. Un **rat** sort régulièrement d'un trou dans le mur pour **saboter** la cuisine. **Pour l'instant, le chef ne peut rien faire contre le rat** : il doit l'éviter et réparer ses dégâts. Le bouton pour le taper est prévu mais désactivé (voir §8.3).
 
 Pendant la partie, un **commentateur IA** façon commentateur sportif réagit à ce qui se passe, avec une voix de synthèse. Un **juge IA** donne un nom absurde et une critique à chaque plat livré. À la fin, l'IA rédige un **récap' personnalisé** de la partie.
 
@@ -35,8 +35,8 @@ Quand il faut trancher, on suit ces priorités dans l'ordre :
 
 - **Déplacement** : joystick **flottant** et **plein écran**. Le pouce se pose n'importe où, le joystick apparaît sous le doigt et on glisse. Le déplacement reste toujours à plat, sur le sol.
 - **Interactions de cuisine** : **automatiques au contact**. On marche jusqu'au tapis coloré devant un meuble et l'action se fait toute seule (ramasser, poser, reprendre, livrer).
-- **Un seul bouton à l'écran** : **TAPER**, dans le coin en bas à droite, facile à atteindre avec le pouce libre. Il sert uniquement à taper le rat quand il est à portée. *(Phase 3)*
-- Sur ordinateur (développement) : clic-glisser à la souris, ou <kbd>ZQSD</kbd>/<kbd>WASD</kbd>/flèches, et <kbd>Espace</kbd> pour taper.
+- **Aucun bouton à l'écran pour l'instant.** Le bouton **TAPER** (coin en bas à droite) est retiré : le chef ne peut rien contre le rat (§8.3).
+- Sur ordinateur (développement) : clic-glisser à la souris, ou <kbd>ZQSD</kbd>/<kbd>WASD</kbd>/flèches.
 
 ## 5. Caméra et vue
 
@@ -48,21 +48,20 @@ Quand il faut trancher, on suit ces priorités dans l'ordre :
 
 ## 6. La cuisine
 
-Une seule pièce, un seul niveau.
+Une seule pièce d'environ **10 × 12,5 m**, entièrement visible à l'écran (la caméra ne bouge presque plus), inspirée de l'image de référence de l'équipe. Sous le comptoir de service, la **salle du restaurant** sert de décor.
 
 ```
-          mur du fond (haut, avec le TROU DU RAT au centre)
-   ┌──────────────────────────────────────────┐
-   │ [TOMATES]          (trou)      [DÉCOUPE]  │
-   │                                           │
-   │                                           │
-   │                                 [CUISSON] │
-   │               (joueur)                    │
-   │                                           │
-   │                                           │
-   │   [LIVRAISON]                             │
-   └──────────────────────────────────────────┘
-          mur de devant (bas)
+   ┌───────── mur du fond (carrelage terracotta) ─────────┐
+   │  étagère      HOTTE + trou du rat       étagère       │
+   │ [FRIGO]                                  [comptoir]   │
+   │                                          [DÉCOUPE]    │
+   │ [TOMATES]                                             │
+   │                  (allée centrale)        [CUISSON]    │
+   │ [comptoir]                                            │
+   │ [comptoir]                               [comptoir]   │
+   │ ════════ comptoir de service ════════ [LIVRAISON] ══  │
+   └───────────────────────────────────────────────────────┘
+        salle du restaurant : parquet, tapis rouge, tables, chaises
 ```
 
 | Meuble | Rôle | Règle |
@@ -77,9 +76,14 @@ Une seule pièce, un seul niveau.
 
 **Volontairement pas de recettes complexes** pour l'instant : un ingrédient qui passe par les deux stations fait un plat valide. On pourra ajouter une variante de recette au polish, **jamais avant** que la boucle et le rat soient solides.
 
+**Plus tard : les recettes.** Le fonctionnement prévu est décrit dans [PHASE-9-recettes.md](phases/PHASE-9-recettes.md) : commandes affichées en tickets, chaque ingrédient préparé séparément, puis assemblé au contact sur une assiette posée sur un plan de dressage.
+
 ## 7. La manche, le score et les étoiles
 
-- **Durée** : 60 à 90 s. La valeur exacte sera fixée à l'équilibrage (Phase 4).
+- **Progression** : une partie est une suite de niveaux dans la même cuisine. L'objectif cumulé est de 5 plats au niveau 1, puis 10, 15, etc. Atteindre l'objectif valide le niveau et démarre immédiatement le suivant.
+- **Chrono** : 90 s au niveau 1, puis 5 s de moins par niveau, avec un plancher de 60 s. Quand il expire avant l'objectif, le joueur perd une vie et rejoue le même niveau ; son score cumulé est conservé.
+- **Santé** : 3 vies au départ, +1 vie à chaque niveau réussi, maximum 3. Un dégât direct du rat retire une vie ; à 0, la partie se termine.
+- **Difficulté** : le rat reçoit un multiplicateur de +15 % par niveau, plafonné à 2×, pour accélérer et réduire le délai entre ses sorties.
 - **Départ protégé** : pendant les **5 premières secondes**, le rat ne sort pas, le temps de comprendre la boucle.
 - **Score** : **1 point par plat livré**.
 - **Étoiles** à la fin du chrono :
@@ -93,7 +97,7 @@ Une seule pièce, un seul niveau.
 
 - **Écran de fin** : score, étoiles animées, récap' IA lu à voix haute, bouton **Rejouer**.
 
-> ⚠️ **Équilibrage à faire (Phase 4).** Avec la cuisine actuelle, un plat prend environ 13 s (≈ 9 s de marche et 4 s de transformation). Sur 90 s, ça donne environ 6 à 7 plats **sans** rat, donc 3 étoiles (15 plats) sont **inatteignables**. Il faudra ajuster ensemble la durée de la manche, les temps de découpe et de cuisson, la vitesse du joueur, les distances et les paliers. Objectif : ★ facile, ★★ en jouant bien, ★★★ uniquement si on gère bien le rat.
+> ⚠️ **Équilibrage à faire (Phase 4).** Avec la cuisine actuelle, un plat prend environ 13 s (≈ 9 s de marche et 4 s de transformation). Le premier objectif de 5 plats est donc exigeant avec le rat ; vérifier les valeurs sur téléphone et ajuster ensemble les durées, déplacements et accélération du rat. Objectif : la progression doit rester possible, mais chaque niveau doit demander une meilleure gestion du temps et du rat.
 
 ## 8. Le rat
 
@@ -121,11 +125,14 @@ Ils reposent tous sur **un seul système commun** (une cible, une durée d'effet
 | Sabotage | Condition | Effet | Contre-mesure |
 |----------|-----------|-------|---------------|
 | **Éteindre la plaque** | Un aliment cuit sur la plaque | La cuisson se met en pause, la plaque devient grise et fume | Le joueur touche la plaque (contact) pour la rallumer |
-| **Renverser le plat** | Le joueur porte un objet et le rat le percute | L'objet tombe et est perdu (flaque au sol) | Taper le rat avant qu'il arrive ; éviter son chemin |
-| **Voler un ingrédient** | Un objet est posé sur une station | Le rat l'emporte vers son trou | Le taper pendant sa fuite : il lâche l'objet au sol, qu'on peut ramasser |
+| **Renverser le plat** | Le joueur porte un objet et le rat le percute | L'objet tombe et est perdu (flaque au sol) | Éviter son chemin |
+| **Voler un ingrédient** | Un objet est posé sur une station | Le rat l'emporte vers son trou | Ne pas laisser d'objet sans surveillance |
 | **Flaque glissante** *(optionnel)* | Aucune | Une flaque au sol fait glisser et ralentir le joueur pendant quelques secondes | La contourner |
 
-### 8.3 Taper le rat
+### 8.3 Taper le rat — ⏸️ désactivé pour l'instant
+
+> **Décision du 2026-09-26 : le chef ne peut rien faire contre le rat pour le moment.** Le bouton TAPER est retiré de l'écran et la touche Espace ne fait plus rien. Le code est conservé : pour réactiver, mettre `can_hit_rat = true` sur le joueur (`scripts/player.gd`) et remettre `scenes/hit_button.tscn` dans `main.tscn` (sous `UI`, avec `ignore_zones` du joystick pointant dessus). Règles prévues si on le réactive :
+
 
 - Bouton **TAPER** : si le rat est à moins d'environ **1,5 m**, il est **assommé**, s'enfuit dans son trou et reste caché plus longtemps.
 - Petit *cooldown* du bouton (environ 0,8 s) pour empêcher le martelage.
@@ -188,3 +195,4 @@ Le jeu tourne dans le navigateur : **toute clé mise dans le jeu est publique**.
 | 2026-09-26 | **Portrait**, cuisine droite en plongée à 55° (au lieu d'une vue isométrique en losange), **caméra qui suit** le joueur | Conseil du jury, et la carte était trop petite en paysage |
 | 2026-09-26 | Score transformé en **étoiles** en fin de manche (5 / 10 / 15 points) | Objectif clair et rejouabilité |
 | 2026-09-26 | Nom du jeu : **Ratoir** | Nom du dépôt |
+| 2026-09-26 | **Bouton TAPER retiré** : le chef ne peut rien contre le rat pour l'instant (code conservé, désactivé) | Choix de design, à réévaluer à l'équilibrage |

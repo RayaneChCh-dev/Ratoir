@@ -17,11 +17,13 @@ Godot stocke les scènes dans des fichiers texte (`.tscn`), mais **deux personne
 
 ## 2. Branches et commits
 
-- `main` doit **toujours se lancer sans erreur** et être jouable. On ne pousse jamais directement dessus du code cassé.
-- **Une branche par tâche**, nommée d'après la phase : `phase-3/rat-ia`, `phase-4/ecran-fin`, `phase-7/modele-chef`…
+- `main` doit **toujours se lancer sans erreur** et être jouable : c'est la version publiée. On ne pousse **jamais** directement dessus.
+- `staging` est la branche d'intégration. On ne pousse **jamais** directement dessus non plus.
+- **Une branche par tâche**, créée **depuis `staging`** et nommée d'après la phase : `phase-3/rat-ia`, `phase-4/ecran-fin`, `phase-7/modele-chef`…
+- Circuit : `phase-N/<sujet>` → PR vers `staging` → (quand c'est stable) PR `staging` → `main`.
 - **Petits commits fréquents**, messages en français à l'impératif : `Ajoute le bouton TAPER`, `Corrige la plaque qui reste éteinte`.
-- On fusionne dans `main` via une **Pull Request** relue rapidement par quelqu'un d'autre (5 minutes suffisent : ça se lance ? ça marche sur téléphone ?).
-- Avant de pousser : `git pull --rebase origin main`, puis vérifier que le projet se lance (<kbd>F5</kbd>).
+- On fusionne dans `staging` via une **Pull Request** relue rapidement par quelqu'un d'autre (5 minutes suffisent : ça se lance ? ça marche sur téléphone ?).
+- Avant de pousser : `git pull --rebase origin staging`, puis vérifier que le projet se lance (<kbd>F5</kbd>).
 
 ## 3. Qui possède quelle scène
 
@@ -57,7 +59,7 @@ Une tâche est terminée quand :
 2. Les **critères d'acceptation** de la fiche de phase sont vérifiés.
 3. Ça a été **testé sur un vrai téléphone** (export Web + `tools/serve_https.py`) si ça touche aux contrôles, à l'affichage, au son ou aux performances.
 4. La doc est à jour : [ARCHITECTURE.md](ARCHITECTURE.md) si un contrat a changé, [CONCEPT.md](CONCEPT.md) si une règle du jeu a changé, et la fiche de phase (cases cochées).
-5. La PR est fusionnée dans `main`.
+5. La PR est fusionnée dans `staging`.
 
 ## 6. Conventions de code
 
