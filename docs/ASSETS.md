@@ -136,6 +136,27 @@ Les modèles générés par IA sont souvent **trop lourds** (50 000 à 500 000 t
 4. Télécharger chacune en **FBX, *With Skin***, à 30 fps.
 5. Dans Blender : importer les FBX, renommer les *actions* `idle`, `walk` et `hit`, les regrouper sur un seul squelette (via le *NLA Editor* ou l'*Action Editor*), puis exporter en `.glb` avec les animations.
 
+### Le chef avec **Meshy** (c'est ce qui a été fait)
+Le squelette automatique de Meshy (*Rigging*, type humanoïde) produit un squelette au format Mixamo : **pas besoin de passer par Mixamo**. Meshy exporte **un `.glb` par animation**, chacun contenant le modèle complet et des textures 2048 (≈ 6 Mo par fichier). On les fusionne et on les allège avec `tools/optimize_glb.py` (section suivante).
+
+### Préparer un modèle sans Blender : `tools/optimize_glb.py`
+```bash
+# Personnage : fusionne les animations, les renomme, réduit les textures à 1024
+python3 tools/optimize_glb.py Walking_withSkin.glb -o assets/models/characters/chef.glb \
+    --anim-from Running_withSkin.glb --rename Walking=walk --rename Running=run
+
+# Objet : textures 512 suffisent
+python3 tools/optimize_glb.py stove_meshy.glb -o assets/models/kitchen/stove.glb --texture-size 512
+```
+Ce que fait le script :
+- **textures** réduites (1024 par défaut) ; les cartes de reflets métalliques, de relief et d'occlusion sont retirées, ainsi que les tangentes (inutiles pour notre rendu mobile ; `--keep-pbr` pour les garder) ;
+- **animations** d'autres fichiers ajoutées, à condition qu'ils aient le **même squelette** (les os sont associés par nom) ;
+- doublons `.001` supprimés (poses figées d'une seule image qu'exporte Meshy).
+
+Résultat pour le chef : 2 fichiers de 6 Mo deviennent **un seul fichier de 0,6 Mo**. Le script **ne réduit pas le nombre de triangles** : régler ça à la génération (*Target polycount*) ou avec *Remesh* dans Meshy.
+
+Noms d'animations attendus par `player.gd` : **`idle`**, **`walk`**, **`run`**. S'il manque `idle`, le chef se fige sur la première image de `walk`.
+
 ### Le rat (quadrupède) → **animation procédurale** (recommandé)
 Mixamo ne gère pas les quadrupèdes. Pour un rat qui se déplace vite et vu de haut, une animation **par code** suffit amplement et ne coûte presque rien :
 ```gdscript

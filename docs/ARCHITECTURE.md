@@ -97,6 +97,8 @@ Chaque personnage a un nœud enfant **`Model`** (Node3D) qui contient **uniqueme
 - Convertit l'entrée écran en direction au sol **à partir de la caméra**, pour que « haut » à l'écran corresponde toujours à « haut » dans le jeu.
 - `motion_mode = FLOATING`, `velocity.y = 0` et `y` forcé à 0 : aucun mouvement vertical possible.
 - Réglages : `speed` (6 m/s), `acceleration`, `turn_speed`.
+- **Visuel** : `Model/Chef` est le modèle `assets/models/characters/chef.glb` (échelle 0,95 : ≈ 2 m avec la toque, volontairement exagéré pour la lisibilité). `Model/HoldPoint` est devant ses mains.
+- **Animations** : `_update_animation()` trouve le premier `AnimationPlayer` sous `Model`, met toutes ses animations en boucle, puis joue `idle` (arrêt, < `idle_threshold`), `walk` ou `run` (au-dessus de `run_threshold` = 3 m/s). La cadence suit la vitesse réelle (`walk_anim_speed`, `run_anim_speed`) pour limiter l'effet de glisse.
 
 ### `Station` (`scripts/station.gd`) : Découpe et Cuisson
 - Réglages : `accepts` (état accepté), `produces` (état produit), `duration`, `rug_color`.

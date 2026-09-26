@@ -125,8 +125,10 @@ Ratoir/
 │   ├── progress_bar_3d.gd   # barre de progression au-dessus des stations
 │   └── hud.gd               # affichage du score
 ├── shaders/checker_floor.gdshader  # carrelage du sol
+├── assets/models/           # modèles 3D (.glb) : characters/chef.glb…
 ├── tools/
 │   ├── export_web.sh        # export HTML5 + zip itch.io
+│   ├── optimize_glb.py      # allège un .glb (textures, animations fusionnées) sans Blender
 │   └── serve_https.py       # serveur HTTPS local pour tester sur téléphone
 └── docs/
     ├── CONCEPT.md           # le concept complet du jeu (document de référence)
