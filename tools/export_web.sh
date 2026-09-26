@@ -6,6 +6,8 @@ cd "$(dirname "$0")/.."
 
 GODOT="${GODOT:-godot}"
 mkdir -p build/web
+# Godot ne doit pas scanner build/ (sinon il y crée des .import qui finissent dans le zip).
+touch build/.gdignore
 "$GODOT" --headless --path . --export-release "Web" build/web/index.html
 
 rm -f build/ratoir-web.zip
