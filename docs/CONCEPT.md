@@ -77,6 +77,8 @@ Une seule pièce, un seul niveau.
 
 **Volontairement pas de recettes complexes** pour l'instant : un ingrédient qui passe par les deux stations fait un plat valide. On pourra ajouter une variante de recette au polish, **jamais avant** que la boucle et le rat soient solides.
 
+**Plus tard : les recettes.** Le fonctionnement prévu est décrit dans [PHASE-9-recettes.md](phases/PHASE-9-recettes.md) : commandes affichées en tickets, chaque ingrédient préparé séparément, puis assemblé au contact sur une assiette posée sur un plan de dressage.
+
 ## 7. La manche, le score et les étoiles
 
 - **Progression** : une partie est une suite de niveaux dans la même cuisine. L'objectif cumulé est de 5 plats au niveau 1, puis 10, 15, etc. Atteindre l'objectif valide le niveau et démarre immédiatement le suivant.

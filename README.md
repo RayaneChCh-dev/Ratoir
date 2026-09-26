@@ -52,6 +52,7 @@ Un critique affamé commente la partie à voix haute (voix Gradium). Le juge IA 
 | 6 | Juge de plats + personnalité du rat + récap' final IA | ⏳ À faire |
 | 7 | Polish : vrais modèles 3D, animations, sons, effets | ⏳ À faire |
 | 8 | Déploiement itch.io, tests sur téléphones, script et répétition de la démo | ⏳ À faire |
+| 9 | Recettes à plusieurs ingrédients, plan de dressage, commandes | 💡 Plus tard |
 
 Chaque phase restante a sa fiche détaillée dans [`docs/phases/`](docs/phases/README.md), avec la répartition possible entre coéquipiers.
 

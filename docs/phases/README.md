@@ -12,6 +12,7 @@
 | 6 | [Juge, personnalité du rat, récap' final](PHASE-6-juge-recap.md) | ⏳ À faire | Dev IA/backend | 1 h 30 à 2 h |
 | 7 | [Polish : assets 3D, animations, sons, effets](PHASE-7-polish.md) | ⏳ À faire | Artiste/intégrateur | 2 h à 3 h (en continu) |
 | 8 | [Déploiement et démo](PHASE-8-demo.md) | ⏳ À faire | Toute l'équipe | 1 h |
+| 9 | [Recettes et assemblage](PHASE-9-recettes.md) | 💡 Plus tard (après 3 et 4) | Gameplay + Assets | 3 à 4 h |
 
 Les estimations sont indicatives, pour une personne qui connaît déjà un peu Godot.
 
