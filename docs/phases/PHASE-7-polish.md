@@ -37,7 +37,8 @@ Que le jeu soit **agréable à regarder et à écouter**, pas seulement fonction
 - [ ] Remplir `CREDITS.md` au fur et à mesure.
 
 ### Étape 2 — Intégrer le chef et les meubles (dès maintenant, **en se coordonnant** avec la personne de la Phase 3, qui modifie aussi `player.tscn` et les stations)
-- [ ] Chef dans `player.tscn` → `Model` ([ASSETS.md §7](../ASSETS.md#7-intégrer-un-modèle-dans-godot-pas-à-pas)), et animations idle/walk branchées dans `player.gd`.
+- [x] Chef dans `player.tscn` → `Model` ([ASSETS.md §7](../ASSETS.md#7-intégrer-un-modèle-dans-godot-pas-à-pas)), animations **walk** et **run** branchées dans `player.gd`.
+- [ ] Animation **idle** du chef (Meshy → *Animate* → Idle, puis `tools/optimize_glb.py --anim-from`). En attendant, pose figée.
 - [ ] Meubles : plan de travail, planche, plaque, caisse, passe-plat (garder `Area3D`, `ItemSlot`, `Rug`, `ApproachPoint`).
 - [ ] Tomate, tranches et assiette dans `item.gd` (constante `MODELS`).
 - [ ] Trou du rat (arche).

@@ -159,8 +159,10 @@ Ratoir/
 ├── server/
 │   ├── speak.py             # proxy local : texte → voix Gradium (WAV)
 │   └── .env.example         # GRADIUM_API_KEY, sans valeur (le vrai .env est ignoré)
+├── assets/models/           # modèles 3D (.glb) : characters/chef.glb…
 ├── tools/
 │   ├── export_web.sh        # export HTML5 + zip itch.io
+│   ├── optimize_glb.py      # allège un .glb (textures, animations fusionnées) sans Blender
 │   └── serve_https.py       # serveur HTTPS local pour tester sur téléphone
 └── docs/
     ├── CONCEPT.md           # le concept complet du jeu (document de référence)
