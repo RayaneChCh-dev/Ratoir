@@ -48,21 +48,20 @@ Quand il faut trancher, on suit ces priorités dans l'ordre :
 
 ## 6. La cuisine
 
-Une seule pièce, un seul niveau.
+Une seule pièce d'environ **10 × 12,5 m**, entièrement visible à l'écran (la caméra ne bouge presque plus), inspirée de l'image de référence de l'équipe. Sous le comptoir de service, la **salle du restaurant** sert de décor.
 
 ```
-          mur du fond (haut, avec le TROU DU RAT au centre)
-   ┌──────────────────────────────────────────┐
-   │ [TOMATES]          (trou)      [DÉCOUPE]  │
-   │                                           │
-   │                                           │
-   │                                 [CUISSON] │
-   │               (joueur)                    │
-   │                                           │
-   │                                           │
-   │   [LIVRAISON]                             │
-   └──────────────────────────────────────────┘
-          mur de devant (bas)
+   ┌───────── mur du fond (carrelage terracotta) ─────────┐
+   │  étagère      HOTTE + trou du rat       étagère       │
+   │ [FRIGO]                                  [comptoir]   │
+   │                                          [DÉCOUPE]    │
+   │ [TOMATES]                                             │
+   │                  (allée centrale)        [CUISSON]    │
+   │ [comptoir]                                            │
+   │ [comptoir]                               [comptoir]   │
+   │ ════════ comptoir de service ════════ [LIVRAISON] ══  │
+   └───────────────────────────────────────────────────────┘
+        salle du restaurant : parquet, tapis rouge, tables, chaises
 ```
 
 | Meuble | Rôle | Règle |

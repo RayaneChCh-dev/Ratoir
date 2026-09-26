@@ -269,6 +269,17 @@ Pour **chaque** modèle intégré :
 - [ ] Ligne ajoutée dans `CREDITS.md`
 - [ ] Testé avec <kbd>F5</kbd> **et** sur un vrai téléphone après export (le poids du build reste raisonnable)
 
+## 10 bis. Icônes du HUD (remplacement automatique)
+
+Le HUD dessine aujourd'hui ses icônes en code. Il suffit de déposer ces fichiers (PNG carrés à fond transparent, 256 ou 512 px) pour qu'ils les remplacent, sans toucher au code (`scripts/ui/hud_icon.gd`) :
+
+| Fichier | Icône |
+|---------|-------|
+| `assets/ui/icons/heart.png` | Cœur (vies) — la version « perdue » est grisée automatiquement |
+| `assets/ui/icons/timer.png` | Chrono |
+| `assets/ui/icons/star.png` | Étoile (objectif du niveau) |
+| `assets/ui/icons/chef_hat.png` | Toque (niveau) |
+
 ## 11. Catalogue de prompts (images à générer)
 
 Prompts en **anglais** : les générateurs d'images les comprennent mieux. Les images servent ensuite à la conversion image → 3D (§4), sauf celles de la partie 2D (§11.6), qui sont utilisées telles quelles dans le jeu.

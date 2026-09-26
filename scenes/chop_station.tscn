@@ -49,7 +49,7 @@ position = Vector3(0, 2.0, 0)
 script = ExtResource("2_progress")
 
 [node name="Label3D" type="Label3D" parent="."]
-position = Vector3(0, 2.45, 0)
+position = Vector3(0, 2.1, 1.7)
 billboard = 1
 no_depth_test = true
 pixel_size = 0.011

@@ -22,9 +22,10 @@ var _elapsed := 0.0
 
 func _ready() -> void:
 	add_to_group("stations")
-	var rug_material := StandardMaterial3D.new()
-	rug_material.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
-	rug_material.albedo_color = rug_color
+	var rug_material := ShaderMaterial.new()
+	rug_material.shader = preload("res://shaders/rug.gdshader")
+	rug_material.set_shader_parameter("base_color", Color(rug_color, 1.0))
+	rug_material.set_shader_parameter("rug_size", Vector2(2.6, 2.6))
 	if has_node("Rug"):
 		$Rug.material_override = rug_material
 
