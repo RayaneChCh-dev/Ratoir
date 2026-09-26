@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Statut** | ⏳ À faire |
+| **Statut** | 🟡 Juge fait (banque de textes) ; IA en direct, personnalité du rat et récap' à faire |
 | **Dépend de** | Phase 5 (serveur relais, file audio, bulle), Phase 4 (écran de fin, compte à rebours), Phase 3 (`RatProfile`) |
 | **Débloque** | Phase 8 (démo) |
 | **Profil** | Dev IA/backend |
@@ -25,7 +25,7 @@ Règles de design : [CONCEPT.md §9](../CONCEPT.md#9-lintelligence-artificielle)
 - [ ] Pendant le compte à rebours, le **nom** et la **réplique d'entrée** du rat s'affichent (et le commentateur la lit si possible).
 - [ ] Les **curseurs** générés changent réellement le comportement du rat (vitesse, fréquence, sabotage préféré), **dans des limites sûres** (valeurs bornées).
 - [ ] Si l'IA ne répond pas en **3 s** au lancement : profil tiré d'une banque de 3 à 5 profils écrits à la main. **Le jeu ne démarre jamais en retard.**
-- [ ] À chaque plat livré, une **carte du juge** s'affiche 2 à 3 s (nom du plat + critique + note sur 10), sans gêner le jeu.
+- [x] À chaque plat livré, le **juge** (assis à la table de droite de la salle) reçoit l'assiette, goûte, réagit et affiche une **bulle** au-dessus de lui : nom du plat, **note sur 5 étoiles**, critique. Les livraisons rapprochées sont jugées l'une après l'autre. Implémentation : `scenes/judge.tscn`, `scripts/judge/`, `data/judge_bank.json`. Note : 4 de base, +1 si servi en moins de 12 s, −1 au-delà de 25 s, −1 si le rat a saboté entre-temps, un peu de hasard.
 - [ ] Sur l'écran de fin, un **récap' personnalisé** qui cite des faits réels de la partie (nombre de plats, sabotages, coups sur le rat, nom du rat), affiché progressivement (effet machine à écrire) et **lu à voix haute**.
 - [ ] Si le récap' IA ne répond pas en **8 s** : récap' de secours construit à partir des statistiques, sans erreur visible.
 - [ ] Testé hors ligne et en ligne, sur téléphone.

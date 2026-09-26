@@ -1,0 +1,16 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/judge/judge.gd" id="1_judge"]
+[ext_resource type="PackedScene" path="res://assets/models/characters/judge.glb" id="2_model"]
+[ext_resource type="Script" path="res://scripts/judge/judge_bubble.gd" id="3_bubble"]
+
+[node name="Judge" type="Node3D"]
+script = ExtResource("1_judge")
+
+[node name="Model" type="Node3D" parent="."]
+
+[node name="Visual" parent="Model" instance=ExtResource("2_model")]
+transform = Transform3D(0.95, 0, 0, 0, 0.95, 0, 0, 0, 0.95, 0, 0, 0)
+
+[node name="Bubble" type="CanvasLayer" parent="."]
+script = ExtResource("3_bubble")

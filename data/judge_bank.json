@@ -1,0 +1,42 @@
+{
+  "prefixes": [
+    "Tomate", "Carpaccio", "Symphonie", "Mille-feuille", "Velouté", "Tartare", "Fricassée",
+    "Soupe", "Rhapsodie", "Crumble", "Émulsion", "Ballade", "Confit", "Tatin", "Sonnet"
+  ],
+  "suffixes": [
+    "existentialiste", "du désespoir", "à la sauvette", "façon grand-mère énervée",
+    "sous tension", "du lundi matin", "en crise d'identité", "impressionniste",
+    "au parfum de rat", "de la dernière chance", "en apesanteur", "philosophale",
+    "sans permis", "révolutionnaire", "à l'arrache"
+  ],
+  "critiques": {
+    "great": [
+      "J'ai pleuré. Deux fois.",
+      "Enfin un chef qui comprend la tomate.",
+      "Je vais l'encadrer.",
+      "C'est du génie. Ou de la chance. Je prends quand même.",
+      "Mon monocle en est tombé."
+    ],
+    "good": [
+      "Solide, honnête, presque élégant.",
+      "Mes papilles applaudissent poliment.",
+      "Je reviendrai. Peut-être.",
+      "Il y a de l'idée. Et de la tomate.",
+      "Correct. Je le dirai à personne."
+    ],
+    "meh": [
+      "C'est… un plat. Indéniablement.",
+      "Ni bon ni mauvais, comme un mardi.",
+      "J'attendais plus. J'attends encore.",
+      "La tomate a fait le travail, pas vous.",
+      "Tiède, comme mon enthousiasme."
+    ],
+    "bad": [
+      "Le rat a mieux cuisiné.",
+      "Je veux parler au gérant.",
+      "Même ma moustache refuse.",
+      "C'est froid, c'est triste, c'est vous.",
+      "On sent le sabotage. Et l'abandon."
+    ]
+  }
+}

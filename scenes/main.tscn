@@ -19,21 +19,22 @@
 [ext_resource type="PackedScene" path="res://scenes/trap_bin.tscn" id="17_r"]
 [ext_resource type="PackedScene" path="res://scenes/place_button.tscn" id="18_r"]
 [ext_resource type="Script" path="res://scripts/soundtrack.gd" id="19_r"]
-[ext_resource type="PackedScene" path="res://assets/kaykit/kitchen/extractorhood.gltf" id="20_r"]
-[ext_resource type="PackedScene" path="res://assets/kaykit/kitchen/shelf_papertowel_decorated.gltf" id="21_r"]
-[ext_resource type="PackedScene" path="res://assets/kaykit/kitchen/pot_A.gltf" id="22_r"]
-[ext_resource type="PackedScene" path="res://assets/kaykit/kitchen/fridge_A_decorated.gltf" id="23_r"]
-[ext_resource type="PackedScene" path="res://assets/kaykit/kitchen/kitchencounter_straight_A_decorated.gltf" id="24_r"]
-[ext_resource type="PackedScene" path="res://assets/kaykit/kitchen/kitchencounter_straight_A.gltf" id="25_r"]
-[ext_resource type="PackedScene" path="res://assets/kaykit/kitchen/papertowel.gltf" id="26_r"]
-[ext_resource type="PackedScene" path="res://assets/kaykit/kitchen/kitchencounter_straight_B.gltf" id="27_r"]
-[ext_resource type="PackedScene" path="res://assets/kaykit/kitchen/jar_A_medium.gltf" id="28_r"]
-[ext_resource type="PackedScene" path="res://assets/kaykit/kitchen/ketchup.gltf" id="29_r"]
-[ext_resource type="PackedScene" path="res://assets/kaykit/kitchen/mustard.gltf" id="30_r"]
-[ext_resource type="PackedScene" path="res://assets/kaykit/kitchen/dishrack_plates.gltf" id="31_r"]
-[ext_resource type="PackedScene" path="res://assets/kaykit/kitchen/menu.gltf" id="32_r"]
-[ext_resource type="PackedScene" path="res://assets/kaykit/kitchen/kitchentable_A.gltf" id="33_r"]
-[ext_resource type="PackedScene" path="res://assets/kaykit/kitchen/chair_A.gltf" id="34_r"]
+[ext_resource type="PackedScene" path="res://scenes/judge.tscn" id="20_r"]
+[ext_resource type="PackedScene" path="res://assets/kaykit/kitchen/extractorhood.gltf" id="21_r"]
+[ext_resource type="PackedScene" path="res://assets/kaykit/kitchen/shelf_papertowel_decorated.gltf" id="22_r"]
+[ext_resource type="PackedScene" path="res://assets/kaykit/kitchen/pot_A.gltf" id="23_r"]
+[ext_resource type="PackedScene" path="res://assets/kaykit/kitchen/fridge_A_decorated.gltf" id="24_r"]
+[ext_resource type="PackedScene" path="res://assets/kaykit/kitchen/kitchencounter_straight_A_decorated.gltf" id="25_r"]
+[ext_resource type="PackedScene" path="res://assets/kaykit/kitchen/kitchencounter_straight_A.gltf" id="26_r"]
+[ext_resource type="PackedScene" path="res://assets/kaykit/kitchen/papertowel.gltf" id="27_r"]
+[ext_resource type="PackedScene" path="res://assets/kaykit/kitchen/kitchencounter_straight_B.gltf" id="28_r"]
+[ext_resource type="PackedScene" path="res://assets/kaykit/kitchen/jar_A_medium.gltf" id="29_r"]
+[ext_resource type="PackedScene" path="res://assets/kaykit/kitchen/ketchup.gltf" id="30_r"]
+[ext_resource type="PackedScene" path="res://assets/kaykit/kitchen/mustard.gltf" id="31_r"]
+[ext_resource type="PackedScene" path="res://assets/kaykit/kitchen/dishrack_plates.gltf" id="32_r"]
+[ext_resource type="PackedScene" path="res://assets/kaykit/kitchen/menu.gltf" id="33_r"]
+[ext_resource type="PackedScene" path="res://assets/kaykit/kitchen/kitchentable_A.gltf" id="34_r"]
+[ext_resource type="PackedScene" path="res://assets/kaykit/kitchen/chair_A.gltf" id="35_r"]
 
 [sub_resource type="Environment" id="Env"]
 background_mode = 1
@@ -180,19 +181,19 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, -0, 0, 1, 2.8, 0, 4.3)
 
 [node name="Props" type="Node3D" parent="Kitchen"]
 
-[node name="Hood" parent="Kitchen/Props" instance=ExtResource("20_r")]
+[node name="Hood" parent="Kitchen/Props" instance=ExtResource("21_r")]
 transform = Transform3D(0.8, 0, 0, 0, 0.8, 0, -0, 0, 0.8, 0, 0, -8)
 
-[node name="ShelfLeft" parent="Kitchen/Props" instance=ExtResource("21_r")]
+[node name="ShelfLeft" parent="Kitchen/Props" instance=ExtResource("22_r")]
 transform = Transform3D(0.8, 0, 0, 0, 0.8, 0, -0, 0, 0.8, -2.8, 2.2, -8)
 
-[node name="ShelfRight" parent="Kitchen/Props" instance=ExtResource("21_r")]
+[node name="ShelfRight" parent="Kitchen/Props" instance=ExtResource("22_r")]
 transform = Transform3D(0.8, 0, 0, 0, 0.8, 0, -0, 0, 0.8, 2.8, 2.2, -8)
 
-[node name="PotOnShelf" parent="Kitchen/Props" instance=ExtResource("22_r")]
+[node name="PotOnShelf" parent="Kitchen/Props" instance=ExtResource("23_r")]
 transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, -0, 0, 0.5, 2.6, 2.9, -7.75)
 
-[node name="Fridge" parent="Kitchen/Props" instance=ExtResource("23_r")]
+[node name="Fridge" parent="Kitchen/Props" instance=ExtResource("24_r")]
 transform = Transform3D(4.286e-17, 0, 0.7, 0, 0.7, 0, -0.7, 0, 4.286e-17, -4.25, 0, -6.8)
 
 [node name="FridgeCollision" type="CSGBox3D" parent="Kitchen/Props"]
@@ -201,7 +202,7 @@ visible = false
 use_collision = true
 size = Vector3(1.6, 1.8, 1.45)
 
-[node name="CounterBackRight" parent="Kitchen/Props" instance=ExtResource("24_r")]
+[node name="CounterBackRight" parent="Kitchen/Props" instance=ExtResource("25_r")]
 transform = Transform3D(4.286e-17, 0, -0.7, 0, 0.7, 0, 0.7, 0, 4.286e-17, 4.3, 0, -7)
 
 [node name="CounterBackRightCollision" type="CSGBox3D" parent="Kitchen/Props"]
@@ -210,7 +211,7 @@ visible = false
 use_collision = true
 size = Vector3(1.4, 1.0, 1.4)
 
-[node name="CounterRight" parent="Kitchen/Props" instance=ExtResource("25_r")]
+[node name="CounterRight" parent="Kitchen/Props" instance=ExtResource("26_r")]
 transform = Transform3D(4.286e-17, 0, -0.7, 0, 0.7, 0, 0.7, 0, 4.286e-17, 4.3, 0, 1.2)
 
 [node name="CounterRightCollision" type="CSGBox3D" parent="Kitchen/Props"]
@@ -219,10 +220,10 @@ visible = false
 use_collision = true
 size = Vector3(1.4, 1.0, 1.4)
 
-[node name="PaperTowel" parent="Kitchen/Props" instance=ExtResource("26_r")]
+[node name="PaperTowel" parent="Kitchen/Props" instance=ExtResource("27_r")]
 transform = Transform3D(0.7, 0, 0, 0, 0.7, 0, -0, 0, 0.7, 4.4, 0.7, 1.2)
 
-[node name="CounterLeft" parent="Kitchen/Props" instance=ExtResource("27_r")]
+[node name="CounterLeft" parent="Kitchen/Props" instance=ExtResource("28_r")]
 transform = Transform3D(4.286e-17, 0, 0.7, 0, 0.7, 0, -0.7, 0, 4.286e-17, -4.3, 0, -0.6)
 
 [node name="CounterLeftCollision" type="CSGBox3D" parent="Kitchen/Props"]
@@ -231,37 +232,37 @@ visible = false
 use_collision = true
 size = Vector3(1.4, 1.0, 1.4)
 
-[node name="JarLeft" parent="Kitchen/Props" instance=ExtResource("28_r")]
+[node name="JarLeft" parent="Kitchen/Props" instance=ExtResource("29_r")]
 transform = Transform3D(0.6, 0, 0, 0, 0.6, 0, -0, 0, 0.6, -4.5, 0.7, -0.2)
 
-[node name="Ketchup" parent="Kitchen/Props" instance=ExtResource("29_r")]
+[node name="Ketchup" parent="Kitchen/Props" instance=ExtResource("30_r")]
 transform = Transform3D(0.7, 0, 0, 0, 0.7, 0, -0, 0, 0.7, -4.3, 0.7, -0.3)
 
-[node name="Mustard" parent="Kitchen/Props" instance=ExtResource("30_r")]
+[node name="Mustard" parent="Kitchen/Props" instance=ExtResource("31_r")]
 transform = Transform3D(0.7, 0, 0, 0, 0.7, 0, -0, 0, 0.7, -4.05, 0.7, -0.45)
 
-[node name="DishRack" parent="Kitchen/Props" instance=ExtResource("31_r")]
+[node name="DishRack" parent="Kitchen/Props" instance=ExtResource("32_r")]
 transform = Transform3D(3.062e-17, 0, 0.5, 0, 0.5, 0, -0.5, 0, 3.062e-17, -4.35, 0.7, -0.75)
 
 [node name="TrapBin" parent="Kitchen" instance=ExtResource("17_r")]
 transform = Transform3D(6.123e-17, 0, 1, 0, 1, 0, -1, 0, 6.123e-17, -4.3, 0, 1.6)
 
-[node name="Service0" parent="Kitchen/Props" instance=ExtResource("27_r")]
+[node name="Service0" parent="Kitchen/Props" instance=ExtResource("28_r")]
 transform = Transform3D(0.7, 0, 0, 0, 0.7, 0, -0, 0, 0.7, -4.2, 0, 4.3)
 
-[node name="Service1" parent="Kitchen/Props" instance=ExtResource("27_r")]
+[node name="Service1" parent="Kitchen/Props" instance=ExtResource("28_r")]
 transform = Transform3D(0.7, 0, 0, 0, 0.7, 0, -0, 0, 0.7, -2.8, 0, 4.3)
 
-[node name="Service2" parent="Kitchen/Props" instance=ExtResource("27_r")]
+[node name="Service2" parent="Kitchen/Props" instance=ExtResource("28_r")]
 transform = Transform3D(0.7, 0, 0, 0, 0.7, 0, -0, 0, 0.7, -1.4, 0, 4.3)
 
-[node name="Service3" parent="Kitchen/Props" instance=ExtResource("27_r")]
+[node name="Service3" parent="Kitchen/Props" instance=ExtResource("28_r")]
 transform = Transform3D(0.7, 0, 0, 0, 0.7, 0, -0, 0, 0.7, 0, 0, 4.3)
 
-[node name="Service4" parent="Kitchen/Props" instance=ExtResource("27_r")]
+[node name="Service4" parent="Kitchen/Props" instance=ExtResource("28_r")]
 transform = Transform3D(0.7, 0, 0, 0, 0.7, 0, -0, 0, 0.7, 1.4, 0, 4.3)
 
-[node name="Service5" parent="Kitchen/Props" instance=ExtResource("27_r")]
+[node name="Service5" parent="Kitchen/Props" instance=ExtResource("28_r")]
 transform = Transform3D(0.7, 0, 0, 0, 0.7, 0, -0, 0, 0.7, 4.2, 0, 4.3)
 
 [node name="ServiceCollision" type="CSGBox3D" parent="Kitchen/Props"]
@@ -270,7 +271,7 @@ visible = false
 use_collision = true
 size = Vector3(10, 1, 1.4)
 
-[node name="Menu" parent="Kitchen/Props" instance=ExtResource("32_r")]
+[node name="Menu" parent="Kitchen/Props" instance=ExtResource("33_r")]
 transform = Transform3D(0.7, 0, 0, 0, 0.7, 0, -0, 0, 0.7, -1.4, 0.7, 4.25)
 
 [node name="Dining" type="Node3D" parent="."]
@@ -298,35 +299,36 @@ position = Vector3(0, 0.01, 8.8)
 mesh = SubResource("Mesh_rug_dining")
 surface_material_override/0 = SubResource("Mat_rug_dining")
 
-[node name="TableLeft" parent="Dining" instance=ExtResource("33_r")]
+[node name="TableLeft" parent="Dining" instance=ExtResource("34_r")]
 transform = Transform3D(0.7, 0, 0, 0, 0.7, 0, -0, 0, 0.7, -3.2, 0, 8.4)
 
-[node name="ChairLeftTop" parent="Dining" instance=ExtResource("34_r")]
+[node name="ChairLeftTop" parent="Dining" instance=ExtResource("35_r")]
 transform = Transform3D(0.9, 0, 0, 0, 0.9, 0, -0, 0, 0.9, -3.2, 0, 7.2)
 
-[node name="ChairLeftBottom" parent="Dining" instance=ExtResource("34_r")]
+[node name="ChairLeftBottom" parent="Dining" instance=ExtResource("35_r")]
 transform = Transform3D(-0.9, 0, 1.102e-16, 0, 0.9, 0, -1.102e-16, 0, -0.9, -3.2, 0, 9.6)
 
-[node name="MenuLeft" parent="Dining" instance=ExtResource("32_r")]
+[node name="MenuLeft" parent="Dining" instance=ExtResource("33_r")]
 transform = Transform3D(0.6, 0, 0, 0, 0.6, 0, -0, 0, 0.6, -2.9, 0.7, 8.4)
 
-[node name="KetchupLeft" parent="Dining" instance=ExtResource("29_r")]
+[node name="KetchupLeft" parent="Dining" instance=ExtResource("30_r")]
 transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, -0, 0, 0.5, -3.55, 0.7, 8.3)
 
-[node name="TableRight" parent="Dining" instance=ExtResource("33_r")]
+[node name="TableRight" parent="Dining" instance=ExtResource("34_r")]
 transform = Transform3D(0.7, 0, 0, 0, 0.7, 0, -0, 0, 0.7, 3.2, 0, 8.4)
 
-[node name="ChairRightTop" parent="Dining" instance=ExtResource("34_r")]
-transform = Transform3D(0.9, 0, 0, 0, 0.9, 0, -0, 0, 0.9, 3.2, 0, 7.2)
-
-[node name="ChairRightBottom" parent="Dining" instance=ExtResource("34_r")]
+[node name="ChairRightBottom" parent="Dining" instance=ExtResource("35_r")]
 transform = Transform3D(-0.9, 0, 1.102e-16, 0, 0.9, 0, -1.102e-16, 0, -0.9, 3.2, 0, 9.6)
 
-[node name="MenuRight" parent="Dining" instance=ExtResource("32_r")]
+[node name="MenuRight" parent="Dining" instance=ExtResource("33_r")]
 transform = Transform3D(0.6, 0, 0, 0, 0.6, 0, -0, 0, 0.6, 3.5, 0.7, 8.4)
 
-[node name="KetchupRight" parent="Dining" instance=ExtResource("29_r")]
+[node name="KetchupRight" parent="Dining" instance=ExtResource("30_r")]
 transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, -0, 0, 0.5, 2.85, 0.7, 8.3)
+
+[node name="Judge" parent="." instance=ExtResource("20_r") node_paths=PackedStringArray("delivery")]
+position = Vector3(3.2, 0, 7.05)
+delivery = NodePath("../Kitchen/DeliveryCounter")
 
 [node name="Player" parent="." instance=ExtResource("6_r") node_paths=PackedStringArray("joystick")]
 position = Vector3(0, 0, -1)
