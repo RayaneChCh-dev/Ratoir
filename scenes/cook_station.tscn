@@ -20,6 +20,7 @@ script = ExtResource("1_station")
 accepts = 1
 produces = 2
 duration = 2.5
+can_be_switched_off = true
 
 [node name="Rug" type="MeshInstance3D" parent="."]
 position = Vector3(0, 0.01, 0)
@@ -42,6 +43,8 @@ material = SubResource("Mat_burner")
 position = Vector3(0, 1.06, 0)
 
 [node name="Area3D" type="Area3D" parent="."]
+collision_layer = 0
+collision_mask = 2
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
 position = Vector3(0, 0.5, 0)
@@ -59,3 +62,6 @@ pixel_size = 0.011
 text = "Cuisson"
 font_size = 40
 outline_size = 12
+
+[node name="ApproachPoint" type="Marker3D" parent="."]
+position = Vector3(-1.1, 0, 0)

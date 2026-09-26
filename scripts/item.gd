@@ -57,3 +57,7 @@ func _add_mesh(mesh: PrimitiveMesh, color: Color, pos: Vector3) -> MeshInstance3
 	instance.position = pos
 	add_child(instance)
 	return instance
+
+
+func get_item_name() -> String:
+	return ["une tomate crue", "une tomate découpée", "une assiette de tomates cuites"][state]

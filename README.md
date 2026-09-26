@@ -45,7 +45,7 @@ Un critique affamé commente la partie à voix haute (voix Gradium). Le juge IA 
 |------:|---------|------|
 | 1 | Squelette : scène 3D, caméra, joueur, joystick tactile, export Web | ✅ Terminé |
 | 2 | Boucle de cuisine complète (ramasser, découper, cuire, livrer, score) + passage en portrait | ✅ Terminé |
-| 3 | Le rat et ses sabotages + « taper le rat » | ⏳ À faire |
+| 3 | Le rat et ses sabotages + « taper le rat » | ✅ Terminé |
 | 4 | Manche complète : écran titre, chrono, écran de fin avec étoiles, équilibrage | ⏳ À faire |
 | 5 | Critique vocal : phrase selon l'action dominante + voix Gradium | ✅ Démo jouable |
 | 6 | Juge de plats + personnalité du rat + récap' final IA | ⏳ À faire |
@@ -103,7 +103,7 @@ Si le proxy est arrêté, le sous-titre s'affiche quand même et la cuisine cont
 |--------|-----------|------------|
 | Se déplacer | Poser le pouce **n'importe où** et glisser (joystick flottant) | Clic-glisser, ou <kbd>Z</kbd><kbd>Q</kbd><kbd>S</kbd><kbd>D</kbd> / <kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> / flèches |
 | Ramasser, poser, livrer | **Automatique au contact** : il suffit de marcher jusqu'au tapis coloré devant un meuble | idem |
-| Taper le rat | Bouton dans le coin (arrive en phase 3) | <kbd>Espace</kbd> (phase 3) |
+| Taper le rat | Bouton **TAPER** en bas à droite (à portée, environ 1,5 m) | <kbd>Espace</kbd> |
 
 ## Tester sur téléphone
 

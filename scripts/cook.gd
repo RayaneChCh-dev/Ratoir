@@ -21,3 +21,7 @@ func take_item() -> Item:
 	var item := held_item
 	held_item = null
 	return item
+
+
+func has_item() -> bool:
+	return held_item != null
