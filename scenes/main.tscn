@@ -1,48 +1,86 @@
 [gd_scene format=3]
 
-[ext_resource type="PackedScene" path="res://scenes/player.tscn" id="1_player"]
-[ext_resource type="Script" path="res://scripts/touch_joystick.gd" id="2_joystick"]
-[ext_resource type="Shader" path="res://shaders/checker_floor.gdshader" id="3_floor"]
-[ext_resource type="Script" path="res://scripts/camera_follow.gd" id="4_camera"]
-[ext_resource type="PackedScene" path="res://scenes/chop_station.tscn" id="5_chop"]
-[ext_resource type="PackedScene" path="res://scenes/cook_station.tscn" id="6_cook"]
-[ext_resource type="PackedScene" path="res://scenes/ingredient_spawn.tscn" id="7_spawn"]
-[ext_resource type="PackedScene" path="res://scenes/delivery_counter.tscn" id="8_delivery"]
-[ext_resource type="Script" path="res://scripts/hud.gd" id="9_hud"]
-
-[ext_resource type="PackedScene" path="res://scenes/rat.tscn" id="10_rat"]
-[ext_resource type="PackedScene" path="res://scenes/ui/onboarding.tscn" id="11_onboarding"]
-[ext_resource type="PackedScene" path="res://scenes/trap_bin.tscn" id="11_trap_bin"]
-[ext_resource type="PackedScene" path="res://scenes/place_button.tscn" id="12_place"]
-[ext_resource type="Script" path="res://scripts/soundtrack.gd" id="13_music"]
-
-[sub_resource type="ProceduralSkyMaterial" id="SkyMat"]
-sky_top_color = Color(0.55, 0.72, 0.9, 1)
-sky_horizon_color = Color(0.85, 0.88, 0.92, 1)
-ground_horizon_color = Color(0.85, 0.88, 0.92, 1)
-
-[sub_resource type="Sky" id="Sky"]
-sky_material = SubResource("SkyMat")
+[ext_resource type="Shader" path="res://shaders/kitchen_tiles.gdshader" id="1_r"]
+[ext_resource type="Shader" path="res://shaders/wall_tiles.gdshader" id="2_r"]
+[ext_resource type="Shader" path="res://shaders/wood_planks.gdshader" id="3_r"]
+[ext_resource type="Shader" path="res://shaders/rug.gdshader" id="4_r"]
+[ext_resource type="Shader" path="res://shaders/vignette.gdshader" id="5_r"]
+[ext_resource type="PackedScene" path="res://scenes/player.tscn" id="6_r"]
+[ext_resource type="Script" path="res://scripts/touch_joystick.gd" id="7_r"]
+[ext_resource type="Script" path="res://scripts/camera_follow.gd" id="8_r"]
+[ext_resource type="PackedScene" path="res://scenes/chop_station.tscn" id="9_r"]
+[ext_resource type="PackedScene" path="res://scenes/cook_station.tscn" id="10_r"]
+[ext_resource type="PackedScene" path="res://scenes/ingredient_spawn.tscn" id="11_r"]
+[ext_resource type="PackedScene" path="res://scenes/delivery_counter.tscn" id="12_r"]
+[ext_resource type="Script" path="res://scripts/hud.gd" id="13_r"]
+[ext_resource type="PackedScene" path="res://scenes/rat.tscn" id="14_r"]
+[ext_resource type="PackedScene" path="res://scenes/ui/onboarding.tscn" id="15_r"]
+[ext_resource type="PackedScene" path="res://scenes/ui/game_hud.tscn" id="16_r"]
+[ext_resource type="PackedScene" path="res://scenes/trap_bin.tscn" id="17_r"]
+[ext_resource type="PackedScene" path="res://scenes/place_button.tscn" id="18_r"]
+[ext_resource type="Script" path="res://scripts/soundtrack.gd" id="19_r"]
+[ext_resource type="PackedScene" path="res://assets/kaykit/kitchen/extractorhood.gltf" id="20_r"]
+[ext_resource type="PackedScene" path="res://assets/kaykit/kitchen/shelf_papertowel_decorated.gltf" id="21_r"]
+[ext_resource type="PackedScene" path="res://assets/kaykit/kitchen/pot_A.gltf" id="22_r"]
+[ext_resource type="PackedScene" path="res://assets/kaykit/kitchen/fridge_A_decorated.gltf" id="23_r"]
+[ext_resource type="PackedScene" path="res://assets/kaykit/kitchen/kitchencounter_straight_A_decorated.gltf" id="24_r"]
+[ext_resource type="PackedScene" path="res://assets/kaykit/kitchen/kitchencounter_straight_A.gltf" id="25_r"]
+[ext_resource type="PackedScene" path="res://assets/kaykit/kitchen/papertowel.gltf" id="26_r"]
+[ext_resource type="PackedScene" path="res://assets/kaykit/kitchen/kitchencounter_straight_B.gltf" id="27_r"]
+[ext_resource type="PackedScene" path="res://assets/kaykit/kitchen/jar_A_medium.gltf" id="28_r"]
+[ext_resource type="PackedScene" path="res://assets/kaykit/kitchen/ketchup.gltf" id="29_r"]
+[ext_resource type="PackedScene" path="res://assets/kaykit/kitchen/mustard.gltf" id="30_r"]
+[ext_resource type="PackedScene" path="res://assets/kaykit/kitchen/dishrack_plates.gltf" id="31_r"]
+[ext_resource type="PackedScene" path="res://assets/kaykit/kitchen/menu.gltf" id="32_r"]
+[ext_resource type="PackedScene" path="res://assets/kaykit/kitchen/kitchentable_A.gltf" id="33_r"]
+[ext_resource type="PackedScene" path="res://assets/kaykit/kitchen/chair_A.gltf" id="34_r"]
 
 [sub_resource type="Environment" id="Env"]
 background_mode = 1
-background_color = Color(0.2, 0.18, 0.25, 1)
+background_color = Color(0.16, 0.09, 0.07, 1)
 ambient_light_source = 2
-ambient_light_color = Color(0.75, 0.78, 0.9, 1)
-ambient_light_energy = 0.45
-sky = SubResource("Sky")
+ambient_light_color = Color(1, 0.8, 0.62, 1)
+ambient_light_energy = 0.32
 tonemap_mode = 0
 
 [sub_resource type="ShaderMaterial" id="Mat_floor"]
-render_priority = 0
-shader = ExtResource("3_floor")
+shader = ExtResource("1_r")
+shader_parameter/tile_a = Color(0.93, 0.7, 0.5, 1)
+shader_parameter/tile_b = Color(0.85, 0.58, 0.4, 1)
+shader_parameter/grout = Color(0.7, 0.46, 0.32, 1)
+shader_parameter/tile_size = 1.0
+shader_parameter/grid_origin = Vector2(-5, -8)
 
-[sub_resource type="StandardMaterial3D" id="Mat_wall"]
-albedo_color = Color(0.55, 0.36, 0.26, 1)
+[sub_resource type="ShaderMaterial" id="Mat_wall"]
+shader = ExtResource("2_r")
+
+[sub_resource type="ShaderMaterial" id="Mat_wood"]
+shader = ExtResource("3_r")
+shader_parameter/wood_a = Color(0.72, 0.45, 0.26, 1)
+shader_parameter/wood_b = Color(0.62, 0.37, 0.2, 1)
+
+[sub_resource type="StandardMaterial3D" id="Mat_wood_trim"]
+albedo_color = Color(0.5, 0.3, 0.17, 1)
 roughness = 0.8
 
 [sub_resource type="StandardMaterial3D" id="Mat_hole"]
-albedo_color = Color(0.05, 0.04, 0.04, 1)
+albedo_color = Color(0.05, 0.03, 0.03, 1)
+
+[sub_resource type="StandardMaterial3D" id="Mat_hole_frame"]
+albedo_color = Color(0.55, 0.34, 0.2, 1)
+
+[sub_resource type="ShaderMaterial" id="Mat_rug_dining"]
+shader = ExtResource("4_r")
+shader_parameter/base_color = Color(0.8, 0.26, 0.2, 1)
+shader_parameter/border_color = Color(0.98, 0.86, 0.72, 1)
+shader_parameter/rug_size = Vector2(2.6, 4.6)
+
+[sub_resource type="PlaneMesh" id="Mesh_rug_dining"]
+size = Vector2(2.6, 4.6)
+
+[sub_resource type="ShaderMaterial" id="Mat_vignette"]
+shader = ExtResource("5_r")
+shader_parameter/strength = 0.4
 
 [node name="Main" type="Node3D"]
 
@@ -50,97 +88,282 @@ albedo_color = Color(0.05, 0.04, 0.04, 1)
 environment = SubResource("Env")
 
 [node name="Sun" type="DirectionalLight3D" parent="."]
-rotation_degrees = Vector3(-55, 30, 0)
-light_energy = 0.8
+rotation_degrees = Vector3(-60, 20, 0)
+light_color = Color(1, 0.88, 0.72, 1)
+light_energy = 0.85
 shadow_enabled = true
+shadow_opacity = 0.6
+
+[node name="HoodLight" type="OmniLight3D" parent="."]
+position = Vector3(0, 1.8, -6.6)
+light_color = Color(1, 0.78, 0.5, 1)
+light_energy = 0.9
+omni_range = 4.5
+
+[node name="CandleLeft" type="OmniLight3D" parent="."]
+position = Vector3(-3.2, 1.3, 8.4)
+light_color = Color(1, 0.62, 0.3, 1)
+light_energy = 1.6
+omni_range = 3.2
+
+[node name="CandleRight" type="OmniLight3D" parent="."]
+position = Vector3(3.2, 1.3, 8.4)
+light_color = Color(1, 0.62, 0.3, 1)
+light_energy = 1.6
+omni_range = 3.2
 
 [node name="Camera3D" type="Camera3D" parent="." node_paths=PackedStringArray("target")]
 transform = Transform3D(1, 0, 0, 0, 0.573576, 0.819152, 0, -0.819152, 0.573576, 0, 16.383, 11.4715)
 keep_aspect = 0
 projection = 1
-size = 10.0
+size = 11.6
 near = 0.1
 far = 100.0
-script = ExtResource("4_camera")
+script = ExtResource("8_r")
 target = NodePath("../Player")
+bounds = Rect2(-5.8, -12.6, 11.6, 25.1)
+dead_zone = Vector2(1.2, 2.5)
 
 [node name="Kitchen" type="Node3D" parent="."]
 
 [node name="Floor" type="CSGBox3D" parent="Kitchen"]
-position = Vector3(0, -0.25, 0)
+position = Vector3(0, -0.25, -1.75)
 use_collision = true
-size = Vector3(12, 0.5, 22)
+size = Vector3(11, 0.5, 13.5)
 material = SubResource("Mat_floor")
 
-[node name="WallNorth" type="CSGBox3D" parent="Kitchen"]
-position = Vector3(0, 2, -11.25)
+[node name="WallBack" type="CSGBox3D" parent="Kitchen"]
+position = Vector3(0, 2, -8.25)
 use_collision = true
-size = Vector3(13, 4, 0.5)
+size = Vector3(11.5, 4, 0.5)
 material = SubResource("Mat_wall")
 
-[node name="WallSouth" type="CSGBox3D" parent="Kitchen"]
-position = Vector3(0, 0.3, 11.25)
+[node name="WallLeft" type="CSGBox3D" parent="Kitchen"]
+position = Vector3(-5.25, 1.5, -1.75)
 use_collision = true
-size = Vector3(13, 0.6, 0.5)
+size = Vector3(0.5, 3, 13.5)
 material = SubResource("Mat_wall")
 
-[node name="WallWest" type="CSGBox3D" parent="Kitchen"]
-position = Vector3(-6.25, 0.6, 0)
+[node name="WallRight" type="CSGBox3D" parent="Kitchen"]
+position = Vector3(5.25, 1.5, -1.75)
 use_collision = true
-size = Vector3(0.5, 1.2, 22)
+size = Vector3(0.5, 3, 13.5)
 material = SubResource("Mat_wall")
 
-[node name="WallEast" type="CSGBox3D" parent="Kitchen"]
-position = Vector3(6.25, 0.6, 0)
-use_collision = true
-size = Vector3(0.5, 1.2, 22)
-material = SubResource("Mat_wall")
+[node name="RatHoleFrame" type="CSGCylinder3D" parent="Kitchen"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, -7.99)
+radius = 0.68
+height = 0.03
+sides = 24
+material = SubResource("Mat_hole_frame")
 
 [node name="RatHole" type="CSGCylinder3D" parent="Kitchen"]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, -10.98)
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, -7.97)
 radius = 0.55
-height = 0.04
+height = 0.03
 sides = 24
 material = SubResource("Mat_hole")
 
-[node name="IngredientSpawn" parent="Kitchen" instance=ExtResource("7_spawn")]
-position = Vector3(-3.5, 0, -10.2)
+[node name="IngredientSpawn" parent="Kitchen" instance=ExtResource("11_r")]
+transform = Transform3D(6.123e-17, 0, 1, 0, 1, 0, -1, 0, 6.123e-17, -4.3, 0, -3.4)
 
-[node name="ChopStation" parent="Kitchen" instance=ExtResource("5_chop")]
-position = Vector3(3.5, 0, -10.2)
+[node name="ChopStation" parent="Kitchen" instance=ExtResource("9_r")]
+transform = Transform3D(6.123e-17, 0, -1, 0, 1, 0, 1, 0, 6.123e-17, 4.3, 0, -4.6)
+rug_color = Color(0.8, 0.28, 0.22, 1)
 
-[node name="CookStation" parent="Kitchen" instance=ExtResource("6_cook")]
-position = Vector3(5.2, 0, 3)
-rug_color = Color(0.95, 0.5, 0.15, 0.35)
+[node name="CookStation" parent="Kitchen" instance=ExtResource("10_r")]
+transform = Transform3D(6.123e-17, 0, -1, 0, 1, 0, 1, 0, 6.123e-17, 4.3, 0, -1.6)
+rug_color = Color(0.86, 0.36, 0.2, 1)
 
-[node name="DeliveryCounter" parent="Kitchen" instance=ExtResource("8_delivery")]
-position = Vector3(-2.5, 0, 10.2)
+[node name="DeliveryCounter" parent="Kitchen" instance=ExtResource("12_r")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, -0, 0, 1, 2.8, 0, 4.3)
 
-[node name="TrapBin" parent="Kitchen" instance=ExtResource("11_trap_bin")]
-position = Vector3(-5, 0, 0)
+[node name="Props" type="Node3D" parent="Kitchen"]
 
-[node name="Player" parent="." node_paths=PackedStringArray("joystick") instance=ExtResource("1_player")]
+[node name="Hood" parent="Kitchen/Props" instance=ExtResource("20_r")]
+transform = Transform3D(0.8, 0, 0, 0, 0.8, 0, -0, 0, 0.8, 0, 0, -8)
+
+[node name="ShelfLeft" parent="Kitchen/Props" instance=ExtResource("21_r")]
+transform = Transform3D(0.8, 0, 0, 0, 0.8, 0, -0, 0, 0.8, -2.8, 2.2, -8)
+
+[node name="ShelfRight" parent="Kitchen/Props" instance=ExtResource("21_r")]
+transform = Transform3D(0.8, 0, 0, 0, 0.8, 0, -0, 0, 0.8, 2.8, 2.2, -8)
+
+[node name="PotOnShelf" parent="Kitchen/Props" instance=ExtResource("22_r")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, -0, 0, 0.5, 2.6, 2.9, -7.75)
+
+[node name="Fridge" parent="Kitchen/Props" instance=ExtResource("23_r")]
+transform = Transform3D(4.286e-17, 0, 0.7, 0, 0.7, 0, -0.7, 0, 4.286e-17, -4.25, 0, -6.8)
+
+[node name="FridgeCollision" type="CSGBox3D" parent="Kitchen/Props"]
+position = Vector3(-4.25, 0.9, -6.8)
+visible = false
+use_collision = true
+size = Vector3(1.6, 1.8, 1.45)
+
+[node name="CounterBackRight" parent="Kitchen/Props" instance=ExtResource("24_r")]
+transform = Transform3D(4.286e-17, 0, -0.7, 0, 0.7, 0, 0.7, 0, 4.286e-17, 4.3, 0, -7)
+
+[node name="CounterBackRightCollision" type="CSGBox3D" parent="Kitchen/Props"]
+position = Vector3(4.3, 0.5, -7.0)
+visible = false
+use_collision = true
+size = Vector3(1.4, 1.0, 1.4)
+
+[node name="CounterRight" parent="Kitchen/Props" instance=ExtResource("25_r")]
+transform = Transform3D(4.286e-17, 0, -0.7, 0, 0.7, 0, 0.7, 0, 4.286e-17, 4.3, 0, 1.2)
+
+[node name="CounterRightCollision" type="CSGBox3D" parent="Kitchen/Props"]
+position = Vector3(4.3, 0.5, 1.2)
+visible = false
+use_collision = true
+size = Vector3(1.4, 1.0, 1.4)
+
+[node name="PaperTowel" parent="Kitchen/Props" instance=ExtResource("26_r")]
+transform = Transform3D(0.7, 0, 0, 0, 0.7, 0, -0, 0, 0.7, 4.4, 0.7, 1.2)
+
+[node name="CounterLeft" parent="Kitchen/Props" instance=ExtResource("27_r")]
+transform = Transform3D(4.286e-17, 0, 0.7, 0, 0.7, 0, -0.7, 0, 4.286e-17, -4.3, 0, -0.6)
+
+[node name="CounterLeftCollision" type="CSGBox3D" parent="Kitchen/Props"]
+position = Vector3(-4.3, 0.5, -0.6)
+visible = false
+use_collision = true
+size = Vector3(1.4, 1.0, 1.4)
+
+[node name="JarLeft" parent="Kitchen/Props" instance=ExtResource("28_r")]
+transform = Transform3D(0.6, 0, 0, 0, 0.6, 0, -0, 0, 0.6, -4.5, 0.7, -0.2)
+
+[node name="Ketchup" parent="Kitchen/Props" instance=ExtResource("29_r")]
+transform = Transform3D(0.7, 0, 0, 0, 0.7, 0, -0, 0, 0.7, -4.3, 0.7, -0.3)
+
+[node name="Mustard" parent="Kitchen/Props" instance=ExtResource("30_r")]
+transform = Transform3D(0.7, 0, 0, 0, 0.7, 0, -0, 0, 0.7, -4.05, 0.7, -0.45)
+
+[node name="DishRack" parent="Kitchen/Props" instance=ExtResource("31_r")]
+transform = Transform3D(3.062e-17, 0, 0.5, 0, 0.5, 0, -0.5, 0, 3.062e-17, -4.35, 0.7, -0.75)
+
+[node name="TrapBin" parent="Kitchen" instance=ExtResource("17_r")]
+transform = Transform3D(6.123e-17, 0, 1, 0, 1, 0, -1, 0, 6.123e-17, -4.3, 0, 1.6)
+
+[node name="Service0" parent="Kitchen/Props" instance=ExtResource("27_r")]
+transform = Transform3D(0.7, 0, 0, 0, 0.7, 0, -0, 0, 0.7, -4.2, 0, 4.3)
+
+[node name="Service1" parent="Kitchen/Props" instance=ExtResource("27_r")]
+transform = Transform3D(0.7, 0, 0, 0, 0.7, 0, -0, 0, 0.7, -2.8, 0, 4.3)
+
+[node name="Service2" parent="Kitchen/Props" instance=ExtResource("27_r")]
+transform = Transform3D(0.7, 0, 0, 0, 0.7, 0, -0, 0, 0.7, -1.4, 0, 4.3)
+
+[node name="Service3" parent="Kitchen/Props" instance=ExtResource("27_r")]
+transform = Transform3D(0.7, 0, 0, 0, 0.7, 0, -0, 0, 0.7, 0, 0, 4.3)
+
+[node name="Service4" parent="Kitchen/Props" instance=ExtResource("27_r")]
+transform = Transform3D(0.7, 0, 0, 0, 0.7, 0, -0, 0, 0.7, 1.4, 0, 4.3)
+
+[node name="Service5" parent="Kitchen/Props" instance=ExtResource("27_r")]
+transform = Transform3D(0.7, 0, 0, 0, 0.7, 0, -0, 0, 0.7, 4.2, 0, 4.3)
+
+[node name="ServiceCollision" type="CSGBox3D" parent="Kitchen/Props"]
+position = Vector3(0, 0.5, 4.3)
+visible = false
+use_collision = true
+size = Vector3(10, 1, 1.4)
+
+[node name="Menu" parent="Kitchen/Props" instance=ExtResource("32_r")]
+transform = Transform3D(0.7, 0, 0, 0, 0.7, 0, -0, 0, 0.7, -1.4, 0.7, 4.25)
+
+[node name="Dining" type="Node3D" parent="."]
+
+[node name="DiningFloor" type="CSGBox3D" parent="Dining"]
+position = Vector3(0, -0.25, 8.75)
+use_collision = true
+size = Vector3(11, 0.5, 8.5)
+material = SubResource("Mat_wood")
+
+[node name="DiningWallLeft" type="CSGBox3D" parent="Dining"]
+position = Vector3(-5.25, 0.5, 8.75)
+use_collision = true
+size = Vector3(0.5, 1, 8.5)
+material = SubResource("Mat_wood_trim")
+
+[node name="DiningWallRight" type="CSGBox3D" parent="Dining"]
+position = Vector3(5.25, 0.5, 8.75)
+use_collision = true
+size = Vector3(0.5, 1, 8.5)
+material = SubResource("Mat_wood_trim")
+
+[node name="Rug" type="MeshInstance3D" parent="Dining"]
+position = Vector3(0, 0.01, 8.8)
+mesh = SubResource("Mesh_rug_dining")
+surface_material_override/0 = SubResource("Mat_rug_dining")
+
+[node name="TableLeft" parent="Dining" instance=ExtResource("33_r")]
+transform = Transform3D(0.7, 0, 0, 0, 0.7, 0, -0, 0, 0.7, -3.2, 0, 8.4)
+
+[node name="ChairLeftTop" parent="Dining" instance=ExtResource("34_r")]
+transform = Transform3D(0.9, 0, 0, 0, 0.9, 0, -0, 0, 0.9, -3.2, 0, 7.2)
+
+[node name="ChairLeftBottom" parent="Dining" instance=ExtResource("34_r")]
+transform = Transform3D(-0.9, 0, 1.102e-16, 0, 0.9, 0, -1.102e-16, 0, -0.9, -3.2, 0, 9.6)
+
+[node name="MenuLeft" parent="Dining" instance=ExtResource("32_r")]
+transform = Transform3D(0.6, 0, 0, 0, 0.6, 0, -0, 0, 0.6, -2.9, 0.7, 8.4)
+
+[node name="KetchupLeft" parent="Dining" instance=ExtResource("29_r")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, -0, 0, 0.5, -3.55, 0.7, 8.3)
+
+[node name="TableRight" parent="Dining" instance=ExtResource("33_r")]
+transform = Transform3D(0.7, 0, 0, 0, 0.7, 0, -0, 0, 0.7, 3.2, 0, 8.4)
+
+[node name="ChairRightTop" parent="Dining" instance=ExtResource("34_r")]
+transform = Transform3D(0.9, 0, 0, 0, 0.9, 0, -0, 0, 0.9, 3.2, 0, 7.2)
+
+[node name="ChairRightBottom" parent="Dining" instance=ExtResource("34_r")]
+transform = Transform3D(-0.9, 0, 1.102e-16, 0, 0.9, 0, -1.102e-16, 0, -0.9, 3.2, 0, 9.6)
+
+[node name="MenuRight" parent="Dining" instance=ExtResource("32_r")]
+transform = Transform3D(0.6, 0, 0, 0, 0.6, 0, -0, 0, 0.6, 3.5, 0.7, 8.4)
+
+[node name="KetchupRight" parent="Dining" instance=ExtResource("29_r")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, -0, 0, 0.5, 2.85, 0.7, 8.3)
+
+[node name="Player" parent="." instance=ExtResource("6_r") node_paths=PackedStringArray("joystick")]
+position = Vector3(0, 0, -1)
 joystick = NodePath("../UI/TouchJoystick")
 
+[node name="Rat" parent="." instance=ExtResource("14_r")]
+position = Vector3(0, 0, -7.4)
+
 [node name="Soundtrack" type="AudioStreamPlayer" parent="."]
-script = ExtResource("13_music")
+script = ExtResource("19_r")
 
 [node name="UI" type="CanvasLayer" parent="."]
 
+[node name="Vignette" type="ColorRect" parent="UI"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+material = SubResource("Mat_vignette")
+
 [node name="Score" type="RichTextLabel" parent="UI"]
+visible = false
 anchors_preset = 10
 anchor_right = 1.0
 offset_top = 24.0
 offset_bottom = 90.0
 grow_horizontal = 2
 mouse_filter = 2
-theme_override_colors/default_color = Color(1, 1, 1, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 14
-theme_override_font_sizes/normal_font_size = 44
 bbcode_enabled = true
 scroll_active = false
-script = ExtResource("9_hud")
+script = ExtResource("13_r")
+
+[node name="GameHud" parent="UI" instance=ExtResource("16_r")]
+
+[node name="PlaceButton" parent="UI" instance=ExtResource("18_r")]
 
 [node name="TouchJoystick" type="Control" parent="UI" node_paths=PackedStringArray("ignore_zones")]
 layout_mode = 3
@@ -150,12 +373,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-script = ExtResource("2_joystick")
+script = ExtResource("7_r")
 ignore_zones = [NodePath("../PlaceButton")]
 
-[node name="PlaceButton" parent="UI" instance=ExtResource("12_place")]
-
-[node name="Rat" parent="." instance=ExtResource("10_rat")]
-position = Vector3(0, 0, -10.4)
-
-[node name="Onboarding" parent="." instance=ExtResource("11_onboarding")]
+[node name="Onboarding" parent="." instance=ExtResource("15_r")]

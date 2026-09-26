@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" path="res://scripts/ingredient_spawn.gd" id="1_script"]
 [ext_resource type="PackedScene" path="res://assets/models/kitchen/crate.glb" id="3_model"]
+[ext_resource type="Shader" path="res://shaders/rug.gdshader" id="9_rug"]
 
 [sub_resource type="BoxShape3D" id="Shape_area"]
 size = Vector3(2.6, 1, 2.6)
@@ -9,9 +10,11 @@ size = Vector3(2.6, 1, 2.6)
 [sub_resource type="PlaneMesh" id="Mesh_rug"]
 size = Vector2(2.6, 2.6)
 
-[sub_resource type="StandardMaterial3D" id="Mat_rug"]
-transparency = 1
-albedo_color = Color(0.95, 0.8, 0.3, 0.35)
+[sub_resource type="ShaderMaterial" id="Mat_rug"]
+shader = ExtResource("9_rug")
+shader_parameter/base_color = Color(0.36, 0.62, 0.46, 1)
+shader_parameter/rug_size = Vector2(2.6, 2.6)
+
 
 [sub_resource type="StandardMaterial3D" id="Mat_counter"]
 albedo_color = Color(0.75, 0.5, 0.25, 1)
@@ -44,7 +47,7 @@ position = Vector3(0, 0.5, 0)
 shape = SubResource("Shape_area")
 
 [node name="Label3D" type="Label3D" parent="."]
-position = Vector3(0, 2.45, 0)
+position = Vector3(0, 2.1, 1.7)
 billboard = 1
 no_depth_test = true
 pixel_size = 0.011

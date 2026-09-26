@@ -60,6 +60,13 @@ Que le jeu soit **agréable à regarder et à écouter**, pas seulement fonction
 - [ ] Modèle dans `rat.tscn` → `Model`, avec animation `run` ou procédurale ([ASSETS.md §6](../ASSETS.md#6-animer-les-personnages)).
 - [ ] État « assommé » : petites étoiles qui tournent au-dessus de sa tête.
 
+### Étape 3 bis — Cuisine v2 ✅ fait
+- Cuisine réduite à ≈ 10 × 12,5 m d'après l'image de référence, salle du restaurant en décor, décor KayKit (frigo, hotte, étagères, comptoirs, ustensiles, tables, chaises).
+- Ambiance : carrelage (`kitchen_tiles`, `wall_tiles`), parquet, tapis (`rug`), lumières chaudes (soleil, hotte, bougies), vignettage.
+- HUD : niveau, chrono, cœurs, étoile + progression. Icônes dessinées en code en attendant les PNG (voir ASSETS §10 bis).
+- La scène est générée par un script Python gardé hors dépôt ; pour ajuster un meuble, modifier directement `scenes/main.tscn` dans l'éditeur.
+- À venir quand les modèles arrivent : plantes, bougies, trou du rat en 3D.
+
 ### Étape 4 — Effets et sons (§4)
 
 ### Étape 5 — Habillage de l'interface
