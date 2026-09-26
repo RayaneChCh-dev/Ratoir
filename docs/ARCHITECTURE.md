@@ -70,16 +70,29 @@ Chaque personnage a un nœud enfant **`Model`** (Node3D) qui contient **uniqueme
 ### `GameState` (autoload, `scripts/game_state.gd`)
 | Membre | Type | Rôle |
 |--------|------|------|
-| `score` | `int` | Points de la manche |
+| `score` | `int` | Plats livrés pendant la partie |
+| `level` | `int` | Niveau courant ; objectif = `level * 5` plats cumulés |
+| `health` | `int` | Santé (3 au départ, +1 à chaque niveau, maximum 3) |
+| `time_left` | `float` | Temps restant dans le niveau |
 | `STAR_THRESHOLDS` | `Array[int]` = `[5, 10, 15]` | Paliers d'étoiles |
 | `add_point()` | fonction | +1 point, émet `score_changed` |
 | `stars() -> int` | fonction | Étoiles (0 à 3) pour le score actuel |
+| `target_score() -> int` | fonction | Objectif cumulatif du niveau (`level * 5`) |
+| `round_duration_for_level() -> float` | fonction | 90 s au niveau 1, -5 s par niveau, minimum 60 s |
+| `difficulty_scale() -> float` | fonction | Multiplicateur de difficulté du rat : +15 % par niveau, plafonné à 2× |
+| `take_damage(amount, reason)` | fonction | Retire de la santé ; zéro santé termine et met le jeu en pause |
+| `reset()` | fonction | Repart au niveau 1, réinitialise score/santé/journal et relance le chrono |
 | `log_event(event: String, detail := "")` | fonction | Ajoute au journal et émet `event_logged` |
 | `events` | `Array[Dictionary]` | Journal complet de la manche |
 | `score_changed(score)` | signal | Le HUD l'écoute |
+| `level_changed(level, target_score)` | signal | Le HUD met à jour l'objectif |
+| `health_changed(health)` | signal | Le HUD met à jour les vies |
+| `time_changed(time_left)` | signal | Le HUD met à jour le chrono |
+| `difficulty_changed(level, scale)` | signal | Le rat ajuste sa vitesse et son intervalle de sortie |
+| `round_started` / `round_ended(level, score, health)` | signaux | Début/fin d'un niveau |
 | `event_logged(entry)` | signal | Le commentateur l'écoute (Phase 5) |
 
-*Phase 4 ajoutera* : l'état de la manche (`READY`, `PLAYING`, `ENDED`), le chrono, `start_round()`, `reset()` et les signaux `round_started`/`round_ended`. Voir [PHASE-4](phases/PHASE-4-manche.md).
+Chaque niveau dure 90 s au niveau 1, puis 5 s de moins par niveau (minimum 60 s). Le score est cumulatif : atteindre 5, 10, 15… plats valide le niveau suivant. Un chrono expiré retire une vie et relance le niveau ; un dégât direct du rat passe par `take_damage()`. La Phase 3 doit connecter les sabotages qui touchent le joueur et appliquer `difficulty_scale()` à la vitesse/fréquence du rat. Voir [PHASE-4](phases/PHASE-4-manche.md).
 
 ### `Item` (`scripts/item.gd`) : un ingrédient
 - `enum State { RAW, CHOPPED, COOKED }` : tomate crue → tranches → assiette.
@@ -144,6 +157,8 @@ Toujours passer par `GameState.log_event(event, detail)`. `t` (secondes depuis l
 | `item_recovered` | Player | `"tomate récupérée au sol"` | 3 |
 | `timer_milestone` | GameState | `"30 s restantes"` / `"10 s restantes"` | 4 |
 | `round_end` | GameState | `"score 9, 1 étoile"` | 4 |
+| `level_up` | GameState | `"niveau 2"` | 4 |
+| `player_damaged` | GameState | `"rat"` | 4 |
 
 ## 6. Ajouter une nouvelle station (exemple)
 

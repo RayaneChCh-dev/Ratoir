@@ -8,8 +8,8 @@ func _physics_process(_delta: float) -> void:
 	for body in _area.get_overlapping_bodies():
 		if body is Cook and body.held_item and body.held_item.state == Item.State.COOKED:
 			body.take_item().queue_free()
-			GameState.add_point()
 			GameState.log_event("dish_delivered", "assiette de tomates cuites")
+			GameState.add_point()
 			_show_popup()
 
 

@@ -13,9 +13,9 @@
 
 ## 1. Objectif
 
-Transformer la boucle en **une vraie partie, du début à la fin** :
+Transformer la boucle en **une vraie partie, du début à la fin**, puis en progression de niveaux :
 
-**écran titre** « Touchez pour commencer » → **3, 2, 1, Cuisinez !** → **manche chronométrée** → **« Temps écoulé ! »** → **écran de fin** (score + étoiles + récap') → **Rejouer**.
+**écran titre** « Touchez pour commencer » → **3, 2, 1, Cuisinez !** → **niveau chronométré** → niveau suivant si l'objectif est atteint, sinon perte d'une vie et nouvel essai → **partie terminée** à 0 vie.
 
 ## 2. État jouable exigé (critères d'acceptation)
 
@@ -28,11 +28,15 @@ Transformer la boucle en **une vraie partie, du début à la fin** :
 - [ ] Écran de fin : **score**, **étoiles** qui apparaissent une par une (0 à 3, paliers 5/10/15), une **zone de texte pour le récap'** (texte de secours pour l'instant, remplacé en Phase 6) et un bouton **Rejouer**.
 - [ ] **Rejouer** relance une manche propre : score à 0, journal vidé, cuisine vide, rat caché.
 - [ ] Équilibrage fait (§4) et valeurs reportées dans [CONCEPT.md](../CONCEPT.md#7-la-manche-le-score-et-les-étoiles).
+- [ ] Progression : objectif cumulatif de 5 plats par niveau, chrono -5 s par niveau (90 s au départ, minimum 60 s), difficulté du rat +15 % par niveau (plafond 2×).
+- [ ] Santé : 3 vies, +1 vie par niveau réussi (maximum 3), -1 à l'expiration du chrono ou sur dégât direct du rat ; à 0, la partie se termine.
 - [ ] Testé sur un vrai téléphone, audio compris.
 
 ## 3. Conception technique
 
 ### 3.1 État de la manche dans `GameState`
+La progression conserve le score entre les niveaux : `target_score() == level * 5`. Le chrono redémarre à chaque niveau avec `max(60, 90 - 5 * (level - 1))`. Le rat écoute `difficulty_changed(level, scale)` et utilise `difficulty_scale()` pour augmenter sa vitesse et réduire son délai caché. Tout dégât direct passe par `GameState.take_damage()`.
+
 ```gdscript
 enum RoundState { TITLE, COUNTDOWN, PLAYING, ENDED }
 
@@ -131,6 +135,9 @@ Méthode :
 | Score 4, 5, 10, 15 (tricher en appelant `add_point()` pour tester) | 0, 1, 2, 3 étoiles |
 | Rejouer 3 fois de suite | Chaque manche repart de zéro (score, journal, objets, rat) |
 | Mettre le navigateur en arrière-plan pendant la manche | Au retour, le jeu reprend sans chrono négatif ni double fin |
+| Atteindre 5 puis 10 plats | Le niveau et l'objectif montent, le chrono baisse, une vie est rendue sans dépasser 3 |
+| Laisser le chrono expirer | Une vie est perdue, le score reste acquis, le même niveau redémarre |
+| Recevoir un dégât direct du rat | Une vie est perdue ; à 0, le jeu se met en pause |
 
 ## 7. Pièges connus
 - **Autoload qui survit au rechargement** : voir §3.5.
