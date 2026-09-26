@@ -39,11 +39,12 @@ Jeu de cuisine en 3D pour **téléphone**, jouable **dans le navigateur** (expor
 Tu es le chef. Ta mission : servir un maximum d'assiettes avant la fin du chrono. Mais un rat sort de son trou pour semer le chaos dans ta cuisine…
 
 - **La recette** : prendre une tomate dans la caisse → la **découper** sur la planche → la **cuire** sur la cuisinière → la **livrer** au comptoir de service. Tout se fait **au contact** : il suffit de marcher jusqu'au meuble.
-- **Le rat** : il éteint la plaque, vole les ingrédients et renverse les plats. Le chef ne peut pas le taper (choix actuel) : il faut l'éviter et réparer ses dégâts. Quand le rat devient plus rapide que le chef, une **poubelle à pièges** apparaît pour se défendre.
-- **Le juge** : attablé dans la salle, un critique gastronomique goûte chaque plat livré, lui donne un **nom absurde**, une **note sur 5 étoiles** et un avis sans pitié. La note dépend de la rapidité du service et des sabotages du rat.
+- **Le rat** : il éteint la plaque (on la rallume au contact), vole les ingrédients et renverse les plats. Le chef ne peut pas le taper (choix actuel) : il faut l'éviter et réparer ses dégâts. En manche 3, quand le rat court plus vite que le chef, un **bac à pièges** apparaît : on prend un piège et on le pose (bouton **POSER** ou <kbd>E</kbd>).
+- **Le juge** : attablé dans la salle, un critique gastronomique reçoit chaque plat livré (l'assiette va jusqu'à sa table), lui donne un **nom absurde**, une **note sur 5 étoiles** et un avis sans pitié, tirés d'une banque locale. La note dépend de la rapidité du service et des sabotages du rat. Le jeu ne se met jamais en pause pour lui.
 - **Le critique** : une voix (en anglais), affamée et impatiente, commente toutes les quelques secondes l'action que tu fais le plus. Les phrases sont enregistrées dans le jeu : aucun réseau nécessaire.
-- **3 manches** : objectif de 5, 10 puis 15 plats cumulés, en 90, 75 puis 60 s. La recette accélère et le rat court plus vite à chaque manche. Pas de vies : si le chrono tombe à 0 avant l'objectif, la partie est perdue. Réussir la 3ᵉ manche gagne la partie.
-- **Ambiance** : cuisine chaleureuse façon *Overcooked*, vue en plongée en portrait, musique qui monte en intensité à chaque manche.
+- **3 manches** : objectif de 5, 10 puis 15 plats cumulés, en 90, 75 puis 60 s. La recette accélère et le rat court plus vite à chaque manche (4 m/s, 5,6 m/s puis 7,2 m/s ; le chef reste à 6 m/s). Pas de vies : si le chrono tombe à 0 avant l'objectif, la partie est perdue. Réussir la 3ᵉ manche gagne la partie.
+- **Écrans** : **PLAY** au départ (la partie reste en pause tant qu'on n'a pas touché l'écran), puis **VICTOIRE !** ou **PARTIE TERMINÉE**, et **REJOUER**.
+- **Ambiance** : cuisine chaleureuse façon *Overcooked* et salle du restaurant, vue en plongée en portrait. Musique : une minute de morceau par manche, de plus en plus intense, bouclée tant que le chrono dure ; elle démarre après **PLAY** (le navigateur exige un geste de l'utilisateur).
 
 ## Contrôles
 
@@ -51,7 +52,8 @@ Tu es le chef. Ta mission : servir un maximum d'assiettes avant la fin du chrono
 |--------|-----------|------------|
 | Se déplacer | Poser le pouce **n'importe où** et glisser (joystick flottant) | Clic-glisser, ou <kbd>Z</kbd><kbd>Q</kbd><kbd>S</kbd><kbd>D</kbd> / <kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> / flèches |
 | Ramasser, poser, livrer | **Automatique au contact** du meuble | idem |
-| Poser un piège | Bouton **POSER** (visible quand le chef tient un piège) | <kbd>E</kbd> |
+| Poser un piège | Bouton **POSER** (manche 3, visible quand le chef tient un piège) | <kbd>E</kbd> |
+| Taper le rat | *Désactivé* (voir [CONCEPT §8.3](docs/CONCEPT.md)) ; la parade jouable est le piège | — |
 | Lancer / relancer | Bouton **PLAY** / **REJOUER** | Clic, ou <kbd>Entrée</kbd> |
 
 ## État d'avancement
@@ -174,10 +176,10 @@ You are the chef. Your mission: serve as many dishes as possible before time run
 
 ### How to play
 - **The recipe**: grab a tomato from the crate → **chop** it on the cutting board → **cook** it on the stove → **serve** it at the service counter. Everything happens **on contact**: just walk up to the station.
-- **The rat**: it turns off your stove, steals your ingredients and knocks over your dishes. The chef can't hit it (current design choice): dodge it and fix the damage. Once the rat gets faster than the chef, a **trap bin** appears so you can fight back.
+- **The rat**: it turns off your stove (walk up to it to relight it), steals your ingredients and knocks over your dishes. The chef can't hit it (current design choice): dodge it and fix the damage. In round 3, once the rat runs faster than the chef, a **trap bin** appears: grab a trap and place it (**POSER** button or <kbd>E</kbd>).
 - **The judge**: sitting in the dining room, a snobbish food critic tastes every dish you serve, gives it an **absurd name**, a **5-star rating** and a merciless review. The rating depends on how fast you served and on the rat's sabotage.
 - **The commentator**: a hungry, impatient voice comments every few seconds on what you do the most. The lines are recorded inside the game: no network needed.
-- **3 rounds**: reach 5, 10 then 15 total dishes in 90, 75 then 60 seconds. The recipe gets faster and the rat gets quicker every round. No lives: if the timer hits 0 before the goal, you lose. Clear round 3 to win.
+- **3 rounds**: reach 5, 10 then 15 total dishes in 90, 75 then 60 seconds. The recipe gets faster and the rat gets quicker every round (4 m/s, 5.6 m/s then 7.2 m/s; the chef stays at 6 m/s). No lives: if the timer hits 0 before the goal, you lose. Clear round 3 to win.
 - **Mood**: a cozy *Overcooked*-style kitchen, top-down portrait view, and music that ramps up every round.
 
 ### Controls
@@ -185,7 +187,7 @@ You are the chef. Your mission: serve as many dishes as possible before time run
 |--------|-------|----------|
 | Move | Put your thumb **anywhere** and drag (floating joystick) | Click and drag, or <kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> / <kbd>Z</kbd><kbd>Q</kbd><kbd>S</kbd><kbd>D</kbd> / arrow keys |
 | Pick up, drop, serve | **Automatic on contact** with the station | same |
-| Place a trap | **POSER** button (shown while holding a trap) | <kbd>E</kbd> |
+| Place a trap | **POSER** button (round 3, shown while holding a trap) | <kbd>E</kbd> |
 | Start / restart | **PLAY** / **REJOUER** button | Click, or <kbd>Enter</kbd> |
 
 📱 Designed for portrait mode on phones. Turn the sound on to hear the commentator!
