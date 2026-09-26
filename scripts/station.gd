@@ -21,6 +21,7 @@ var _elapsed := 0.0
 
 
 func _ready() -> void:
+	add_to_group("stations")
 	var rug_material := StandardMaterial3D.new()
 	rug_material.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
 	rug_material.albedo_color = rug_color
@@ -71,7 +72,7 @@ func has_item() -> bool:
 	return _item != null
 
 
-func is_processing() -> bool:
+func is_transforming_item() -> bool:
 	# Objet présent et encore en cours de transformation (ex: cuisson en cours)
 	return _item != null and _item.state == accepts
 
@@ -98,7 +99,8 @@ func steal_item() -> Item:
 
 
 func _set_visual_state(is_on: bool) -> void:
-	if has_node("StoveMesh"):
-		var sm = get_node("StoveMesh")
-		if sm.material_override:
-			sm.material_override.albedo_color = Color.ORANGE if is_on else Color.GRAY
+	var burner := get_node_or_null("Burner") as CSGCylinder3D
+	if burner:
+		var material := StandardMaterial3D.new()
+		material.albedo_color = Color.ORANGE if is_on else Color.GRAY
+		burner.material = material

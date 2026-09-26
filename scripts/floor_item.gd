@@ -1,24 +1,29 @@
-# scripts/floor_item.gd
 class_name FloorItem
 extends Node3D
+## Réessaie aussi si le joueur libère ses mains sans quitter la zone.
 
 @onready var area: Area3D = $Area3D
-var contained_item: Node3D = null
+var contained_item: Item
+var _bounce: Tween
 
-func _ready() -> void:
-	area.collision_mask = 2 # Détecte uniquement le Joueur (Layer 2)
-	area.body_entered.connect(_on_body_entered)
-
-func setup(item: Node3D) -> void:
+func setup(item: Item) -> void:
 	contained_item = item
-	add_child(item)
+	item.reparent(self, false)
 	item.position = Vector3(0, 0.1, 0)
+	_bounce = create_tween()
+	_bounce.tween_property(item, "position:y", 0.4, 0.15)
+	_bounce.tween_property(item, "position:y", 0.1, 0.2)
 
-func _on_body_entered(body: Node3D) -> void:
-	if body.is_in_group("player"):
-		# Vérifie que le joueur a les mains libres
-		if not body.has_item():
-			remove_child(contained_item)
+func _physics_process(_delta: float) -> void:
+	if contained_item == null:
+		return
+	for body in area.get_overlapping_bodies():
+		if body is Cook and not body.has_item():
+			if _bounce:
+				_bounce.kill()
+			var detail := contained_item.get_item_name()
 			body.hold(contained_item)
-			GameState.log_event("item_recovered", "objet récupéré au sol")
+			contained_item = null
+			GameState.log_event("item_recovered", detail + " récupérée au sol")
 			queue_free()
+			return

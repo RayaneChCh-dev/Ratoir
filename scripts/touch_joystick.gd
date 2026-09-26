@@ -19,7 +19,7 @@ var _knob := Vector2.ZERO
 
 func _is_in_ignore_zone(pos: Vector2) -> bool:
 	for button in ignore_zones:
-		if button and button.is_visible_in_tree():
+		if button and button.is_visible_in_tree() and button.texture_normal:
 			var size = button.texture_normal.get_size() * button.global_scale
 			if Rect2(button.global_position, size).has_point(pos):
 				return true

@@ -16,7 +16,7 @@ enum State { HIDDEN, EMERGING, GOING, SABOTAGING, RETURNING, FLEEING }
 # États et Timers
 var current_state: State = State.HIDDEN
 var hole_position: Vector3 = Vector3.ZERO
-var carried_item: Node3D = null
+var carried_item: Item = null
 var current_sabotage: Sabotage = null
 
 var _state_timer: float = 0.0
@@ -30,13 +30,13 @@ func _ready() -> void:
 	add_to_group("rat")
 	motion_mode = CharacterBody3D.MOTION_MODE_FLOATING
 	hole_position = global_position
-	
+
 	if not profile:
 		profile = RatProfile.new()
-		
+
 	contact_area.body_entered.connect(_on_contact_area_body_entered)
 	alert_label.visible = false
-	
+
 	_enter_hidden(profile.get_next_hidden_delay())
 
 func _physics_process(delta: float) -> void:
@@ -58,14 +58,21 @@ func _physics_process(delta: float) -> void:
 
 		State.GOING:
 			_anti_stuck_timer += delta
-			if _anti_stuck_timer >= STUCK_LIMIT:
+			var limit := Sabotage.SpillSabotage.MAX_PURSUIT_TIME if current_sabotage is Sabotage.SpillSabotage else STUCK_LIMIT
+			if not current_sabotage.is_valid() or _anti_stuck_timer >= limit:
 				_enter_returning()
 				return
 
 			var target = current_sabotage.target_position()
-			var dist = global_position.distance_to(target)
-			
-			if dist < 0.4:
+			var dist := global_position.distance_to(target)
+			alert_label.global_position = target + Vector3.UP * 1.5
+			if current_sabotage is Sabotage.SpillSabotage:
+				# Le contact physique est la seule condition de renversement.
+				for body in contact_area.get_overlapping_bodies():
+					_on_contact_area_body_entered(body)
+				if current_state == State.GOING:
+					_move_towards(target, profile.speed)
+			elif dist < 0.4:
 				_enter_sabotaging()
 			else:
 				_move_towards(target, profile.speed)
@@ -73,20 +80,25 @@ func _physics_process(delta: float) -> void:
 		State.SABOTAGING:
 			_state_timer -= delta
 			if _state_timer <= 0.0:
-				if current_sabotage:
+				if current_sabotage and current_sabotage.is_valid():
 					current_sabotage.apply(self)
 				_enter_returning()
 
 		State.RETURNING:
+			_anti_stuck_timer += delta
 			var dist = global_position.distance_to(hole_position)
-			if dist < 0.3:
+			if dist < 0.3 or _anti_stuck_timer >= STUCK_LIMIT:
+				# En secours, rendre l’objet récupérable plutôt que valider un vol.
+				if dist >= 0.3 and carried_item:
+					_drop_item_on_floor()
 				_finish_returning()
 			else:
 				_move_towards(hole_position, profile.speed)
 
 		State.FLEEING:
+			_anti_stuck_timer += delta
 			var dist = global_position.distance_to(hole_position)
-			if dist < 0.3:
+			if dist < 0.3 or _anti_stuck_timer >= STUCK_LIMIT:
 				GameState.log_event("rat_fled", "%s retourne dans son trou" % profile.display_name)
 				_enter_hidden(HIT_FLEE_LONG_DELAY)
 			else:
@@ -97,14 +109,17 @@ func _move_towards(target: Vector3, spd: float) -> void:
 	dir.y = 0.0
 	if dir.length_squared() > 0.001:
 		dir = dir.normalized()
-		look_at(global_position + dir, Vector3.UP)
+		model.rotation.y = atan2(dir.x, dir.z)
 	velocity = dir * spd
 	move_and_slide()
+	global_position.y = 0.0
 
 # --- GESTION DES ÉTATS ---
 
 func _enter_hidden(delay: float) -> void:
 	current_state = State.HIDDEN
+	global_position = hole_position
+	velocity = Vector3.ZERO
 	_state_timer = delay
 	visible = false
 	collision_shape.set_deferred("disabled", true)
@@ -125,11 +140,12 @@ func _try_emerge() -> void:
 	model.scale = Vector3(0.1, 0.1, 0.1)
 	collision_shape.set_deferred("disabled", false)
 	contact_area.set_deferred("monitoring", true)
-	
+
 	GameState.log_event("rat_appeared", "%s sort de son trou" % profile.display_name)
 
 func _start_going() -> void:
 	current_state = State.GOING
+	model.scale = Vector3.ONE
 	_anti_stuck_timer = 0.0
 	alert_label.visible = true
 	alert_label.global_position = current_sabotage.target_position() + Vector3.UP * 1.5
@@ -142,44 +158,46 @@ func _enter_sabotaging() -> void:
 
 func _enter_returning() -> void:
 	current_state = State.RETURNING
+	_anti_stuck_timer = 0.0
 	alert_label.visible = false
 
 func _finish_returning() -> void:
 	if carried_item:
-		# Vol validé
+		# Vol validé uniquement à l’arrivée au trou.
+		GameState.log_event("sabotage_steal", "le rat a volé " + carried_item.get_item_name())
 		carried_item.queue_free()
 		carried_item = null
 	_enter_hidden(profile.get_next_hidden_delay())
 
 # --- COUP REÇU (TAPER) ---
 
-func hit() -> void:
+func hit() -> bool:
 	if current_state == State.HIDDEN or current_state == State.FLEEING:
-		return
-	
+		return false
+
 	# Lâcher l'objet au sol si le rat en portait un
 	if carried_item:
 		_drop_item_on_floor()
 
 	alert_label.visible = false
 	current_state = State.FLEEING
+	_anti_stuck_timer = 0.0
+	model.scale = Vector3.ONE
 	_spawn_bonk_feedback()
+	return true
 
 func _drop_item_on_floor() -> void:
 	var floor_item_scene = preload("res://scenes/floor_item.tscn")
 	var floor_item = floor_item_scene.instantiate()
 	get_parent().add_child(floor_item)
 	floor_item.global_position = global_position
-	
+
 	# Transférer l'objet
-	carried_item.get_parent().remove_child(carried_item)
 	floor_item.setup(carried_item)
 	carried_item = null
 
-func carry(item: Node3D) -> void:
-	if item.get_parent():
-		item.get_parent().remove_child(item)
-	hold_point.add_child(item)
+func carry(item: Item) -> void:
+	item.reparent(hold_point, false)
 	item.position = Vector3.ZERO
 	carried_item = item
 
@@ -190,7 +208,7 @@ func _spawn_bonk_feedback() -> void:
 	label.billboard = BaseMaterial3D.BILLBOARD_ENABLED
 	label.position = global_position + Vector3.UP * 1.0
 	get_parent().add_child(label)
-	
+
 	var tween = create_tween()
 	tween.tween_property(label, "position:y", label.position.y + 0.8, 0.6)
 	tween.parallel().tween_property(label, "modulate:a", 0.0, 0.6)
@@ -200,20 +218,20 @@ func _spawn_bonk_feedback() -> void:
 
 func _pick_best_sabotage() -> Sabotage:
 	var candidates: Array[Sabotage] = []
-	
+
 	var s_off = Sabotage.StoveOffSabotage.new()
 	s_off.weight = profile.weight_stove_off
-	if s_off.can_apply():
+	if s_off.weight > 0.0 and s_off.can_apply():
 		candidates.append(s_off)
 
 	var s_steal = Sabotage.StealSabotage.new()
 	s_steal.weight = profile.weight_steal
-	if s_steal.can_apply():
+	if s_steal.weight > 0.0 and s_steal.can_apply():
 		candidates.append(s_steal)
 
 	var s_spill = Sabotage.SpillSabotage.new()
 	s_spill.weight = profile.weight_spill
-	if s_spill.can_apply():
+	if s_spill.weight > 0.0 and s_spill.can_apply():
 		candidates.append(s_spill)
 
 	if candidates.is_empty():
@@ -236,6 +254,6 @@ func _pick_best_sabotage() -> Sabotage:
 
 func _on_contact_area_body_entered(body: Node3D) -> void:
 	if current_state == State.GOING and current_sabotage is Sabotage.SpillSabotage:
-		if body.is_in_group("player"):
+		if body.is_in_group("player") and current_sabotage.is_valid():
 			current_sabotage.apply(self)
 			_enter_returning()

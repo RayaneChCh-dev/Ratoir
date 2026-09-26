@@ -12,6 +12,7 @@ const HIT_COOLDOWN_TIME: float = 0.8
 
 
 func _ready() -> void:
+	add_to_group("player")
 	motion_mode = CharacterBody3D.MOTION_MODE_FLOATING
 
 
@@ -62,12 +63,12 @@ func _to_world(input: Vector2) -> Vector3:
 
 func _try_hit_rat() -> void:
 	_hit_cooldown = HIT_COOLDOWN_TIME
-	
+
 	var rats = get_tree().get_nodes_in_group("rat")
 	if rats.is_empty():
 		return
 
 	var rat = rats[0]
 	if rat.global_position.distance_to(global_position) <= 1.5:
-		rat.hit()
-		GameState.log_event("rat_hit", "bonk ! le rat est assommé")
+		if rat.hit():
+			GameState.log_event("rat_hit", "bonk ! le rat est assommé")
