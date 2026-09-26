@@ -155,6 +155,8 @@ Ce que fait le script :
 
 Résultat pour le chef : 2 fichiers de 6 Mo deviennent **un seul fichier de 0,6 Mo**. Le script **ne réduit pas le nombre de triangles** : régler ça à la génération (*Target polycount*) ou avec *Remesh* dans Meshy.
 
+**Échelle bizarre à l'import ?** Certains exports Meshy (squelettes non humanoïdes, format « Unreal ») arrivent **100 fois trop petits** (le rat mesurait 5 mm). Ce n'est pas grave : corriger l'échelle du nœud du modèle dans sa scène (`rat_model.tscn` : × 340).
+
 Noms d'animations attendus par `player.gd` : **`idle`**, **`walk`**, **`run`**. S'il manque `idle`, le chef se fige sur la première image de `walk`.
 
 ### Le rat (quadrupède) → **animation procédurale** (recommandé)

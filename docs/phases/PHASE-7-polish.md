@@ -44,6 +44,12 @@ Que le jeu soit **agréable à regarder et à écouter**, pas seulement fonction
 - [ ] Trou du rat (arche).
 
 ### Étape 3 — Intégrer le rat (après la Phase 3)
+**Le modèle est prêt** : `scenes/models/rat_model.tscn` (rat animé `run` + version assommée, déjà à la bonne échelle, ≈ 1,2 m de long, regarde vers +Z). À brancher dans `scenes/rat.tscn` par la personne de la Phase 3 :
+1. Sous `Rat/Model`, supprimer `Body` et `Tail`, puis instancier `scenes/models/rat_model.tscn` et le nommer **`Visual`**. Garder `HoldPoint` (le remonter vers la bouche : ≈ `(0, 0.45, 0.55)`).
+2. Dans `rat.gd`, à la fin de `_physics_process` : `$Model/Visual.set_speed(Vector2(velocity.x, velocity.z).length())`.
+3. Sur un coup (`hit()`) : `$Model/Visual.set_stunned(true)`. Conseil : rester **assommé sur place ≈ 0,8 s** (le joueur voit son coup réussir), puis `set_stunned(false)` et fuir en courant.
+4. Le rat est plus gros que la capsule d'origine : passer le rayon de `CollisionShape3D` à ≈ 0,4 m et celui de `ContactArea` à ≈ 0,6 m.
+
 - [ ] Modèle dans `rat.tscn` → `Model`, avec animation `run` ou procédurale ([ASSETS.md §6](../ASSETS.md#6-animer-les-personnages)).
 - [ ] État « assommé » : petites étoiles qui tournent au-dessus de sa tête.
 
