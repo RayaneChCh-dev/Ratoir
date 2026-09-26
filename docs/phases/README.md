@@ -6,12 +6,12 @@
 |------:|-------|------|------------------|-----------:|
 | 1 | [Squelette](PHASE-1-squelette.md) | ✅ Terminé | — | — |
 | 2 | [Boucle de cuisine + portrait](PHASE-2-boucle-cuisine.md) | ✅ Terminé | — | — |
-| 3 | [Le rat et les sabotages](PHASE-3-rat.md) | 🧪 Validation téléphone restante | Dev gameplay (Godot) | 2 h 30 à 3 h |
-| 4 | [Manche complète : titre, chrono, étoiles](PHASE-4-manche.md) | ⏳ À faire | Dev gameplay/UI (Godot) | 1 h 30 à 2 h |
-| 5 | [Commentateur IA](PHASE-5-commentateur.md) | ⏳ À faire | Dev IA/backend (+ un peu de Godot) | 2 h 30 à 3 h |
-| 6 | [Juge, personnalité du rat, récap' final](PHASE-6-juge-recap.md) | ⏳ À faire | Dev IA/backend | 1 h 30 à 2 h |
-| 7 | [Polish : assets 3D, animations, sons, effets](PHASE-7-polish.md) | ⏳ À faire | Artiste/intégrateur | 2 h à 3 h (en continu) |
-| 8 | [Déploiement et démo](PHASE-8-demo.md) | ⏳ À faire | Toute l'équipe | 1 h |
+| 3 | [Le rat et les sabotages](PHASE-3-rat.md) | ✅ Terminé (coup sur le rat désactivé) | Dev gameplay (Godot) | 2 h 30 à 3 h |
+| 4 | [Manche complète : titre, chrono, étoiles](PHASE-4-manche.md) | ✅ Terminé (3 manches, pièges, accueil, victoire/défaite) | Dev gameplay/UI (Godot) | 1 h 30 à 2 h |
+| 5 | [Commentateur IA](PHASE-5-commentateur.md) | ✅ Terminé (9 phrases en MP3, voix en anglais) | Dev IA/backend (+ un peu de Godot) | 2 h 30 à 3 h |
+| 6 | [Juge, personnalité du rat, récap' final](PHASE-6-juge-recap.md) | 🟡 Juge fait ; IA en direct, personnalité du rat, récap' à faire | Dev IA/backend | 1 h 30 à 2 h |
+| 7 | [Polish : assets 3D, animations, sons, effets](PHASE-7-polish.md) | 🟡 En partie (décor à compléter, effets et sons à faire) | Artiste/intégrateur | 2 h à 3 h (en continu) |
+| 8 | [Déploiement et démo](PHASE-8-demo.md) | 🟡 Build et captures prêts ; tests téléphones et démo à faire | Toute l'équipe | 1 h |
 | 9 | [Recettes et assemblage](PHASE-9-recettes.md) | 💡 Plus tard (après 3 et 4) | Gameplay + Assets | 3 à 4 h |
 
 Les estimations sont indicatives, pour une personne qui connaît déjà un peu Godot.
