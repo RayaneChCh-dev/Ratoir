@@ -8,6 +8,11 @@ const TOMATO_COLOR := Color(0.9, 0.2, 0.15)
 const COOKED_COLOR := Color(0.72, 0.32, 0.12)
 const PLATE_COLOR := Color(0.97, 0.97, 0.95)
 
+## Modèles 3D par état (échelle, hauteur du centre). Un état absent garde sa forme simple.
+const MODELS := {
+	State.COOKED: [preload("res://assets/models/food/plate_dish.glb"), 0.65, 0.11],
+}
+
 var state := State.RAW:
 	set(value):
 		state = value
@@ -22,6 +27,13 @@ func _ready() -> void:
 func _rebuild() -> void:
 	for child in get_children():
 		child.queue_free()
+	if MODELS.has(state):
+		var entry: Array = MODELS[state]
+		var model: Node3D = entry[0].instantiate()
+		model.scale = Vector3.ONE * entry[1]
+		model.position.y = entry[2]
+		add_child(model)
+		return
 	match state:
 		State.RAW:
 			_add_sphere(TOMATO_COLOR, 0.22, Vector3(0, 0.22, 0))
