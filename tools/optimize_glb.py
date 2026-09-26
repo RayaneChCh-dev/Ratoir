@@ -2,7 +2,7 @@
 """Prépare un modèle .glb (Meshy, Tripo…) pour le jeu, sans Blender.
 
 - Réduit les textures (1024 px par défaut) et retire les cartes PBR inutiles
-  pour notre rendu mobile (reflets métalliques, relief, occlusion) ainsi que les tangentes.
+  pour notre rendu mobile (reflets métalliques, relief, occlusion, émission) ainsi que les tangentes.
 - Fusionne dans un seul fichier les animations exportées séparément
   (ex. Meshy donne un .glb par animation, chacun avec le modèle et ses textures).
 - Renomme les animations et supprime les doublons « .001 » (poses figées d'une image).
@@ -93,6 +93,8 @@ def resize_image(data: bytes, max_size: int) -> tuple[bytes, str, str]:
         image.thumbnail((max_size, max_size), Image.LANCZOS)
     out = io.BytesIO()
     has_alpha = image.mode in ("RGBA", "LA") or "transparency" in image.info
+    if has_alpha and image.convert("RGBA").getchannel("A").getextrema()[0] == 255:
+        has_alpha = False  # canal alpha présent mais entièrement opaque : JPEG, bien plus léger
     if has_alpha:
         image.save(out, "PNG", optimize=True)
         mime = "image/png"
@@ -175,20 +177,31 @@ def main() -> None:
             pbr["roughnessFactor"] = 1.0
             for key in PBR_TEXTURE_KEYS:
                 material.pop(key, None)
+            # Meshy met parfois la texture en émission : le modèle brillerait comme une lampe.
+            material.pop("emissiveTexture", None)
+            material.pop("emissiveFactor", None)
+            for ext in ("KHR_materials_specular", "KHR_materials_ior", "KHR_materials_emissive_strength"):
+                material.get("extensions", {}).pop(ext, None)
+            if not material.get("extensions"):
+                material.pop("extensions", None)
 
     # Textures réellement utilisées, réencodées à la bonne taille.
     used_textures: dict[int, int] = {}
+    used_images: dict[int, int] = {}
     textures, images = [], []
 
     def remap(ref: dict) -> None:
         old = ref["index"]
         if old not in used_textures:
             tex = dict(src_json["textures"][old])
-            img = src_json["images"][tex["source"]]
-            data, mime, info = resize_image(base.view_bytes(img["bufferView"]), args.texture_size)
-            print(f"  texture {len(images)} : {info} ({len(data) // 1024} Kio)")
-            images.append({"bufferView": writer.add_bytes(data), "mimeType": mime})
-            tex["source"] = len(images) - 1
+            source = tex["source"]
+            if source not in used_images:  # une image partagée par plusieurs textures n'est écrite qu'une fois
+                img = src_json["images"][source]
+                data, mime, info = resize_image(base.view_bytes(img["bufferView"]), args.texture_size)
+                print(f"  image {len(images)} : {info} ({len(data) // 1024} Kio)")
+                images.append({"bufferView": writer.add_bytes(data), "mimeType": mime})
+                used_images[source] = len(images) - 1
+            tex["source"] = used_images[source]
             textures.append(tex)
             used_textures[old] = len(textures) - 1
         ref["index"] = used_textures[old]
