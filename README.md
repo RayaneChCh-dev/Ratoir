@@ -1,61 +1,74 @@
 # Ratoir
 
-> Un jeu de cuisine mobile en 3D où tu dois servir un maximum de plats avant la fin du temps… pendant qu'un rat sort de son trou pour tout saboter.
+<p align="center"><img src="docs/images/screens/cover.png" width="630" alt="Ratoir : la cuisine, le chef et le juge qui note un plat"></p>
 
-<p align="center"><img src="docs/images/screenshot.png" width="300" alt="Capture du jeu : le cuisinier bleu tient une assiette, le trou du rat est dans le mur du fond"></p>
+> 🇫🇷 Cuisine vite, livre tes plats… pendant qu'un rat saboteur rôde dans ta cuisine !
+> 🇬🇧 Cook fast, serve your dishes… while a sneaky rat wreaks havoc in your kitchen!
 
-Projet de hackathon réalisé avec **Godot 4.7** et exporté pour le **navigateur mobile** (HTML5, hébergé sur itch.io).
-Un critique affamé commente la partie à voix haute (voix Gradium). Le juge IA et le rat arrivent ensuite (voir [le concept complet](docs/CONCEPT.md)).
+**[🇬🇧 English version below](#-english)**
+
+<p align="center">
+  <img src="docs/images/screens/1_accueil.png" width="150" alt="Écran d'accueil">
+  <img src="docs/images/screens/2_cuisine.png" width="150" alt="La cuisine en jeu">
+  <img src="docs/images/screens/3_rat.png" width="150" alt="Le rat sort de son trou">
+  <img src="docs/images/screens/4_juge.png" width="150" alt="Le juge note un plat">
+  <img src="docs/images/screens/5_victoire.png" width="150" alt="Écran de victoire">
+</p>
+
+Jeu de cuisine en 3D pour **téléphone**, jouable **dans le navigateur** (export HTML5, hébergé sur itch.io). Projet de hackathon réalisé avec **Godot 4.7**.
 
 ---
 
 ## Sommaire
 
-- [Le jeu en 30 secondes](#le-jeu-en-30-secondes)
+- [Le jeu](#le-jeu)
+- [Contrôles](#contrôles)
 - [État d'avancement](#état-davancement)
 - [Démarrer (développeurs)](#démarrer-développeurs)
-- [Entendre le critique](#entendre-le-critique)
-- [Contrôles](#contrôles)
+- [Tests](#tests)
 - [Tester sur téléphone](#tester-sur-téléphone)
 - [Publier sur itch.io](#publier-sur-itchio)
 - [Structure du dépôt](#structure-du-dépôt)
 - [Documentation](#documentation)
+- [🇬🇧 English](#-english)
 
 ---
 
-## Le jeu en 30 secondes
+## Le jeu
 
-- **Format** : portrait, plein écran, sur téléphone (dans le navigateur).
-- **Vue** : 3D en plongée façon *Overcooked*. La caméra ne tourne jamais ; elle suit le joueur en glissant quand il s'éloigne du centre de l'écran.
-- **Boucle** : prendre une tomate au bac → la **découper** → la **cuire** → la **livrer** au comptoir → **+1 point**.
-- **L'ennemi** : un **rat** sort d'un trou dans le mur pour saboter (éteindre la plaque, renverser le plat, voler un ingrédient…). Pour l'instant, le chef ne peut rien contre lui : il faut l'éviter et réparer ses dégâts.
-- **Progression** : une partie dure 3 manches, à 5, 10 puis 15 plats cumulés. Le chrono passe de 90 s à 75 s puis 60 s, la recette accélère un peu, et le rat court plus vite. Pas de vies : si le chrono arrive à 0 avant l'objectif, la partie se termine. La 3e manche réussie gagne la partie. Un plat renversé est perdu, sans autre pénalité.
-- **Musique** : le morceau monte d'intensité à chaque manche — une minute de soundtrack par manche, bouclée tant que le chrono de la manche dure.
-- **Étoiles** : le score cumulé donne des étoiles :
+Tu es le chef. Ta mission : servir un maximum d'assiettes avant la fin du chrono. Mais un rat sort de son trou pour semer le chaos dans ta cuisine…
 
-| Étoiles | Points nécessaires |
-|:-------:|:------------------:|
-| ★       | 5                  |
-| ★★      | 10                 |
-| ★★★     | 15                 |
+- **La recette** : prendre une tomate dans la caisse → la **découper** sur la planche → la **cuire** sur la cuisinière → la **livrer** au comptoir de service. Tout se fait **au contact** : il suffit de marcher jusqu'au meuble.
+- **Le rat** : il éteint la plaque, vole les ingrédients et renverse les plats. Le chef ne peut pas le taper (choix actuel) : il faut l'éviter et réparer ses dégâts. Quand le rat devient plus rapide que le chef, une **poubelle à pièges** apparaît pour se défendre.
+- **Le juge** : attablé dans la salle, un critique gastronomique goûte chaque plat livré, lui donne un **nom absurde**, une **note sur 5 étoiles** et un avis sans pitié. La note dépend de la rapidité du service et des sabotages du rat.
+- **Le critique** : une voix (en anglais), affamée et impatiente, commente toutes les quelques secondes l'action que tu fais le plus. Les phrases sont enregistrées dans le jeu : aucun réseau nécessaire.
+- **3 manches** : objectif de 5, 10 puis 15 plats cumulés, en 90, 75 puis 60 s. La recette accélère et le rat court plus vite à chaque manche. Pas de vies : si le chrono tombe à 0 avant l'objectif, la partie est perdue. Réussir la 3ᵉ manche gagne la partie.
+- **Ambiance** : cuisine chaleureuse façon *Overcooked*, vue en plongée en portrait, musique qui monte en intensité à chaque manche.
 
-- **Le critique** : une voix anglaise, affamée et impatiente. Toutes les quelques secondes, elle commente l'action que tu as faite le plus (prendre une tomate, découper, cuire, livrer). Le jeu n'attend jamais la voix. Le juge de plats et le récap' de fin ne sont pas encore là.
+## Contrôles
+
+| Action | Téléphone | Ordinateur |
+|--------|-----------|------------|
+| Se déplacer | Poser le pouce **n'importe où** et glisser (joystick flottant) | Clic-glisser, ou <kbd>Z</kbd><kbd>Q</kbd><kbd>S</kbd><kbd>D</kbd> / <kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> / flèches |
+| Ramasser, poser, livrer | **Automatique au contact** du meuble | idem |
+| Poser un piège | Bouton **POSER** (visible quand le chef tient un piège) | <kbd>E</kbd> |
+| Lancer / relancer | Bouton **PLAY** / **REJOUER** | Clic, ou <kbd>Entrée</kbd> |
 
 ## État d'avancement
 
 | Phase | Contenu | État |
 |------:|---------|------|
 | 1 | Squelette : scène 3D, caméra, joueur, joystick tactile, export Web | ✅ Terminé |
-| 2 | Boucle de cuisine complète (ramasser, découper, cuire, livrer, score) + passage en portrait | ✅ Terminé |
-| 3 | Le rat et ses sabotages (le coup pour le taper est désactivé pour l'instant) | ✅ Terminé |
-| 4 | Manche complète : partie à 3 manches jouable ; écran titre et écran de fin illustré à faire | ⏳ En cours |
-| 5 | Critique vocal : phrase selon l'action dominante + voix Gradium | ✅ Démo jouable |
-| 6 | Juge de plats + personnalité du rat + récap' final IA | ⏳ À faire |
-| 7 | Polish : vrais modèles 3D, animations, sons, effets | ⏳ À faire |
-| 8 | Déploiement itch.io, tests sur téléphones, script et répétition de la démo | ⏳ À faire |
+| 2 | Boucle de cuisine complète + passage en portrait | ✅ Terminé |
+| 3 | Le rat et ses sabotages (coup pour le taper désactivé) | ✅ Terminé |
+| 4 | Partie en 3 manches, pièges, écran d'accueil, écrans de victoire et de défaite | ✅ Terminé |
+| 5 | Critique vocal : 9 phrases enregistrées (MP3) | ✅ Terminé (voix en anglais) |
+| 6 | Juge de plats ✅ · critiques générées par IA en direct, personnalité du rat, récap' final | 🟡 En partie |
+| 7 | Chef, rat, juge, meubles et décor en 3D, cuisine refaite, HUD, musique | 🟡 En partie (plantes, bougies, trou du rat 3D à venir) |
+| 8 | Build itch.io prêt, captures ; tests sur téléphones et démo à faire | 🟡 En partie |
 | 9 | Recettes à plusieurs ingrédients, plan de dressage, commandes | 💡 Plus tard |
 
-Chaque phase restante a sa fiche détaillée dans [`docs/phases/`](docs/phases/README.md), avec la répartition possible entre coéquipiers.
+Chaque phase a sa fiche détaillée dans [`docs/phases/`](docs/phases/README.md).
 
 ## Démarrer (développeurs)
 
@@ -68,27 +81,18 @@ Chaque phase restante a sa fiche détaillée dans [`docs/phases/`](docs/phases/R
 3. **Ouvrir** Godot → *Importer* → choisir `project.godot`. Le premier import régénère le dossier `.godot/` (ignoré par git, c'est normal).
 4. **Lancer** avec <kbd>F5</kbd>. La scène principale est `scenes/main.tscn`.
 
-> 💡 Sur ordinateur, la souris simule le doigt (`emulate_touch_from_mouse`) : clique-glisse n'importe où pour faire apparaître le joystick. Le clavier marche aussi.
+> 💡 Sur ordinateur, la souris simule le doigt (`emulate_touch_from_mouse`) : clique-glisse n'importe où pour faire apparaître le joystick.
 
-Avant de coder, lis [`docs/CONTRIBUTING.md`](docs/CONTRIBUTING.md) (règles pour ne pas se marcher dessus dans les scènes Godot) et [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md).
+Avant de coder, lis [`docs/CONTRIBUTING.md`](docs/CONTRIBUTING.md) (branches, PR vers `staging`, règles pour les scènes Godot) et [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md).
 
-## Entendre le critique
-
-Les neuf phrases sont déjà enregistrées dans `assets/audio/critic/` (voix Mark). Le jeu les joue tout seul : pas besoin de lancer le proxy ni d'une clé Gradium.
+## Tests
 
 ```bash
-godot --path .
+godot --headless --path . res://tests/cooking_loop.tscn       # boucle de cuisine + collisions
+godot --headless --path . res://tests/phase4_integration.tscn # manches, rat, fin de partie
+godot --headless --path . res://tests/full_game.tscn          # partie complète jouée au joystick par un joueur automatique
 ```
-
-Après environ deux secondes, la voix dit « I'm hungry. The chef had better hurry. » Il n'y a pas de sous-titre. Ensuite, joue : la phrase suivante suit l'action la plus fréquente sur environ 4 secondes.
-
-## Contrôles
-
-| Action | Téléphone | Ordinateur |
-|--------|-----------|------------|
-| Se déplacer | Poser le pouce **n'importe où** et glisser (joystick flottant) | Clic-glisser, ou <kbd>Z</kbd><kbd>Q</kbd><kbd>S</kbd><kbd>D</kbd> / <kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> / flèches |
-| Ramasser, poser, livrer | **Automatique au contact** : il suffit de marcher jusqu'au tapis coloré devant un meuble | idem |
-| Taper le rat | *Désactivé pour l'instant* (voir CONCEPT §8.3) | — |
+Chaque test affiche `… : 0 échec(s)` quand tout va bien. Les avertissements de fuite mémoire affichés **à la fermeture** sont sans conséquence.
 
 ## Tester sur téléphone
 
@@ -101,15 +105,14 @@ python3 tools/serve_https.py     # affiche l'adresse à ouvrir, ex. https://192.
 
 Sur le téléphone (même Wi-Fi que le PC) : ouvrir l'adresse affichée → avertissement « connexion non privée » (certificat auto-signé, normal) → *Paramètres avancés* → *Continuer vers le site*.
 
-**Prérequis de l'export** : les *export templates* Godot 4.7.x pour le Web. Dans l'éditeur : *Éditeur → Gérer les modèles d'exportation → Télécharger et installer*.
+**Prérequis de l'export** : les *export templates* Godot 4.7.x pour le Web (*Éditeur → Gérer les modèles d'exportation → Télécharger et installer*).
 
 ## Publier sur itch.io
 
-1. `./tools/export_web.sh` → produit `build/ratoir-web.zip` (`index.html` à la racine du zip, c'est ce qu'itch.io attend).
-2. Sur itch.io : *Create new project* → **Kind of project : HTML** → envoyer le zip → cocher **« This file will be played in the browser »**.
-3. Dans *Embed options* : cocher **Mobile friendly**, orientation **Portrait**, et **Fullscreen button**.
-4. Taille de la fenêtre intégrée conseillée : 360 × 640 (ratio 9:16).
-5. Pas besoin de cocher *SharedArrayBuffer support* : l'export est configuré **sans threads** exprès.
+1. `./tools/export_web.sh` → produit `build/ratoir-web.zip` (`index.html` à la racine du zip).
+2. Sur itch.io : **Kind of project : HTML** → envoyer le zip → cocher **« This file will be played in the browser »**.
+3. *Embed options* : **360 × 640**, **Mobile friendly** en **Portrait**, **Fullscreen button**. Laisser *SharedArrayBuffer* décoché (export sans threads).
+4. Captures et couverture : `docs/images/screens/` (versions réduites) ou `build/itch/` en pleine taille après une session de captures.
 
 Détails et checklist de démo : [`docs/phases/PHASE-8-demo.md`](docs/phases/PHASE-8-demo.md).
 
@@ -117,44 +120,37 @@ Détails et checklist de démo : [`docs/phases/PHASE-8-demo.md`](docs/phases/PHA
 
 ```
 Ratoir/
-├── project.godot            # configuration Godot (portrait 720×1280, rendu Compatibility, autoloads GameState et Commentator)
-├── export_presets.cfg       # preset d'export « Web » (sans threads)
+├── project.godot              # portrait 720×1280, rendu Compatibility, autoloads GameState et Commentator
+├── export_presets.cfg         # preset « Web » (sans threads ; build/, tests/, art/ exclus)
 ├── scenes/
-│   ├── main.tscn            # la cuisine : sol, murs, trou du rat, stations, joueur, caméra, UI
-│   ├── player.tscn          # le cuisinier (CharacterBody3D)
-│   ├── chop_station.tscn    # station Découpe
-│   ├── cook_station.tscn    # station Cuisson
-│   ├── ingredient_spawn.tscn# bac à tomates
-│   └── delivery_counter.tscn# comptoir de livraison
+│   ├── main.tscn              # la cuisine, la salle, les personnages, l'interface
+│   ├── player.tscn            # le chef
+│   ├── rat.tscn               # le rat (logique) ; models/rat_model.tscn = son visuel
+│   ├── judge.tscn             # le juge et sa bulle de critique
+│   ├── chop_station.tscn, cook_station.tscn, ingredient_spawn.tscn, delivery_counter.tscn
+│   ├── trap_bin.tscn, rat_trap.tscn, place_button.tscn, floor_item.tscn
+│   └── ui/                    # onboarding.tscn (PLAY / REJOUER / VICTOIRE), game_hud.tscn
 ├── scripts/
-│   ├── game_state.gd        # autoload : score, étoiles, journal d'événements
-│   ├── ai/commentator.gd    # autoload : critique vocal (fenêtre d'actions, voix seule)
-│   ├── cook.gd              # base du cuisinier : objet tenu en main
-│   ├── player.gd            # déplacement du joueur (joystick + clavier)
-│   ├── touch_joystick.gd    # joystick tactile flottant plein écran
-│   ├── camera_follow.gd     # caméra en plongée qui suit le joueur, bornée à la cuisine
-│   ├── item.gd              # ingrédient : brut → découpé → cuit
-│   ├── station.gd           # Découpe / Cuisson (transformation temporisée)
-│   ├── ingredient_spawn.gd  # donne une tomate au contact
-│   ├── delivery_counter.gd  # livre un plat cuit → +1 point
-│   ├── progress_bar_3d.gd   # barre de progression au-dessus des stations
-│   └── hud.gd               # affichage du score
-├── shaders/checker_floor.gdshader  # carrelage du sol
-├── server/
-│   ├── speak.py             # ancien proxy Gradium, plus utilisé par le jeu
-│   └── .env.example         # GRADIUM_API_KEY, sans valeur (le vrai .env est ignoré)
-├── assets/audio/critic/     # neuf phrases du critique, déjà enregistrées
-├── assets/models/           # modèles 3D (.glb) : characters/chef.glb…
+│   ├── game_state.gd          # autoload : manches, chrono, score, journal d'événements
+│   ├── ai/commentator.gd      # autoload : critique vocal (MP3)
+│   ├── player.gd, cook.gd, item.gd, station.gd, camera_follow.gd, touch_joystick.gd …
+│   ├── rat/                   # rat, profils, sabotages
+│   ├── judge/                 # juge, bulle de critique
+│   └── ui/                    # écran d'accueil, HUD, icônes
+├── data/                      # judge_bank.json (textes du juge), rat_profiles/
+├── assets/
+│   ├── models/                # chef, rat, juge, meubles, assiette (Meshy, allégés)
+│   ├── kaykit/                # décor KayKit Restaurant Bits (CC0)
+│   ├── audio/                 # musique + critic/ (9 phrases du critique)
+│   └── ui/icons/              # toque, chrono, étoile, aliments
+├── shaders/                   # carrelage sol et murs, parquet, tapis, flou, vignettage
+├── tests/                     # cooking_loop, phase4_integration, full_game
 ├── tools/
-│   ├── export_web.sh        # export HTML5 + zip itch.io
-│   ├── optimize_glb.py      # allège un .glb (textures, animations fusionnées) sans Blender
-│   └── serve_https.py       # serveur HTTPS local pour tester sur téléphone
-└── docs/
-    ├── CONCEPT.md           # le concept complet du jeu (document de référence)
-    ├── ARCHITECTURE.md      # comment le code est organisé, contrats entre modules
-    ├── ASSETS.md            # trouver / générer / intégrer de meilleurs modèles 3D
-    ├── CONTRIBUTING.md      # règles de travail en équipe (git + Godot)
-    └── phases/              # une fiche détaillée par phase
+│   ├── export_web.sh          # export HTML5 + zip itch.io
+│   ├── optimize_glb.py        # allège un .glb (textures, animations fusionnées) sans Blender
+│   └── serve_https.py         # serveur HTTPS local pour tester sur téléphone
+├── server/speak.py            # ancien proxy de voix Gradium (plus utilisé par le jeu)
+└── docs/                      # concept, architecture, assets, contribution, phases, captures
 ```
 
 ## Documentation
@@ -163,6 +159,44 @@ Ratoir/
 |----------|----------|---------|
 | [CONCEPT.md](docs/CONCEPT.md) | Toute l'équipe, le jury | Vision, règles, rat, sabotages, IA, direction artistique |
 | [ARCHITECTURE.md](docs/ARCHITECTURE.md) | Développeurs | Scènes, scripts, autoloads, événements, conventions |
-| [ASSETS.md](docs/ASSETS.md) | Artiste / intégrateur | Où trouver ou comment générer les modèles 3D, format, import |
-| [CONTRIBUTING.md](docs/CONTRIBUTING.md) | Toute l'équipe | Branches, commits, conflits de scènes, tests |
+| [ASSETS.md](docs/ASSETS.md) | Artiste / intégrateur | Générer et intégrer les modèles 3D, prompts, icônes |
+| [CONTRIBUTING.md](docs/CONTRIBUTING.md) | Toute l'équipe | Branches, PR, conflits de scènes, tests |
 | [phases/](docs/phases/README.md) | Toute l'équipe | Feuille de route et répartition du travail |
+| [CREDITS.md](CREDITS.md) | Tout le monde | Auteurs et licences des assets |
+
+---
+
+## 🇬🇧 English
+
+**Ratoir** is a 3D cooking game for **mobile phones**, playable **right in the browser** (HTML5 export, hosted on itch.io). Built during a hackathon with **Godot 4.7**.
+
+You are the chef. Your mission: serve as many dishes as possible before time runs out. But a rat crawls out of its hole to wreak havoc in your kitchen…
+
+### How to play
+- **The recipe**: grab a tomato from the crate → **chop** it on the cutting board → **cook** it on the stove → **serve** it at the service counter. Everything happens **on contact**: just walk up to the station.
+- **The rat**: it turns off your stove, steals your ingredients and knocks over your dishes. The chef can't hit it (current design choice): dodge it and fix the damage. Once the rat gets faster than the chef, a **trap bin** appears so you can fight back.
+- **The judge**: sitting in the dining room, a snobbish food critic tastes every dish you serve, gives it an **absurd name**, a **5-star rating** and a merciless review. The rating depends on how fast you served and on the rat's sabotage.
+- **The commentator**: a hungry, impatient voice comments every few seconds on what you do the most. The lines are recorded inside the game: no network needed.
+- **3 rounds**: reach 5, 10 then 15 total dishes in 90, 75 then 60 seconds. The recipe gets faster and the rat gets quicker every round. No lives: if the timer hits 0 before the goal, you lose. Clear round 3 to win.
+- **Mood**: a cozy *Overcooked*-style kitchen, top-down portrait view, and music that ramps up every round.
+
+### Controls
+| Action | Phone | Computer |
+|--------|-------|----------|
+| Move | Put your thumb **anywhere** and drag (floating joystick) | Click and drag, or <kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> / <kbd>Z</kbd><kbd>Q</kbd><kbd>S</kbd><kbd>D</kbd> / arrow keys |
+| Pick up, drop, serve | **Automatic on contact** with the station | same |
+| Place a trap | **POSER** button (shown while holding a trap) | <kbd>E</kbd> |
+| Start / restart | **PLAY** / **REJOUER** button | Click, or <kbd>Enter</kbd> |
+
+📱 Designed for portrait mode on phones. Turn the sound on to hear the commentator!
+
+### Run it locally
+1. Install **Godot 4.7.x Standard** (not .NET): <https://godotengine.org/download>
+2. `git clone git@github.com:RayaneChCh-dev/Ratoir.git`, then import `project.godot` in Godot and press <kbd>F5</kbd>.
+3. Web build and phone testing: `./tools/export_web.sh` then `python3 tools/serve_https.py` (open the printed `https://` address on your phone, same Wi-Fi, accept the self-signed certificate).
+4. Tests: `godot --headless --path . res://tests/full_game.tscn` (plus `cooking_loop` and `phase4_integration`).
+
+The detailed design and team documentation (in French) lives in [`docs/`](docs/).
+
+### Credits
+Built by the Ratoir team during a hackathon with Godot Engine. Environment: KayKit Restaurant Bits by Kay Lousberg (CC0). Characters and furniture generated with Meshy AI. Commentator voice: Gradium. See [CREDITS.md](CREDITS.md).
