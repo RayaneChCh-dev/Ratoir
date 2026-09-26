@@ -5,6 +5,8 @@ extends Cook
 @export var acceleration := 40.0
 @export var turn_speed := 14.0
 @export var joystick: TouchJoystick
+## Taper le rat (bouton TAPER / Espace). Désactivé pour l'instant : le chef ne peut rien contre le rat.
+@export var can_hit_rat := false
 
 ## Vitesses (m/s) auxquelles les animations « walk » et « run » ont leur cadence d'origine.
 @export var walk_anim_speed := 1.8
@@ -44,7 +46,7 @@ func _physics_process(delta: float) -> void:
 	if _hit_cooldown > 0.0:
 		_hit_cooldown -= delta
 
-	if Input.is_action_just_pressed("hit") and _hit_cooldown <= 0.0:
+	if can_hit_rat and Input.is_action_just_pressed("hit") and _hit_cooldown <= 0.0:
 		_try_hit_rat()
 
 	if direction.length_squared() > 0.001:

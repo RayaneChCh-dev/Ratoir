@@ -28,7 +28,7 @@ Un critique affamé commente la partie à voix haute (voix Gradium). Le juge IA 
 - **Format** : portrait, plein écran, sur téléphone (dans le navigateur).
 - **Vue** : 3D en plongée façon *Overcooked*. La caméra ne tourne jamais ; elle suit le joueur en glissant quand il s'éloigne du centre de l'écran.
 - **Boucle** : prendre une tomate au bac → la **découper** → la **cuire** → la **livrer** au comptoir → **+1 point**.
-- **L'ennemi** : un **rat** sort d'un trou dans le mur pour saboter (éteindre la plaque, renverser le plat, voler un ingrédient…). Le joueur peut le **taper** pour le faire fuir.
+- **L'ennemi** : un **rat** sort d'un trou dans le mur pour saboter (éteindre la plaque, renverser le plat, voler un ingrédient…). Pour l'instant, le chef ne peut rien contre lui : il faut l'éviter et réparer ses dégâts.
 - **Progression** : servir 5 plats valide le niveau 1, puis chaque niveau demande 5 plats de plus au score cumulé. Le chrono baisse de 5 s par niveau (90 s au départ, minimum 60 s) et le rat devient plus agressif. Trois vies sont disponibles ; en perdre une au chrono ou lors d'un coup direct du rat coûte une vie. Réussir un niveau en rend une, jusqu'à trois.
 - **Étoiles** : le score cumulé donne des étoiles :
 
@@ -46,7 +46,7 @@ Un critique affamé commente la partie à voix haute (voix Gradium). Le juge IA 
 |------:|---------|------|
 | 1 | Squelette : scène 3D, caméra, joueur, joystick tactile, export Web | ✅ Terminé |
 | 2 | Boucle de cuisine complète (ramasser, découper, cuire, livrer, score) + passage en portrait | ✅ Terminé |
-| 3 | Le rat et ses sabotages + « taper le rat » | ✅ Terminé |
+| 3 | Le rat et ses sabotages (le coup pour le taper est désactivé pour l'instant) | ✅ Terminé |
 | 4 | Manche complète : écran titre, chrono, écran de fin avec étoiles, équilibrage | ⏳ À faire |
 | 5 | Critique vocal : phrase selon l'action dominante + voix Gradium | ✅ Démo jouable |
 | 6 | Juge de plats + personnalité du rat + récap' final IA | ⏳ À faire |
@@ -105,7 +105,7 @@ Si le proxy est arrêté, la cuisine continue, sans voix.
 |--------|-----------|------------|
 | Se déplacer | Poser le pouce **n'importe où** et glisser (joystick flottant) | Clic-glisser, ou <kbd>Z</kbd><kbd>Q</kbd><kbd>S</kbd><kbd>D</kbd> / <kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> / flèches |
 | Ramasser, poser, livrer | **Automatique au contact** : il suffit de marcher jusqu'au tapis coloré devant un meuble | idem |
-| Taper le rat | Bouton **TAPER** en bas à droite (à portée, environ 1,5 m) | <kbd>Espace</kbd> |
+| Taper le rat | *Désactivé pour l'instant* (voir CONCEPT §8.3) | — |
 
 ## Tester sur téléphone
 

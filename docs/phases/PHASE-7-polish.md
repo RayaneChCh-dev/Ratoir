@@ -48,7 +48,9 @@ Que le jeu soit **agréable à regarder et à écouter**, pas seulement fonction
 - [ ] Tomate, tranches et assiette dans `item.gd` (constante `MODELS`).
 - [ ] Trou du rat (arche).
 
-### Étape 3 — Intégrer le rat (après la Phase 3)
+### Étape 3 — Intégrer le rat (après la Phase 3) ✅ fait
+**Le modèle est branché dans `scenes/rat.tscn`** (nœud `Model/Visual`, `rat.gd` appelle `set_speed()` à chaque image et `set_stunned()` sur un coup, avec 0,8 s assommé sur place avant la fuite). Étapes suivies, pour référence :
+
 **Le modèle est prêt** : `scenes/models/rat_model.tscn` (rat animé `run` + version assommée, déjà à la bonne échelle, ≈ 1,2 m de long, regarde vers +Z). À brancher dans `scenes/rat.tscn` par la personne de la Phase 3 :
 1. Sous `Rat/Model`, supprimer `Body` et `Tail`, puis instancier `scenes/models/rat_model.tscn` et le nommer **`Visual`**. Garder `HoldPoint` (le remonter vers la bouche : ≈ `(0, 0.45, 0.55)`).
 2. Dans `rat.gd`, à la fin de `_physics_process` : `$Model/Visual.set_speed(Vector2(velocity.x, velocity.z).length())`.

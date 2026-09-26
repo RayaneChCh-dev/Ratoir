@@ -12,6 +12,7 @@ enum State { HIDDEN, EMERGING, GOING, SABOTAGING, RETURNING, FLEEING }
 @onready var hold_point: Marker3D = $Model/HoldPoint
 @onready var contact_area: Area3D = $ContactArea
 @onready var alert_label: Label3D = $Alert
+@onready var visual: RatModel = $Model/Visual
 
 # États et Timers
 var current_state: State = State.HIDDEN
@@ -26,6 +27,8 @@ var _difficulty_scale: float = 1.0
 
 const STUCK_LIMIT: float = 6.0
 const HIT_FLEE_LONG_DELAY: float = 10.0
+## Temps passé assommé sur place après un coup, avant de s'enfuir.
+const STUN_TIME: float = 0.8
 
 func _ready() -> void:
 	add_to_group("rat")
@@ -54,6 +57,10 @@ func _on_round_started() -> void:
 	_anti_stuck_timer = 0.0
 	model.scale = Vector3.ONE
 	_enter_hidden(profile.get_next_hidden_delay() / _difficulty_scale)
+
+func _process(_delta: float) -> void:
+	# Le modèle court à la vitesse réelle et se fige quand le rat s'arrête (sabotage).
+	visual.set_speed(Vector2(velocity.x, velocity.z).length())
 
 func _physics_process(delta: float) -> void:
 	if _protected_time > 0.0:
@@ -112,6 +119,13 @@ func _physics_process(delta: float) -> void:
 				_move_towards(hole_position, profile.speed)
 
 		State.FLEEING:
+			if _state_timer > 0.0:
+				# Assommé sur place : le joueur voit son coup réussir.
+				_state_timer -= delta
+				velocity = Vector3.ZERO
+				if _state_timer <= 0.0:
+					visual.set_stunned(false)
+				return
 			_anti_stuck_timer += delta
 			var dist = global_position.distance_to(hole_position)
 			if dist < 0.3 or _anti_stuck_timer >= STUCK_LIMIT:
@@ -133,6 +147,7 @@ func _move_towards(target: Vector3, spd: float) -> void:
 # --- GESTION DES ÉTATS ---
 
 func _enter_hidden(delay: float) -> void:
+	visual.set_stunned(false)
 	current_state = State.HIDDEN
 	global_position = hole_position
 	velocity = Vector3.ZERO
@@ -198,7 +213,9 @@ func hit() -> bool:
 	alert_label.visible = false
 	current_state = State.FLEEING
 	_anti_stuck_timer = 0.0
+	_state_timer = STUN_TIME
 	model.scale = Vector3.ONE
+	visual.set_stunned(true)
 	_spawn_bonk_feedback()
 	return true
 
