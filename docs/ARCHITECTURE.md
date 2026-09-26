@@ -18,9 +18,11 @@ main.tscn (Node3D « Main »)
 │   ├── CookStation ─────── cook_station.tscn  (station.gd)
 │   └── DeliveryCounter ─── delivery_counter.tscn
 ├── Player ─────────────────── player.tscn (player.gd → hérite de cook.gd)
+├── Rat ────────────────────── rat.tscn (rat/rat.gd, profil default.tres)
 └── UI (CanvasLayer)
     ├── Score (RichTextLabel) ── hud.gd
-    └── TouchJoystick (Control plein écran) ── touch_joystick.gd
+    ├── TouchJoystick (Control plein écran) ── touch_joystick.gd
+    └── HitButton (TouchScreenButton) ── hit_button.tscn
 
 Autoload (singleton global) : GameState ── game_state.gd
 ```
@@ -33,7 +35,7 @@ Autoload (singleton global) : GameState ── game_state.gd
 | Fenêtre | 720 × 1280, `stretch_mode = canvas_items`, `aspect = expand` | Portrait ; s'adapte aux écrans plus longs sans bandes noires |
 | Orientation | `handheld/orientation = 1` (portrait) | Téléphone tenu verticalement |
 | `emulate_touch_from_mouse` | `true` | La souris simule le doigt sur PC : un seul code d'entrée à maintenir |
-| Actions d'entrée | `move_left/right/up/down` (ZQSD/WASD + flèches) | Clavier en secours sur PC |
+| Actions d'entrée | `move_left/right/up/down` (WASD + flèches), `hit` (Espace) | Clavier en secours sur PC |
 | Autoload | `GameState` | Score et journal accessibles partout |
 | Export | preset « Web », `thread_support = false` | Évite de devoir configurer `SharedArrayBuffer`/COOP-COEP sur itch.io |
 
@@ -56,14 +58,16 @@ Chaque personnage a un nœud enfant **`Model`** (Node3D) qui contient **uniqueme
 - Indentation par tabulations (voir `.editorconfig`).
 
 ### Couches de collision
-**Aujourd'hui, tout est sur la couche 1.** Les `Area3D` filtrent par type de script (`body is Cook`). À la Phase 3 on introduit les couches suivantes. La personne qui fait la Phase 3 les met en place **et** met à jour ce tableau :
+Les valeurs `collision_layer` et `collision_mask` sont des masques de bits :
 
-| Couche | Nom | Qui |
-|-------:|-----|-----|
-| 1 | `world` | murs, sol, meubles |
-| 2 | `player` | le cuisinier |
-| 3 | `rat` | le rat |
-| 4 | `pickup` | objets tombés au sol (ramassables) |
+| Objet | Couche (valeur) | Masque |
+|-------|----------------|--------|
+| Murs, sol, meubles | world (1) | — |
+| Joueur | player (2) | world (1) |
+| Rat | rat (4, troisième couche) | world (1) |
+| Zones des stations, bac, livraison, rat et objets au sol | aucune (0) | player (2) |
+
+Le rat traverse le joueur ; seul `ContactArea` déclenche le renversement.
 
 ## 4. Scripts et contrats
 
@@ -97,11 +101,13 @@ Chaque niveau dure 90 s au niveau 1, puis 5 s de moins par niveau (minimum 60 s)
 ### `Item` (`scripts/item.gd`) : un ingrédient
 - `enum State { RAW, CHOPPED, COOKED }` : tomate crue → tranches → assiette.
 - Assigner `item.state` reconstruit le visuel automatiquement (`_rebuild()`).
+- `get_item_name() -> String` : description française de l’état, utilisée dans les événements.
 - Créé par code : `Item.new()` (il n'y a pas de scène `.tscn`). Son origine est **en bas de l'objet** : il se pose sur un point.
 
 ### `Cook` (`scripts/cook.gd`) : la base du cuisinier
 - `held_item: Item` : l'objet tenu, ou `null`.
 - `hold(item)` : met l'objet dans les mains (sur `Model/HoldPoint`) ; il peut venir d'une station ou être neuf.
+- `has_item() -> bool` : mains occupées.
 - `take_item() -> Item` : retire l'objet des mains et le renvoie. **L'appelant doit le re-parenter ou le libérer.**
 - Le rat **n'est pas** un `Cook`. Les stations n'interagissent qu'avec les `Cook`.
 
@@ -117,7 +123,19 @@ Chaque niveau dure 90 s au niveau 1, puis 5 s de moins par niveau (minimum 60 s)
   1. Station vide et le cuisinier tient un objet à l'état `accepts` → l'objet est posé et la transformation démarre.
   2. Objet terminé (`produces`) et cuisinier les mains vides → il reprend l'objet.
 - Nœuds attendus dans la scène : `Rug`, `ItemSlot`, `Area3D`, `Progress` (`ProgressBar3D`).
-- *Phase 3 ajoutera* un état « sabotée » (ex. plaque éteinte) : voir [PHASE-3](phases/PHASE-3-rat.md).
+- Groupe `stations` ; `has_item()`, `is_transforming_item()`, `steal_item()`, `switch_off()`, `approach_point()`.
+- `is_transforming_item()` évite le nom natif Godot `Node.is_processing()`.
+- `can_be_switched_off` est activé uniquement sur la plaque. `switched_off` suspend `_elapsed` et grise `Burner`. Le prochain contact rallume, même mains pleines, sans autre interaction sur cette image.
+- `ApproachPoint` est placé devant le meuble ; `steal_item()` vide la station et réinitialise la progression.
+
+### `Rat`, `Sabotage`, `RatProfile`, `FloorItem`
+- Une instance de `rat.tscn`, groupe `rat`, lit `data/rat_profiles/default.tres`.
+- États : `HIDDEN`, `EMERGING`, `GOING`, `SABOTAGING`, `RETURNING`, `FLEEING`. Départ protégé de 5 s ; pauses pondérées par le profil.
+- `Sabotage.can_apply()` choisit une cible ; `is_valid()` revalide cette même cible sans la changer ; `target_position()` et `apply()` complètent le contrat commun.
+- Poursuite limitée à 4 s, trajet normal à 6 s. Retour/fuite bloqués : retour caché au trou au bout de 6 s ; un objet volé est laissé au sol avant ce secours.
+- Le vol est enregistré à l’arrivée au trou. `hit() -> bool` indique si le coup est accepté, lâche l’objet, puis impose une fuite et 10 s caché.
+- `FloorItem` transfère l’objet à un `Cook` libre dans sa zone, y compris si ses mains se libèrent après son entrée ; le rebond est arrêté au ramassage.
+- Phase 4 devra remplacer la protection locale par les signaux de manche et arrêter le rat à la fin.
 
 ### `IngredientSpawn`, `DeliveryCounter`
 - Le bac donne `Item.new()` à tout `Cook` qui arrive les mains vides.
@@ -126,7 +144,7 @@ Chaque niveau dure 90 s au niveau 1, puis 5 s de moins par niveau (minimum 60 s)
 ### `TouchJoystick` (`scripts/touch_joystick.gd`)
 - `Control` plein écran avec `mouse_filter = IGNORE`. Il écoute `_input` (événements `InputEventScreenTouch`/`Drag`) et suit **un seul doigt** (`_touch_index`).
 - `output: Vector2` avec zone morte (`dead_zone`) et progression douce.
-- ⚠️ **Phase 3** : il faudra qu'il **ignore les appuis qui commencent sur le bouton TAPER** (sinon, appuyer sur le bouton fait aussi bouger le joueur).
+- `ignore_zones` référence le bouton TAPER : un appui commencé dessus ne démarre pas le joystick. `TouchScreenButton` accepte un deuxième doigt ; son placement suit la taille du viewport.
 
 ### `camera_follow.gd`
 - Caméra orthographique inclinée à −55° sur X, `keep_aspect = largeur`, `size = 10` (≈ 9 m visibles en largeur).

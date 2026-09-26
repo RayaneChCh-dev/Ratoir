@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Statut** | ⏳ À faire |
+| **Statut** | 🧪 Implémentée — validation sur téléphone restante |
 | **Dépend de** | Phase 2 ✅ |
 | **Débloque** | Équilibrage (Phase 4), événements réels pour le commentateur (Phase 5), personnalité du rat (Phase 6), modèle du rat (Phase 7) |
 | **Profil** | Dev gameplay Godot |
@@ -19,15 +19,15 @@ Règles de design : [CONCEPT.md §8](../CONCEPT.md#8-le-rat).
 
 ## 2. État jouable exigé (critères d'acceptation)
 
-- [ ] Pendant les **5 premières secondes**, le rat ne sort pas (départ protégé).
-- [ ] Ensuite, il sort **régulièrement** du trou, un seul rat à la fois, avec des pauses variables.
-- [ ] **Éteindre la plaque** : pendant une cuisson, le rat éteint la plaque, la cuisson se met en pause et la plaque devient visiblement grise. Le joueur la **rallume au contact** et la cuisson reprend là où elle en était.
-- [ ] **Voler un ingrédient** : le rat prend l'objet posé sur une station et part vers son trou. S'il y arrive, l'objet est perdu. S'il est tapé en route, il **lâche l'objet au sol**, et le joueur peut le **ramasser au contact** (mains vides).
-- [ ] **Renverser le plat** : le rat fonce sur le joueur qui porte un objet. Au contact, l'objet est **perdu** et une flaque apparaît quelques secondes. Le rat est **plus lent** que le joueur : on peut lui échapper.
-- [ ] **TAPER** : un bouton dans le coin en bas à droite (et <kbd>Espace</kbd> sur PC). Si le rat est à moins de 1,5 m, il est assommé, lâche ce qu'il porte, fuit et reste caché plus longtemps. Rien ne se passe s'il est trop loin. Petit délai entre deux coups (≈ 0,8 s).
+- [x] Pendant les **5 premières secondes**, le rat ne sort pas (départ protégé).
+- [x] Ensuite, il sort **régulièrement** du trou, un seul rat à la fois, avec des pauses variables.
+- [x] **Éteindre la plaque** : pendant une cuisson, le rat éteint la plaque, la cuisson se met en pause et la plaque devient visiblement grise. Le joueur la **rallume au contact** et la cuisson reprend là où elle en était.
+- [x] **Voler un ingrédient** : le rat prend l'objet posé sur une station et part vers son trou. S'il y arrive, l'objet est perdu. S'il est tapé en route, il **lâche l'objet au sol**, et le joueur peut le **ramasser au contact** (mains vides).
+- [x] **Renverser le plat** : le rat fonce sur le joueur qui porte un objet. Au contact, l'objet est **perdu** et une flaque apparaît quelques secondes. Le rat est **plus lent** que le joueur : on peut lui échapper.
+- [x] **TAPER** : un bouton dans le coin en bas à droite (et <kbd>Espace</kbd> sur PC). Si le rat est à moins de 1,5 m, il est assommé, lâche ce qu'il porte, fuit et reste caché plus longtemps. Rien ne se passe s'il est trop loin. Petit délai entre deux coups (≈ 0,8 s).
 - [ ] Sur téléphone, **deux doigts en même temps** fonctionnent : un doigt pour le joystick, l'autre pour le bouton. Appuyer sur le bouton **ne fait pas bouger** le joueur.
-- [ ] Chaque action notable est enregistrée avec `GameState.log_event(...)` (voir §6).
-- [ ] **La boucle ne se bloque jamais** : aucune station ne reste coincée, le rat ne reste jamais bloqué dans un mur (délai de secours), et le joueur peut toujours continuer à cuisiner.
+- [x] Chaque action notable est enregistrée avec `GameState.log_event(...)` (voir §6).
+- [x] **La boucle ne se bloque jamais** : aucune station ne reste coincée, le rat ne reste jamais bloqué dans un mur (délai de secours), et le joueur peut toujours continuer à cuisiner.
 - [ ] Testé sur un vrai téléphone.
 
 ## 3. Conception technique
@@ -90,7 +90,7 @@ Implémentations :
 | Classe | `can_apply()` | `target_position()` | `apply()` |
 |--------|---------------|---------------------|-----------|
 | `StoveOffSabotage` | Une station `can_be_switched_off` a un objet **en cours** de transformation et n'est pas déjà éteinte | Le `ApproachPoint` de la plaque | `station.switch_off()`, `log_event("sabotage_stove_off")` |
-| `StealSabotage` | Une station a un objet posé (n'importe quel état) | Le `ApproachPoint` de cette station | `rat.carry(station.steal_item())`, `log_event("sabotage_steal")`, puis `RETURNING` |
+| `StealSabotage` | Une station a un objet posé (n'importe quel état) | Le `ApproachPoint` de cette station | `rat.carry(station.steal_item())`, puis `RETURNING` ; événement de vol uniquement à l’arrivée au trou |
 | `SpillSabotage` | Le joueur tient un objet | **La position actuelle du joueur** (mise à jour à chaque image) ; `windup = 0`, l'effet se déclenche au **contact** (`ContactArea`) | `player.take_item().queue_free()`, crée une flaque, `log_event("sabotage_spill")`. Abandon au bout de 4 s de poursuite |
 
 Choix : parmi les sabotages où `can_apply()` est vrai, **tirage pondéré** par `weight`. Les poids viennent du profil (§3.6).
@@ -104,7 +104,7 @@ Ajouter (sans casser la boucle actuelle) :
 var switched_off := false
 
 func has_item() -> bool
-func is_processing() -> bool                 # objet présent et encore à l'état `accepts`
+func is_transforming_item() -> bool                 # objet présent et encore à l'état `accepts`
 func steal_item() -> Item                    # retire l'objet, remet _elapsed à 0, cache la barre
 func switch_off() -> void                    # switched_off = true, visuel « éteint » (brûleur gris, fumée)
 func approach_point() -> Vector3             # position du Marker3D « ApproachPoint » sur le tapis
@@ -160,7 +160,7 @@ extends Resource
 |-------:|-----|------------------|------------------|
 | 1 `world` | murs, sol, meubles | 1 | — |
 | 2 `player` | joueur | 2 | 1 (murs) |
-| 3 `rat` | rat | 3 | 1 (murs). Il **traverse** le joueur, et le contact passe par `ContactArea` |
+| 3 `rat` | rat | 4 | 1 (murs). Il **traverse** le joueur, et le contact passe par `ContactArea` |
 | — | `Area3D` des stations, bac, comptoir | — | **2** (le joueur) ⚠️ |
 | — | `ContactArea` du rat | — | 2 |
 | — | `FloorItem` | — | 2 |
@@ -172,15 +172,15 @@ Tant que la Phase 4 n'existe pas, le rat garde un compteur local : `_protected_t
 
 ## 4. Découpage en tâches
 
-1. [ ] Couches de collision (§3.8) + vérifier que la boucle marche toujours.
-2. [ ] `rat.tscn` + déplacement vers un point + `HIDDEN`/`EMERGING`/`RETURNING` (sans sabotage) : il sort, va au centre et revient.
-3. [ ] `Sabotage` + `StoveOffSabotage` + changements de `Station` (`switch_off`, rallumage, `ApproachPoint`).
-4. [ ] Bouton **TAPER** + `hit()` + `FLEEING` + exclusion de zone dans le joystick. **Tester sur téléphone à deux doigts.**
-5. [ ] `StealSabotage` + `FloorItem`.
-6. [ ] `SpillSabotage` + flaque.
-7. [ ] `RatProfile` + `default.tres` + tirage pondéré.
-8. [ ] Événements `log_event` partout (§6), départ protégé, secours anti-blocage.
-9. [ ] Mise à jour de la doc : ARCHITECTURE (couches, API `Station`, rat), cases de cette fiche.
+1. [x] Couches de collision (§3.8) + vérifier que la boucle marche toujours.
+2. [x] `rat.tscn` + déplacement vers un point + `HIDDEN`/`EMERGING`/`RETURNING` (sans sabotage) : il sort, va au centre et revient.
+3. [x] `Sabotage` + `StoveOffSabotage` + changements de `Station` (`switch_off`, rallumage, `ApproachPoint`).
+4. [ ] Bouton **TAPER** + `hit()` + `FLEEING` + exclusion de zone dans le joystick. **Implémentation et simulation multitouch validées ; test sur téléphone à deux doigts restant.**
+5. [x] `StealSabotage` + `FloorItem`.
+6. [x] `SpillSabotage` + flaque.
+7. [x] `RatProfile` + `default.tres` + tirage pondéré.
+8. [x] Événements `log_event` partout (§6), départ protégé, secours anti-blocage.
+9. [x] Mise à jour de la doc : ARCHITECTURE (couches, API `Station`, rat), cases de cette fiche.
 
 ## 5. Tests à faire
 
@@ -225,3 +225,22 @@ Test automatisé conseillé (comme en Phase 2) : téléporter le joueur, forcer 
 - Modèle 3D et animations du rat → Phase 7.
 - Nom et personnalité générés par IA → Phase 6 (le rat lit déjà un `RatProfile`).
 - Commentaires sur les sabotages → Phase 5 (qui écoute simplement `event_logged`).
+
+
+## 9. Validation de la correction (26 septembre 2026)
+
+Godot **4.7.2** : import et lancement headless sans erreur de script/scène.
+Scénarios automatisés exécutés dans une scène de test temporaire, hors commit :
+
+- boucle bac → découpe → cuisson → livraison via les vrais contacts physiques ;
+- protection initiale, pause/reprise de cuisson et brûleur gris, rallumage mains pleines ;
+- vol interrompu, ramassage au sol, vol validé seulement au trou et événements cohérents ;
+- poursuite limitée, cible invalidée, renversement sur contact déjà présent ;
+- secours de retour/fuite, absence de faux événement de coup sur rat caché ;
+- deux doigts synthétiques sur le vrai `TouchScreenButton`, exclusion du joystick ;
+- trajet physique depuis le trou jusqu’à chacune des stations ;
+- simulation de 180 s à 60 pas/s : 15 livraisons, 54 événements, aucune erreur de script.
+
+Les tests synthétiques ne remplacent pas le test d’export Web sur un vrai téléphone,
+qui reste à faire avant de déclarer la phase terminée. La Phase 4 doit encore relier
+le rat au cycle de manche (`round_started` / `round_ended`).

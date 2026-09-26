@@ -7,9 +7,12 @@ extends Cook
 @export var joystick: TouchJoystick
 
 @onready var _model: Node3D = $Model
+var _hit_cooldown: float = 0.0
+const HIT_COOLDOWN_TIME: float = 0.8
 
 
 func _ready() -> void:
+	add_to_group("player")
 	motion_mode = CharacterBody3D.MOTION_MODE_FLOATING
 
 
@@ -22,6 +25,12 @@ func _physics_process(delta: float) -> void:
 	velocity = horizontal  # y toujours à 0 : aucun mouvement vertical
 	move_and_slide()
 	global_position.y = 0.0
+
+	if _hit_cooldown > 0.0:
+		_hit_cooldown -= delta
+
+	if Input.is_action_just_pressed("hit") and _hit_cooldown <= 0.0:
+		_try_hit_rat()
 
 	if direction.length_squared() > 0.001:
 		var target_yaw := atan2(direction.x, direction.z)
@@ -48,3 +57,18 @@ func _to_world(input: Vector2) -> Vector3:
 	right.y = 0.0
 	forward.y = 0.0
 	return (right.normalized() * input.x + forward.normalized() * -input.y).limit_length(1.0)
+
+
+
+
+func _try_hit_rat() -> void:
+	_hit_cooldown = HIT_COOLDOWN_TIME
+
+	var rats = get_tree().get_nodes_in_group("rat")
+	if rats.is_empty():
+		return
+
+	var rat = rats[0]
+	if rat.global_position.distance_to(global_position) <= 1.5:
+		if rat.hit():
+			GameState.log_event("rat_hit", "bonk ! le rat est assommé")
