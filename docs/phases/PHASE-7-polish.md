@@ -39,7 +39,12 @@ Que le jeu soit **agréable à regarder et à écouter**, pas seulement fonction
 ### Étape 2 — Intégrer le chef et les meubles (dès maintenant, **en se coordonnant** avec la personne de la Phase 3, qui modifie aussi `player.tscn` et les stations)
 - [x] Chef dans `player.tscn` → `Model` ([ASSETS.md §7](../ASSETS.md#7-intégrer-un-modèle-dans-godot-pas-à-pas)), animations **walk** et **run** branchées dans `player.gd`.
 - [ ] Animation **idle** du chef (Meshy → *Animate* → Idle, puis `tools/optimize_glb.py --anim-from`). En attendant, pose figée.
-- [ ] Meubles : plan de travail, planche, plaque, caisse, passe-plat (garder `Area3D`, `ItemSlot`, `Rug`, `ApproachPoint`).
+- [x] Meubles : **découpe**, **cuisinière**, **caisse de tomates** et **comptoir de livraison** (`pass.glb`) sont intégrés. `counter.glb` (plan de travail simple) est disponible pour du décor.
+- [x] **Assiette cuisinée** (`food/plate_dish.glb`) : visuel de l'état `COOKED` dans `item.gd` (constante `MODELS`).
+- [ ] **Tomate crue** et **tranches** : il manque les modèles ; formes simples en attendant (ajouter une ligne dans `Item.MODELS`).
+- [ ] **Poêle** (`kitchen/frying_pan.glb`, prête) : à afficher dans la main du chef pendant le coup sur le rat (Phase 3 ou 7).
+
+  Méthode suivie pour chaque meuble : modèle mis à l'échelle × 1,4 (1,4 m au sol, pieds à `y = 0`) sous un nœud `Model` ; l'ancien cube `Counter` est gardé **invisible** pour la collision ; `ItemSlot` remonté sur le dessus du modèle ; `Area3D`, `Rug`, `Progress` et `Label3D` inchangés. Sur la cuisinière, le disque **`Burner`** est conservé, posé sur le brûleur, car la Phase 3 le colore (orange allumé / gris éteint).
 - [ ] Tomate, tranches et assiette dans `item.gd` (constante `MODELS`).
 - [ ] Trou du rat (arche).
 
