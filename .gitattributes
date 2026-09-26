@@ -1,0 +1,14 @@
+# Fins de ligne normalisées (collègues sous Windows/macOS/Linux)
+* text=auto eol=lf
+
+# Binaires : jamais de diff/merge texte
+*.png binary
+*.jpg binary
+*.glb binary
+*.gltf binary
+*.ogg binary
+*.wav binary
+*.mp3 binary
+*.ttf binary
+*.otf binary
+*.blend binary

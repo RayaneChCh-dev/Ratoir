@@ -1,0 +1,61 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/station.gd" id="1_station"]
+[ext_resource type="Script" path="res://scripts/progress_bar_3d.gd" id="2_progress"]
+
+[sub_resource type="BoxShape3D" id="Shape_area"]
+size = Vector3(2.6, 1, 2.6)
+
+[sub_resource type="PlaneMesh" id="Mesh_rug"]
+size = Vector2(2.6, 2.6)
+
+[sub_resource type="StandardMaterial3D" id="Mat_counter"]
+albedo_color = Color(0.32, 0.32, 0.36, 1)
+
+[sub_resource type="StandardMaterial3D" id="Mat_burner"]
+albedo_color = Color(0.08, 0.08, 0.09, 1)
+
+[node name="CookStation" type="Node3D"]
+script = ExtResource("1_station")
+accepts = 1
+produces = 2
+duration = 2.5
+
+[node name="Rug" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.01, 0)
+mesh = SubResource("Mesh_rug")
+
+[node name="Counter" type="CSGBox3D" parent="."]
+position = Vector3(0, 0.5, 0)
+use_collision = true
+size = Vector3(1.4, 1, 1.4)
+material = SubResource("Mat_counter")
+
+[node name="Burner" type="CSGCylinder3D" parent="."]
+position = Vector3(0, 1.025, 0)
+radius = 0.45
+height = 0.05
+sides = 24
+material = SubResource("Mat_burner")
+
+[node name="ItemSlot" type="Node3D" parent="."]
+position = Vector3(0, 1.06, 0)
+
+[node name="Area3D" type="Area3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+position = Vector3(0, 0.5, 0)
+shape = SubResource("Shape_area")
+
+[node name="Progress" type="Node3D" parent="."]
+position = Vector3(0, 2.0, 0)
+script = ExtResource("2_progress")
+
+[node name="Label3D" type="Label3D" parent="."]
+position = Vector3(0, 2.45, 0)
+billboard = 1
+no_depth_test = true
+pixel_size = 0.011
+text = "Cuisson"
+font_size = 40
+outline_size = 12

@@ -1,0 +1,16 @@
+# Cache et imports Godot (régénérés à l'ouverture du projet)
+.godot/
+*.import.tmp
+
+# Builds d'export et certificats de test local
+build/
+
+# Fichiers système / éditeurs
+.DS_Store
+Thumbs.db
+*.swp
+.vscode/
+.idea/
+
+# Secrets du serveur relais IA (Phase 5)
+server/.env
