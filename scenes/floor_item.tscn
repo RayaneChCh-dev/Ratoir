@@ -1,0 +1,3 @@
+FloorItem (Node3D) ── scripts/floor_item.gd
+└── Area3D
+    └── CollisionShape3D (SphereShape3D, rayon 0.6 m)
