@@ -74,31 +74,13 @@ Avant de coder, lis [`docs/CONTRIBUTING.md`](docs/CONTRIBUTING.md) (règles pour
 
 ## Entendre le critique
 
-Deux programmes : le proxy qui appelle Gradium, puis le jeu.
-
-```bash
-cp server/.env.example server/.env
-```
-
-Dans `server/.env`, renseigne `GRADIUM_API_KEY`. Laisse `GRADIUM_VOICE_ID` vide pour la voix anglaise Mark. Ce fichier est ignoré par git.
-
-Terminal 1 :
-
-```bash
-python3 server/speak.py
-```
-
-Tu dois voir `critic proxy on http://127.0.0.1:8787/speak`. Laisse ce terminal ouvert.
-
-Terminal 2 :
+Les neuf phrases sont déjà enregistrées dans `assets/audio/critic/` (voix Mark). Le jeu les joue tout seul : pas besoin de lancer le proxy ni d'une clé Gradium.
 
 ```bash
 godot --path .
 ```
 
 Après environ deux secondes, la voix dit « I'm hungry. The chef had better hurry. » Il n'y a pas de sous-titre. Ensuite, joue : la phrase suivante suit l'action la plus fréquente sur environ 4 secondes.
-
-Si le proxy est arrêté, la cuisine continue, sans voix.
 
 ## Contrôles
 
@@ -159,8 +141,9 @@ Ratoir/
 │   └── hud.gd               # affichage du score
 ├── shaders/checker_floor.gdshader  # carrelage du sol
 ├── server/
-│   ├── speak.py             # proxy local : texte → voix Gradium (WAV)
+│   ├── speak.py             # ancien proxy Gradium, plus utilisé par le jeu
 │   └── .env.example         # GRADIUM_API_KEY, sans valeur (le vrai .env est ignoré)
+├── assets/audio/critic/     # neuf phrases du critique, déjà enregistrées
 ├── assets/models/           # modèles 3D (.glb) : characters/chef.glb…
 ├── tools/
 │   ├── export_web.sh        # export HTML5 + zip itch.io

@@ -26,25 +26,29 @@ const LINES := {
 	],
 }
 
-@export var proxy_url := "http://127.0.0.1:8787/speak"
+const CLIPS := {
+	"I'm hungry. The chef had better hurry.": preload("res://assets/audio/critic/hungry.mp3"),
+	"Another tomato. I'm still hungry.": preload("res://assets/audio/critic/tomato_again.mp3"),
+	"He grabs a tomato. The plate is still empty.": preload("res://assets/audio/critic/tomato_empty.mp3"),
+	"Chop, chop, chop. The knife is doing all the work.": preload("res://assets/audio/critic/chop_knife.mp3"),
+	"He's chopping again. Faster. I'm starving.": preload("res://assets/audio/critic/chop_faster.mp3"),
+	"On the stove. I can almost smell it.": preload("res://assets/audio/critic/cook_smell.mp3"),
+	"It's cooking. Don't let it sit there.": preload("res://assets/audio/critic/cook_sit.mp3"),
+	"A plate, finally. I'm still hungry.": preload("res://assets/audio/critic/plate_finally.mp3"),
+	"One more plate. The room wants another.": preload("res://assets/audio/critic/plate_another.mp3"),
+}
 
 var _busy := false
 var _playing_voice := false
 var _window: Array[Dictionary] = []
 var _pending: Array[Dictionary] = []
 var _line_index := {}
-var _http: HTTPRequest
 var _player: AudioStreamPlayer
 var _hide_timer: Timer
 var _window_timer: Timer
 
 
 func _ready() -> void:
-	_http = HTTPRequest.new()
-	_http.timeout = 8.0
-	_http.request_completed.connect(_on_response)
-	add_child(_http)
-
 	_player = AudioStreamPlayer.new()
 	_player.finished.connect(_on_voice_finished)
 	add_child(_player)
@@ -111,17 +115,14 @@ func _speak_batch(batch: Array[Dictionary]) -> void:
 
 func _request_voice(text: String) -> void:
 	print("critic: ", text)
-	if proxy_url.is_empty():
+	var stream: AudioStream = CLIPS.get(text)
+	if stream == null:
 		_hide_timer.start(TEXT_ONLY_SECONDS)
 		return
-	var err := _http.request(
-		proxy_url,
-		PackedStringArray(["Content-Type: application/json"]),
-		HTTPClient.METHOD_POST,
-		JSON.stringify({"text": text}),
-	)
-	if err != OK:
-		_hide_timer.start(TEXT_ONLY_SECONDS)
+	_playing_voice = true
+	_player.stream = stream
+	_player.play()
+	_hide_timer.start(SAFETY_SECONDS)
 
 
 func _dominant(batch: Array[Dictionary]) -> String:
@@ -147,28 +148,6 @@ func _line_for(action: String) -> String:
 	return str(lines[index % lines.size()])
 
 
-func _on_response(result: int, code: int, _headers: PackedStringArray, body: PackedByteArray) -> void:
-	if result != HTTPRequest.RESULT_SUCCESS or code != 200:
-		_hide_timer.start(TEXT_ONLY_SECONDS)
-		return
-	var parsed: Variant = JSON.parse_string(body.get_string_from_utf8())
-	if not parsed is Dictionary:
-		_hide_timer.start(TEXT_ONLY_SECONDS)
-		return
-	var audio_b64 := str(parsed.get("audio_base64", "")).strip_edges()
-	if audio_b64.is_empty():
-		_hide_timer.start(TEXT_ONLY_SECONDS)
-		return
-	var stream := _wav_stream(Marshalls.base64_to_raw(audio_b64))
-	if stream == null:
-		_hide_timer.start(TEXT_ONLY_SECONDS)
-		return
-	_playing_voice = true
-	_player.stream = stream
-	_player.play()
-	_hide_timer.start(SAFETY_SECONDS)
-
-
 func _on_voice_finished() -> void:
 	if not _playing_voice:
 		return
@@ -185,45 +164,3 @@ func _on_line_done() -> void:
 	var batch: Array[Dictionary] = _pending.duplicate()
 	_pending.clear()
 	_speak_batch(batch)
-
-
-func _wav_stream(bytes: PackedByteArray) -> AudioStreamWAV:
-	if bytes.size() < 44 or bytes.slice(0, 4).get_string_from_ascii() != "RIFF":
-		return null
-	var offset := 12
-	var channels := 1
-	var sample_rate := 24000
-	var bits := 16
-	var audio_format := 1
-	var pcm := PackedByteArray()
-	while offset + 8 <= bytes.size():
-		var chunk_id := bytes.slice(offset, offset + 4).get_string_from_ascii()
-		var chunk_size := bytes.decode_u32(offset + 4)
-		var start := offset + 8
-		# Gradium met 0xFFFFFFFF comme taille : le son va jusqu'à la fin du fichier.
-		var unknown_size := chunk_size == 0xFFFFFFFF
-		if not unknown_size and start + chunk_size > bytes.size():
-			return null
-		if chunk_id == "fmt " and chunk_size >= 16:
-			audio_format = bytes.decode_u16(start)
-			channels = bytes.decode_u16(start + 2)
-			sample_rate = bytes.decode_u32(start + 4)
-			bits = bytes.decode_u16(start + 14)
-		elif chunk_id == "data":
-			var end := bytes.size() if unknown_size else start + chunk_size
-			pcm = bytes.slice(start, end)
-			break
-		var padded := chunk_size + (chunk_size % 2)
-		offset = start + padded
-	if pcm.is_empty() or audio_format != 1 or bits != 16 or channels < 1 or sample_rate <= 0:
-		return null
-	var frame := 2 * channels
-	pcm = pcm.slice(0, pcm.size() - (pcm.size() % frame))
-	if pcm.is_empty():
-		return null
-	var stream := AudioStreamWAV.new()
-	stream.format = AudioStreamWAV.FORMAT_16_BITS
-	stream.mix_rate = sample_rate
-	stream.stereo = channels > 1
-	stream.data = pcm
-	return stream
