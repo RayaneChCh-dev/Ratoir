@@ -1,9 +1,11 @@
-# Ratoir
+# Tomato Wars
 
-<p align="center"><img src="docs/images/screens/cover.png" width="630" alt="Ratoir : la cuisine, le chef et le juge qui note un plat"></p>
+<p align="center"><img src="docs/images/screens/cover.png" width="630" alt="Tomato Wars : la cuisine, le chef et le juge qui note un plat"></p>
 
 > 🇫🇷 Cuisine vite, livre tes plats… pendant qu'un rat saboteur rôde dans ta cuisine !
 > 🇬🇧 Cook fast, serve your dishes… while a sneaky rat wreaks havoc in your kitchen!
+
+<p align="center"><a href="https://sapphirdev.itch.io/tomatowars"><b>▶️ Jouer dans le navigateur sur itch.io — Play in your browser</b></a></p>
 
 **[🇬🇧 English version below](#-english)**
 
@@ -15,7 +17,7 @@
   <img src="docs/images/screens/5_victoire.png" width="150" alt="Écran de victoire">
 </p>
 
-Jeu de cuisine en 3D pour **téléphone**, jouable **dans le navigateur** (export HTML5, hébergé sur itch.io). Projet de hackathon réalisé avec **Godot 4.7**.
+Jeu de cuisine en 3D pour **téléphone**, jouable **dans le navigateur** : **[sapphirdev.itch.io/tomatowars](https://sapphirdev.itch.io/tomatowars)** Projet de hackathon réalisé avec **Godot 4.7** (le dépôt GitHub s'appelle *Ratoir*, l'ancien nom du jeu).
 
 ---
 
@@ -101,7 +103,7 @@ Chaque test affiche `… : 0 échec(s)` quand tout va bien. Les avertissements d
 Godot Web exige une page servie en **HTTPS** (ou `localhost`). Pour tester sur ton téléphone depuis ton PC :
 
 ```bash
-./tools/export_web.sh            # exporte dans build/web/ (+ build/ratoir-web.zip)
+./tools/export_web.sh            # exporte dans build/web/ (+ build/tomato-wars-web.zip)
 python3 tools/serve_https.py     # affiche l'adresse à ouvrir, ex. https://192.168.1.20:8765
 ```
 
@@ -111,7 +113,7 @@ Sur le téléphone (même Wi-Fi que le PC) : ouvrir l'adresse affichée → aver
 
 ## Publier sur itch.io
 
-1. `./tools/export_web.sh` → produit `build/ratoir-web.zip` (`index.html` à la racine du zip).
+1. `./tools/export_web.sh` → produit `build/tomato-wars-web.zip` (`index.html` à la racine du zip).
 2. Sur itch.io : **Kind of project : HTML** → envoyer le zip → cocher **« This file will be played in the browser »**.
 3. *Embed options* : **360 × 640**, **Mobile friendly** en **Portrait**, **Fullscreen button**. Laisser *SharedArrayBuffer* décoché (export sans threads).
 4. Captures et couverture : `docs/images/screens/` (versions réduites) ou `build/itch/` en pleine taille après une session de captures.
@@ -170,7 +172,7 @@ Ratoir/
 
 ## 🇬🇧 English
 
-**Ratoir** is a 3D cooking game for **mobile phones**, playable **right in the browser** (HTML5 export, hosted on itch.io). Built during a hackathon with **Godot 4.7**.
+**Tomato Wars** is a 3D cooking game for **mobile phones**, playable **right in the browser**: **[sapphirdev.itch.io/tomatowars](https://sapphirdev.itch.io/tomatowars)** Built during a hackathon with **Godot 4.7** (the GitHub repository is named *Ratoir*, the game's former name).
 
 You are the chef. Your mission: serve as many dishes as possible before time runs out. But a rat crawls out of its hole to wreak havoc in your kitchen…
 
@@ -201,4 +203,4 @@ You are the chef. Your mission: serve as many dishes as possible before time run
 The detailed design and team documentation (in French) lives in [`docs/`](docs/).
 
 ### Credits
-Built by the Ratoir team during a hackathon with Godot Engine. Environment: KayKit Restaurant Bits by Kay Lousberg (CC0). Characters and furniture generated with Meshy AI. Commentator voice: Gradium. See [CREDITS.md](CREDITS.md).
+Built by the Tomato Wars team during a hackathon with Godot Engine. Environment: KayKit Restaurant Bits by Kay Lousberg (CC0). Characters and furniture generated with Meshy AI. Commentator voice: Gradium. See [CREDITS.md](CREDITS.md).

@@ -1,4 +1,4 @@
-# Ratoir — Concept complet
+# Tomato Wars — Concept complet
 
 > **Document de référence du jeu.** En cas de doute ou de contradiction avec un autre document (y compris le PDF de conception d'origine « Duel de Cuisine »), **c'est ce fichier qui fait foi**.
 > Toute décision de design qui change le jeu doit être reportée ici.
@@ -7,7 +7,7 @@
 
 ## 1. Le pitch
 
-**Ratoir** est un jeu de cuisine en 3D pour téléphone. Le joueur est un cuisinier qui doit servir **le plus de plats possible avant la fin du chrono**. Un **rat** sort régulièrement d'un trou dans le mur pour **saboter** la cuisine. **Pour l'instant, le chef ne peut rien faire contre le rat** : il doit l'éviter et réparer ses dégâts. Le bouton pour le taper est prévu mais désactivé (voir §8.3).
+**Tomato Wars** est un jeu de cuisine en 3D pour téléphone. Le joueur est un cuisinier qui doit servir **le plus de plats possible avant la fin du chrono**. Un **rat** sort régulièrement d'un trou dans le mur pour **saboter** la cuisine. **Pour l'instant, le chef ne peut rien faire contre le rat** : il doit l'éviter et réparer ses dégâts. Le bouton pour le taper est prévu mais désactivé (voir §8.3).
 
 Pendant la partie, un **commentateur IA** façon commentateur sportif réagit à ce qui se passe, avec une voix de synthèse. Un **juge IA** donne un nom absurde et une critique à chaque plat livré. À la fin, l'IA rédige un **récap' personnalisé** de la partie.
 
@@ -195,4 +195,5 @@ Le jeu tourne dans le navigateur : **toute clé mise dans le jeu est publique**.
 | 2026-09-26 | **Portrait**, cuisine droite en plongée à 55° (au lieu d'une vue isométrique en losange), **caméra qui suit** le joueur | Conseil du jury, et la carte était trop petite en paysage |
 | 2026-09-26 | Score transformé en **étoiles** en fin de manche (5 / 10 / 15 points) | Objectif clair et rejouabilité |
 | 2026-09-26 | Nom du jeu : **Ratoir** | Nom du dépôt |
+| 2026-09-26 | Le jeu est renommé **Tomato Wars** (publié sur itch.io : sapphirdev.itch.io/tomatowars). Le dépôt GitHub garde le nom *Ratoir* | Nom de la page itch.io |
 | 2026-09-26 | **Bouton TAPER retiré** : le chef ne peut rien contre le rat pour l'instant (code conservé, désactivé) | Choix de design, à réévaluer à l'équilibrage |

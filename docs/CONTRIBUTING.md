@@ -1,4 +1,4 @@
-# Travailler à plusieurs sur Ratoir
+# Travailler à plusieurs sur Tomato Wars
 
 Godot stocke les scènes dans des fichiers texte (`.tscn`), mais **deux personnes qui modifient la même scène en même temps**, c'est un conflit git quasi garanti et pénible à résoudre. Ces règles sont là pour l'éviter.
 

@@ -66,7 +66,7 @@ func reset() -> void            # score = 0, events.clear(), round_state = TITLE
 ### 3.3 Écrans (dans `scenes/ui/`, instanciés **une fois** dans `main.tscn` sous `UI`)
 | Scène | Contenu | Détails |
 |-------|---------|---------|
-| `title_screen.tscn` | Fond semi-transparent, titre **RATOIR**, « Touchez pour commencer » qui pulse | Au **premier** `InputEventScreenTouch` pressé → jouer le son « pop » → se cacher → lancer le compte à rebours |
+| `title_screen.tscn` | Fond semi-transparent, titre **TOMATO WARS**, « Touchez pour commencer » qui pulse | Au **premier** `InputEventScreenTouch` pressé → jouer le son « pop » → se cacher → lancer le compte à rebours |
 | `countdown.tscn` | Gros chiffres 3 → 2 → 1 → « Cuisinez ! » | ≈ 0,8 s par étape avec un `Tween` (grossit puis disparaît). À la fin, `GameState.start_round()`. **Plus tard (Phase 6)** : afficher ici le nom et la réplique du rat |
 | `result_screen.tscn` | « Temps écoulé ! », score, 3 étoiles, texte du récap', bouton **Rejouer** | Étoiles qui s'allument une par une (tween d'échelle + son). Rejouer : `GameState.reset()` puis `get_tree().reload_current_scene()` |
 

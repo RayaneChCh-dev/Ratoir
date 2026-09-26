@@ -216,7 +216,7 @@ def main() -> None:
 
     out["accessors"], out["bufferViews"] = writer.accessors, writer.views
     out["buffers"] = [{"byteLength": len(writer.bin)}]
-    out.setdefault("asset", {})["generator"] = "Ratoir tools/optimize_glb.py"
+    out.setdefault("asset", {})["generator"] = "Tomato Wars tools/optimize_glb.py"
 
     json_bytes = json.dumps(out, separators=(",", ":")).encode()
     json_bytes += b" " * (-len(json_bytes) % 4)

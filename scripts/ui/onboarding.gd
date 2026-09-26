@@ -31,8 +31,8 @@ func _ready() -> void:
 
 
 func _show_menu() -> void:
-	_title.text = "RATOIR"
-	_title.add_theme_font_size_override("font_size", 120)
+	_title.text = "TOMATO WARS"
+	_title.add_theme_font_size_override("font_size", 100)
 	_subtitle.text = "Cuisine vite… le rat rôde !"
 	_steps_card.visible = true
 	_button.text = "PLAY"
