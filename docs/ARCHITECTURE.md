@@ -175,6 +175,7 @@ Toujours passer par `GameState.log_event(event, detail)`. `t` (secondes depuis l
 | `rat_hit` | Player | `"bonk ! le rat est assommé"` | 3 |
 | `rat_fled` | Rat | `"le rat retourne dans son trou"` | 3 |
 | `item_recovered` | Player | `"tomate récupérée au sol"` | 3 |
+| `judge_verdict` | Judge | `"Velouté à la sauvette : 5/5, « Je vais l'encadrer. »"` | ✅ 6 |
 | `timer_milestone` | GameState | `"30 s restantes"` / `"10 s restantes"` | 4 |
 | `round_end` | GameState | `"score 9, 1 étoile"` | 4 |
 | `level_up` | GameState | `"niveau 2"` | 4 |
