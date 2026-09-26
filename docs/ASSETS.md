@@ -17,6 +17,7 @@ Aujourd'hui, tout le jeu est fait de **primitives** (capsule bleue pour le chef,
 8. [Sons et musique](#8-sons-et-musique)
 9. [Licences et crédits](#9-licences-et-crédits)
 10. [Checklist finale](#10-checklist-finale)
+11. [Catalogue de prompts (images à générer)](#11-catalogue-de-prompts-images-à-générer)
 
 ---
 
@@ -50,7 +51,7 @@ Le jeu tourne **dans le navigateur d'un téléphone**. Chaque mégaoctet et chaq
 | **Échelle** | 1 unité = **1 mètre**. Chef ≈ 1,4 m, rat ≈ 0,5 m (exagéré pour la lisibilité), plan de travail ≈ 1 m de haut et 1,4 × 1,4 m au sol | Les collisions et les zones de contact du code sont réglées sur ces tailles |
 | **Origine (pivot)** | **Aux pieds**, au centre, à `y = 0` | Sinon le modèle flotte ou s'enfonce dans le sol |
 | **Orientation** | Le personnage **regarde vers +Z dans Godot**. Dans Blender, ça correspond à regarder vers **−Y** (vue de face, <kbd>Pavé num. 1</kbd>) | Le code fait tourner `Model` en supposant que l'avant est +Z |
-| **Triangles** | Personnage ≤ **5 000**, meuble ou objet ≤ **1 500**, total de la scène ≤ **80 000** | Téléphones d'entrée de gamme + WebGL |
+| **Triangles** | Personnage ≤ **8 000**, meuble ≤ **3 000** (5 000 au maximum), aliment ou petit objet ≤ **1 500**, total de la scène ≤ **80 000** | Téléphones d'entrée de gamme + WebGL |
 | **Textures** | **1024 × 1024 maximum** (512 suffit souvent). Idéalement **une texture « palette »** partagée par tous les modèles (style Kenney/KayKit) | Poids du téléchargement et mémoire vidéo |
 | **Poids total des assets** | Objectif **< 15 Mo** | L'export Web pèse déjà ≈ 10 Mo compressé ; au-delà de 30 Mo, le chargement sur 4G devient pénible |
 | **Squelette (rig)** | Un seul squelette par personnage, **≤ 4 influences par sommet** | Limite de WebGL |
@@ -84,28 +85,27 @@ C'est le plus rapide, le plus sûr côté licence, et le style est cohérent. Po
 Utile pour **le rat** ou un objet introuvable. Les outils du moment (Meshy, Tripo, Rodin/Hyper3D, Higgsfield 3D, etc.) transforment **une image** ou **un texte** en modèle 3D texturé exporté en `.glb`.
 
 ### Étape 1 : créer une bonne image de référence
-L'image fait **80 % de la qualité**. Pour un personnage :
-- **vue de face**, **fond blanc uni**, personnage **entier** et centré ;
-- **pose en T ou en A** (bras écartés du corps) si on veut l'animer ensuite ;
-- style explicitement **low-poly / stylisé / couleurs unies**, pour coller aux packs.
+L'image fait **80 % de la qualité**. Tous les prompts prêts à l'emploi sont dans le [catalogue (§11)](#11-catalogue-de-prompts-images-à-générer). Les règles :
+- **un seul objet par image**, **entier** (rien de coupé) et centré, carré 1024 × 1024 ;
+- **fond uni gris clair (#E0E0E0)**. Pas de blanc pur : la toque et la veste du chef, l'assiette et les plans de travail sont blancs, et l'outil ne saurait plus où s'arrête l'objet ;
+- personnages **de face**, en **pose A** (bras un peu écartés, jambes séparées) pour pouvoir les animer ;
+- **même style partout** : générer d'abord l'image de style (prompt 0 du catalogue) et la donner **en image de référence** pour toutes les autres, si le générateur le permet.
 
-Exemple de prompt pour générer l'image du rat :
-```
-cute cartoon rat character for a mobile cooking game, full body, front view,
-standing on four legs, dark grey fur, big pink tail, big round eyes, mischievous smile,
-low poly stylized 3D render, flat colors, simple shapes, plain white background, no shadow
-```
-Pour le chef :
-```
-cute chubby cartoon chef character, full body, front view, T-pose, arms straight out,
-blue chef jacket, white chef hat, low poly stylized 3D render, flat colors,
-plain white background, no shadow
-```
-Pour un objet : `low poly stylized kitchen stove with one round burner, isometric view, flat colors, plain white background`.
+**Test de cohérence** : générer le chef puis la cuisinière avec la même référence. S'ils semblent sortir du même jeu, on peut produire le reste.
 
 ### Étape 2 : image → 3D
-- Envoyer l'image dans l'outil, choisir **low poly** ou un nombre de faces réduit si l'option existe, et texture en 1024.
-- Exporter en **`.glb`**.
+Réglages conseillés (noms des options de **Meshy** ; on trouve l'équivalent chez Tripo ou Hunyuan3D) :
+
+| Asset | Mode | Triangles visés | Options |
+|-------|------|----------------:|---------|
+| Meubles, trou du rat | *Image to 3D*, **Low poly**, texturé | 3 000 à 5 000 | Sans PBR |
+| Aliments, poêle | *Image to 3D*, **Low poly**, texturé | ≈ 1 500 | Sans PBR |
+| **Chef** | *Image to 3D* (ou *Multi-image* avec face, profil et dos), texturé | 5 000 à 8 000 | **Pose A**, **Rigging** activé, animations **Idle** et **Walk** (voir §6) |
+| **Rat** | *Image to 3D*, **Low poly**, texturé | ≈ 5 000 | **Sans rigging** : le squelette automatique ne marche bien que sur les humanoïdes. Il sera animé par code (§6) |
+
+- Télécharger en **`.glb`**, nommé en minuscules (`chef.glb`, `stove.glb`, `rat.glb`…).
+- Le déposer dans `assets/models/<catégorie>/` (voir §7).
+- **Commencer par un seul modèle**, l'intégrer et le vérifier dans le jeu avant de produire le reste.
 
 ### Étape 3 : nettoyer dans Blender (obligatoire)
 Les modèles générés par IA sont souvent **trop lourds** (50 000 à 500 000 triangles), **mal orientés** et **mal centrés**.
@@ -170,13 +170,16 @@ assets/
 │   ├── characters/   chef.glb, rat.glb
 │   ├── kitchen/      counter.glb, stove.glb, cutting_board.glb, crate.glb, pass.glb, rat_hole.glb
 │   └── food/         tomato.glb, tomato_sliced.glb, plate_dish.glb
-├── textures/         (si textures séparées)
+├── textures/         floor_tiles.png, wall_bricks.png, sauce_splash.png
+├── ui/               commentator.png, judge.png, star.png, hit_button.png, logo.png
 └── audio/
     ├── sfx/          chop.ogg, sizzle.ogg, ding.ogg, squeak.ogg, bonk.ogg …
     ├── music/        theme.ogg
     └── voice/        (répliques pré-générées du commentateur, Phase 5)
 ```
 Noms de fichiers en **minuscules_avec_underscores**, sans accents ni espaces.
+
+Les **images sources** générées par IA (avant conversion 3D) vont dans `art/concepts/`, hors de `assets/`. Ce dossier contient un `.gdignore` pour que Godot ne les importe pas dans le jeu.
 
 ### Remplacer la capsule du chef
 1. Copier `chef.glb` dans `assets/models/characters/`. Godot l'importe tout seul.
@@ -242,3 +245,114 @@ Pour **chaque** modèle intégré :
 - [ ] Même style que le reste
 - [ ] Ligne ajoutée dans `CREDITS.md`
 - [ ] Testé avec <kbd>F5</kbd> **et** sur un vrai téléphone après export (le poids du build reste raisonnable)
+
+## 11. Catalogue de prompts (images à générer)
+
+Prompts en **anglais** : les générateurs d'images les comprennent mieux. Les images servent ensuite à la conversion image → 3D (§4), sauf celles de la partie 2D (§11.6), qui sont utilisées telles quelles dans le jeu.
+
+**Ordre de production conseillé** : style (0) → chef → cuisinière → rat → autres meubles → aliments → images 2D. Le rat est attendu par la Phase 3 ; les images 2D ne bloquent personne.
+
+### 11.1 Blocs à réutiliser
+
+**Bloc de style commun**, à coller **à la fin de chaque prompt 3D** (là où le prompt indique `[STYLE]`) :
+```
+stylized 3D game asset, cozy cartoon cooking game style like Overcooked, chunky rounded shapes,
+simple low-poly geometry, soft flat colors with subtle gradients, bold readable silhouette,
+soft studio lighting, centered, entire object visible, isolated on plain solid light grey
+background (#E0E0E0), no ground shadow, no text, no watermark, no border
+```
+
+**Prompt négatif**, si le générateur en accepte un :
+```
+realistic, photo, gritty, dark, noisy textures, cluttered, multiple objects, cropped,
+cut off, text, logo, watermark, heavy shadows, perspective distortion, blurry
+```
+
+### 11.2 Image de style (à faire en premier)
+Elle n'est pas convertie en 3D : elle sert de **référence de style** pour toutes les autres images, et d'image d'ambiance pour l'équipe et le jury.
+```
+cozy cartoon restaurant kitchen seen from above at a 55 degree angle, chunky rounded
+furniture against the walls, checkered cream and beige tile floor, warm terracotta walls,
+a small blue-dressed chef in the middle, a small dark grey rat peeking from a mouse hole
+in the back wall, bright cheerful colors, stylized low-poly 3D game art like Overcooked,
+clean readable shapes, soft lighting, vertical 9:16 composition
+```
+
+### 11.3 Personnages
+
+| Fichier cible | Prompt |
+|---------------|--------|
+| `characters/chef.glb` | voir ci-dessous (le chef doit rester **bleu**, c'est la couleur du joueur) |
+| `characters/rat.glb` | voir ci-dessous (**gris foncé et queue rose**, lisible de loin) |
+
+**Chef :**
+```
+cute chubby cartoon chef character, chibi proportions with big head and small body,
+blue chef jacket with white buttons, tall white chef hat, white apron, small black shoes,
+friendly determined face with big eyes, holding nothing, full body, front view,
+symmetrical A-pose with arms slightly away from the body and legs apart, [STYLE]
+```
+Pour la conversion *multi-vues*, générer aussi la même image avec `side view` puis `back view` à la place de `front view`, **avec l'image de face en référence**.
+
+**Rat :**
+```
+cute mischievous cartoon rat character, chunky rounded body standing on four legs,
+dark grey fur, light grey belly, big round pink ears, big shiny black eyes, sly grin
+showing two front teeth, long pink tail held up and clearly separated from the body,
+full body, three-quarter front view, [STYLE]
+```
+La queue doit être **bien détachée du corps** : elle sera animée séparément (§6).
+
+**Rat assommé** (optionnel ; sert de référence visuelle pour l'effet, pas converti en 3D) :
+```
+same cartoon rat as reference, dizzy and knocked out, swirly eyes, small bump on head,
+little yellow stars circling above the head, sitting, [STYLE]
+```
+
+### 11.4 Meubles
+Dans le jeu, ils mesurent **1,4 × 1,4 m au sol et ≈ 1 m de haut**. On les demande **carrés et compacts**, sinon ils ne rentrent pas à leur place.
+
+| Fichier cible | Prompt |
+|---------------|--------|
+| `kitchen/counter.glb` (plan de travail de base) | `square compact kitchen counter block, cube-shaped, white top with rounded edges, light wood front panel with a small drawer handle, three-quarter front view from slightly above, [STYLE]` |
+| `kitchen/cutting_board.glb` (Découpe) | `square compact kitchen counter with a wooden cutting board on top and a big cartoon kitchen knife lying on the board, cube-shaped counter, white top, light wood front, three-quarter front view from slightly above, [STYLE]` |
+| `kitchen/stove.glb` (Cuisson) | `square compact cartoon cooking stove, cube-shaped, dark charcoal grey body with one big round black burner plate on top, chunky control knob on the front, three-quarter front view from slightly above, [STYLE]` |
+| `kitchen/crate.glb` (Tomates) | `square compact wooden crate full of big shiny red tomatoes, cube-shaped, cartoon style, three-quarter front view from slightly above, [STYLE]` |
+| `kitchen/pass.glb` (Livraison) | `square compact restaurant serving counter, cube-shaped, brushed steel body, bright green stripe on the top edge, small silver service bell on top, three-quarter front view from slightly above, [STYLE]` |
+| `kitchen/rat_hole.glb` (trou du rat) | `cartoon mouse hole in a wall, arched opening with a wooden frame, dark inside, small crumbs in front, front view, [STYLE]` |
+
+Pour la plaque « éteinte » (sabotage de la Phase 3), **pas besoin d'un deuxième modèle** : le jeu changera la couleur du brûleur et ajoutera de la fumée.
+
+### 11.5 Aliments et objets
+Volontairement **grossis** dans le jeu pour rester lisibles sur un petit écran.
+
+| Fichier cible | Prompt |
+|---------------|--------|
+| `food/tomato.glb` (crue) | `one big shiny cartoon red tomato with a green stem and leaves, [STYLE]` |
+| `food/tomato_sliced.glb` (découpée) | `three thick cartoon tomato slices lying side by side, juicy red with visible seeds, [STYLE]` |
+| `food/plate_dish.glb` (cuite) | `round white plate with a cooked tomato dish, glossy red-orange sauce, small green herb leaves on top, cartoon style, three-quarter view from slightly above, [STYLE]` |
+| `kitchen/frying_pan.glb` (arme pour taper le rat) | `cartoon black frying pan with a wooden handle, [STYLE]` |
+
+### 11.6 Images 2D (utilisées telles quelles, **fond transparent**)
+Pas de conversion 3D : on les utilise dans l'interface ou comme texture. Demander un **PNG à fond transparent** ; si le générateur ne sait pas faire, un fond **vert uni #00FF00** qu'on retirera ensuite. Les ranger dans `assets/ui/` (portraits, icônes, logo) ou `assets/textures/` (sol, mur, effets).
+
+| Fichier cible | Utilisation | Prompt |
+|---------------|-------------|--------|
+| `ui/commentator.png` | Portrait dans la bulle de sous-titres (Phase 5) | `cartoon portrait of an over-excited sports commentator, bust shot, headset microphone, loud colorful suit, huge smile, shouting with enthusiasm, bold outlines, flat colors, sticker style, transparent background` |
+| `ui/judge.png` | Portrait sur la carte du juge (Phase 6) | `cartoon portrait of a snobbish food critic judge, bust shot, thin mustache, monocle, raised eyebrow, holding a small scorecard, bold outlines, flat colors, sticker style, transparent background` |
+| `ui/star.png` | Étoiles de l'écran de fin (Phase 4) | `game UI icon, a golden star with a thick dark outline, glossy, cartoon, flat, centered, transparent background` |
+| `ui/hit_button.png` | Bouton TAPER (Phase 3) | `game UI round button icon, cartoon frying pan hitting with motion lines, white icon on a bold orange circle, thick outline, flat, centered, transparent background` |
+| `ui/logo.png` | Écran titre (Phase 4) | `game logo text "RATOIR", chunky rounded bold cartoon letters, cream and tomato red colors, a small rat tail curling out of the letter R, a chef hat on the letter O, thick dark outline, transparent background` |
+| `textures/floor_tiles.png` | Sol (remplace le shader de damier) | `seamless tileable texture, top-down view, cartoon kitchen floor with cream and beige checkered tiles, flat colors, subtle grout lines, no perspective` |
+| `textures/wall_bricks.png` | Murs | `seamless tileable texture, front view, warm terracotta cartoon kitchen wall with subtle brick pattern, flat colors, no perspective` |
+| `textures/sauce_splash.png` | Flaque du plat renversé (Phase 3) | `top-down view of a cartoon red tomato sauce splash puddle, flat colors, simple shape, transparent background` |
+
+Les générateurs d'images écrivent souvent mal le texte : pour le logo, vérifier l'orthographe de **RATOIR**, ou générer le logo sans texte et ajouter les lettres dans Godot avec une police.
+
+### 11.7 Avant de passer à la 3D
+- [ ] Toutes les images ont le **même style** que l'image de référence.
+- [ ] Objet **entier**, **seul**, sur **fond uni**, sans ombre ni texte.
+- [ ] Chef en **pose A**, rat avec la **queue détachée**.
+- [ ] Couleurs du jeu respectées : chef **bleu**, rat **gris et rose**, bande **verte** sur le comptoir de livraison.
+- [ ] Images sources rangées dans `art/concepts/` (utile pour relancer une conversion ou retoucher plus tard).
+
