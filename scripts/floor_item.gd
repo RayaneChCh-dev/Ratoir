@@ -18,7 +18,7 @@ func _physics_process(_delta: float) -> void:
 	if contained_item == null:
 		return
 	for body in area.get_overlapping_bodies():
-		if body is Cook and not body.has_item():
+		if body is Cook and not body.has_item() and body.held_trap == null:
 			if _bounce:
 				_bounce.kill()
 			var detail := contained_item.get_item_name()
