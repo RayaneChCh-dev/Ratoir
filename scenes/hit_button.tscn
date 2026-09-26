@@ -1,0 +1,15 @@
+[gd_scene format=3]
+[ext_resource type="Script" path="res://scripts/hit_button.gd" id="1"]
+[ext_resource type="Texture2D" path="res://assets/ui/hit.svg" id="2"]
+[node name="HitButton" type="TouchScreenButton"]
+script = ExtResource("1")
+texture_normal = ExtResource("2")
+action = "hit"
+[node name="Label" type="Label" parent="."]
+offset_top = 136.0
+offset_right = 180.0
+offset_bottom = 168.0
+mouse_filter = 2
+text = "TAPER"
+horizontal_alignment = 1
+theme_override_font_sizes/font_size = 24

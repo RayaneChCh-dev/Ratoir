@@ -10,6 +10,9 @@
 [ext_resource type="PackedScene" path="res://scenes/delivery_counter.tscn" id="8_delivery"]
 [ext_resource type="Script" path="res://scripts/hud.gd" id="9_hud"]
 
+[ext_resource type="PackedScene" path="res://scenes/rat.tscn" id="10_rat"]
+[ext_resource type="PackedScene" path="res://scenes/hit_button.tscn" id="11_hit"]
+
 [sub_resource type="ProceduralSkyMaterial" id="SkyMat"]
 sky_top_color = Color(0.55, 0.72, 0.9, 1)
 sky_horizon_color = Color(0.85, 0.88, 0.92, 1)
@@ -130,7 +133,7 @@ bbcode_enabled = true
 scroll_active = false
 script = ExtResource("9_hud")
 
-[node name="TouchJoystick" type="Control" parent="UI"]
+[node name="TouchJoystick" type="Control" parent="UI" node_paths=PackedStringArray("ignore_zones")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -139,3 +142,9 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("2_joystick")
+ignore_zones = [NodePath("../HitButton")]
+
+[node name="Rat" parent="." instance=ExtResource("10_rat")]
+position = Vector3(0, 0, -10.4)
+
+[node name="HitButton" parent="UI" instance=ExtResource("11_hit")]

@@ -6,7 +6,7 @@
 |------:|-------|------|------------------|-----------:|
 | 1 | [Squelette](PHASE-1-squelette.md) | ✅ Terminé | — | — |
 | 2 | [Boucle de cuisine + portrait](PHASE-2-boucle-cuisine.md) | ✅ Terminé | — | — |
-| 3 | [Le rat et les sabotages](PHASE-3-rat.md) | ⏳ À faire | Dev gameplay (Godot) | 2 h 30 à 3 h |
+| 3 | [Le rat et les sabotages](PHASE-3-rat.md) | 🧪 Validation téléphone restante | Dev gameplay (Godot) | 2 h 30 à 3 h |
 | 4 | [Manche complète : titre, chrono, étoiles](PHASE-4-manche.md) | ⏳ À faire | Dev gameplay/UI (Godot) | 1 h 30 à 2 h |
 | 5 | [Commentateur IA](PHASE-5-commentateur.md) | ⏳ À faire | Dev IA/backend (+ un peu de Godot) | 2 h 30 à 3 h |
 | 6 | [Juge, personnalité du rat, récap' final](PHASE-6-juge-recap.md) | ⏳ À faire | Dev IA/backend | 1 h 30 à 2 h |
