@@ -5,6 +5,8 @@
 > 🇫🇷 Cuisine vite, livre tes plats… pendant qu'un rat saboteur rôde dans ta cuisine !
 > 🇬🇧 Cook fast, serve your dishes… while a sneaky rat wreaks havoc in your kitchen!
 
+<p align="center"><a href="https://sapphirdev.itch.io/tomatowars"><b>▶️ Jouer dans le navigateur sur itch.io — Play in your browser</b></a></p>
+
 **[🇬🇧 English version below](#-english)**
 
 <p align="center">
@@ -15,7 +17,7 @@
   <img src="docs/images/screens/5_victoire.png" width="150" alt="Écran de victoire">
 </p>
 
-Jeu de cuisine en 3D pour **téléphone**, jouable **dans le navigateur** (export HTML5, hébergé sur itch.io). Projet de hackathon réalisé avec **Godot 4.7**.
+Jeu de cuisine en 3D pour **téléphone**, jouable **dans le navigateur** : **[sapphirdev.itch.io/tomatowars](https://sapphirdev.itch.io/tomatowars)** (publié sur itch.io sous le nom *Tomato Wars*). Projet de hackathon réalisé avec **Godot 4.7**.
 
 ---
 
@@ -170,7 +172,7 @@ Ratoir/
 
 ## 🇬🇧 English
 
-**Ratoir** is a 3D cooking game for **mobile phones**, playable **right in the browser** (HTML5 export, hosted on itch.io). Built during a hackathon with **Godot 4.7**.
+**Ratoir** is a 3D cooking game for **mobile phones**, playable **right in the browser**: **[sapphirdev.itch.io/tomatowars](https://sapphirdev.itch.io/tomatowars)** (published on itch.io as *Tomato Wars*). Built during a hackathon with **Godot 4.7**.
 
 You are the chef. Your mission: serve as many dishes as possible before time runs out. But a rat crawls out of its hole to wreak havoc in your kitchen…
 
