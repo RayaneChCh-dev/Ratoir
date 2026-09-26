@@ -22,6 +22,7 @@ var current_sabotage: Sabotage = null
 var _state_timer: float = 0.0
 var _protected_time: float = 5.0
 var _anti_stuck_timer: float = 0.0
+var _difficulty_scale: float = 1.0
 
 const STUCK_LIMIT: float = 6.0
 const HIT_FLEE_LONG_DELAY: float = 10.0
@@ -37,7 +38,22 @@ func _ready() -> void:
 	contact_area.body_entered.connect(_on_contact_area_body_entered)
 	alert_label.visible = false
 
-	_enter_hidden(profile.get_next_hidden_delay())
+	GameState.difficulty_changed.connect(_on_difficulty_changed)
+	GameState.round_started.connect(_on_round_started)
+	_on_round_started()
+
+func _on_difficulty_changed(_level: int, scale: float) -> void:
+	_difficulty_scale = scale
+
+func _on_round_started() -> void:
+	_difficulty_scale = GameState.difficulty_scale()
+	# Un objet volé reste récupérable lors du passage de niveau.
+	if carried_item:
+		_drop_item_on_floor()
+	_protected_time = 5.0
+	_anti_stuck_timer = 0.0
+	model.scale = Vector3.ONE
+	_enter_hidden(profile.get_next_hidden_delay() / _difficulty_scale)
 
 func _physics_process(delta: float) -> void:
 	if _protected_time > 0.0:
@@ -110,7 +126,7 @@ func _move_towards(target: Vector3, spd: float) -> void:
 	if dir.length_squared() > 0.001:
 		dir = dir.normalized()
 		model.rotation.y = atan2(dir.x, dir.z)
-	velocity = dir * spd
+	velocity = dir * spd * _difficulty_scale
 	move_and_slide()
 	global_position.y = 0.0
 
@@ -167,7 +183,7 @@ func _finish_returning() -> void:
 		GameState.log_event("sabotage_steal", "le rat a volé " + carried_item.get_item_name())
 		carried_item.queue_free()
 		carried_item = null
-	_enter_hidden(profile.get_next_hidden_delay())
+	_enter_hidden(profile.get_next_hidden_delay() / _difficulty_scale)
 
 # --- COUP REÇU (TAPER) ---
 

@@ -115,6 +115,7 @@ class SpillSabotage extends Sabotage:
 				item.queue_free()
 				_spawn_puddle(player.global_position)
 				GameState.log_event("sabotage_spill", "le rat a renversé " + detail)
+				GameState.take_damage(1, "rat : plat renversé")
 
 	func _spawn_puddle(pos: Vector3) -> void:
 		# Création d'une flaque temporaire au sol

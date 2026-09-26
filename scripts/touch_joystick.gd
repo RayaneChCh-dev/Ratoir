@@ -28,6 +28,7 @@ func _is_in_ignore_zone(pos: Vector2) -> bool:
 func _ready() -> void:
 	set_anchors_preset(Control.PRESET_FULL_RECT)
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
+	GameState.round_state_changed.connect(func(_state): _release())
 
 func _input(event: InputEvent) -> void:
 	if event is InputEventScreenTouch and event.pressed:

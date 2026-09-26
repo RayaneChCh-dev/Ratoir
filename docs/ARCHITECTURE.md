@@ -74,16 +74,29 @@ Le rat traverse le joueur ; seul `ContactArea` déclenche le renversement.
 ### `GameState` (autoload, `scripts/game_state.gd`)
 | Membre | Type | Rôle |
 |--------|------|------|
-| `score` | `int` | Points de la manche |
+| `score` | `int` | Plats livrés pendant la partie |
+| `level` | `int` | Niveau courant ; objectif = `level * 5` plats cumulés |
+| `health` | `int` | Santé (3 au départ, +1 à chaque niveau, maximum 3) |
+| `time_left` | `float` | Temps restant dans le niveau |
 | `STAR_THRESHOLDS` | `Array[int]` = `[5, 10, 15]` | Paliers d'étoiles |
 | `add_point()` | fonction | +1 point, émet `score_changed` |
 | `stars() -> int` | fonction | Étoiles (0 à 3) pour le score actuel |
+| `target_score() -> int` | fonction | Objectif cumulatif du niveau (`level * 5`) |
+| `round_duration_for_level() -> float` | fonction | 90 s au niveau 1, -5 s par niveau, minimum 60 s |
+| `difficulty_scale() -> float` | fonction | Multiplicateur de difficulté du rat : +15 % par niveau, plafonné à 2× |
+| `take_damage(amount, reason)` | fonction | Retire de la santé ; zéro santé termine et met le jeu en pause |
+| `reset()` | fonction | Repart au niveau 1, réinitialise score/santé/journal et relance le chrono |
 | `log_event(event: String, detail := "")` | fonction | Ajoute au journal et émet `event_logged` |
 | `events` | `Array[Dictionary]` | Journal complet de la manche |
 | `score_changed(score)` | signal | Le HUD l'écoute |
+| `level_changed(level, target_score)` | signal | Le HUD met à jour l'objectif |
+| `health_changed(health)` | signal | Le HUD met à jour les vies |
+| `time_changed(time_left)` | signal | Le HUD met à jour le chrono |
+| `difficulty_changed(level, scale)` | signal | Le rat ajuste sa vitesse et son intervalle de sortie |
+| `round_started` / `round_ended(level, score, health)` | signaux | Début/fin d'un niveau |
 | `event_logged(entry)` | signal | Le commentateur l'écoute (Phase 5) |
 
-*Phase 4 ajoutera* : l'état de la manche (`READY`, `PLAYING`, `ENDED`), le chrono, `start_round()`, `reset()` et les signaux `round_started`/`round_ended`. Voir [PHASE-4](phases/PHASE-4-manche.md).
+Chaque niveau dure 90 s au niveau 1, puis 5 s de moins par niveau (minimum 60 s). Le score est cumulatif : atteindre 5, 10, 15… plats valide le niveau suivant. Un chrono expiré retire une vie et relance le niveau ; un dégât direct du rat passe par `take_damage()`. Le renversement au contact retire une vie via `take_damage()` ; le vol et l’extinction de plaque ne retirent pas de vie. Le rat écoute `difficulty_changed` : vitesse multipliée et délai de sortie divisé par `difficulty_scale()`, sans modifier la ressource de profil. Le délai de fuite après un coup reste de 10 s. Voir [PHASE-4](phases/PHASE-4-manche.md).
 
 ### `Item` (`scripts/item.gd`) : un ingrédient
 - `enum State { RAW, CHOPPED, COOKED }` : tomate crue → tranches → assiette.
@@ -122,7 +135,7 @@ Le rat traverse le joueur ; seul `ContactArea` déclenche le renversement.
 - Poursuite limitée à 4 s, trajet normal à 6 s. Retour/fuite bloqués : retour caché au trou au bout de 6 s ; un objet volé est laissé au sol avant ce secours.
 - Le vol est enregistré à l’arrivée au trou. `hit() -> bool` indique si le coup est accepté, lâche l’objet, puis impose une fuite et 10 s caché.
 - `FloorItem` transfère l’objet à un `Cook` libre dans sa zone, y compris si ses mains se libèrent après son entrée ; le rebond est arrêté au ramassage.
-- Phase 4 devra remplacer la protection locale par les signaux de manche et arrêter le rat à la fin.
+- À chaque `round_started`, le rat retourne caché au trou avec 5 s de protection ; un objet volé est déposé au sol et reste récupérable. La pause de fin de partie fige le rat, le joueur et les stations. Le HUD reste actif et le joystick est remis à zéro.
 
 ### `IngredientSpawn`, `DeliveryCounter`
 - Le bac donne `Item.new()` à tout `Cook` qui arrive les mains vides.
@@ -162,6 +175,8 @@ Toujours passer par `GameState.log_event(event, detail)`. `t` (secondes depuis l
 | `item_recovered` | Player | `"tomate récupérée au sol"` | 3 |
 | `timer_milestone` | GameState | `"30 s restantes"` / `"10 s restantes"` | 4 |
 | `round_end` | GameState | `"score 9, 1 étoile"` | 4 |
+| `level_up` | GameState | `"niveau 2"` | 4 |
+| `player_damaged` | GameState | `"rat"` | 4 |
 
 ## 6. Ajouter une nouvelle station (exemple)
 

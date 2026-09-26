@@ -79,7 +79,10 @@ Une seule pièce, un seul niveau.
 
 ## 7. La manche, le score et les étoiles
 
-- **Durée** : 60 à 90 s. La valeur exacte sera fixée à l'équilibrage (Phase 4).
+- **Progression** : une partie est une suite de niveaux dans la même cuisine. L'objectif cumulé est de 5 plats au niveau 1, puis 10, 15, etc. Atteindre l'objectif valide le niveau et démarre immédiatement le suivant.
+- **Chrono** : 90 s au niveau 1, puis 5 s de moins par niveau, avec un plancher de 60 s. Quand il expire avant l'objectif, le joueur perd une vie et rejoue le même niveau ; son score cumulé est conservé.
+- **Santé** : 3 vies au départ, +1 vie à chaque niveau réussi, maximum 3. Un dégât direct du rat retire une vie ; à 0, la partie se termine.
+- **Difficulté** : le rat reçoit un multiplicateur de +15 % par niveau, plafonné à 2×, pour accélérer et réduire le délai entre ses sorties.
 - **Départ protégé** : pendant les **5 premières secondes**, le rat ne sort pas, le temps de comprendre la boucle.
 - **Score** : **1 point par plat livré**.
 - **Étoiles** à la fin du chrono :
@@ -93,7 +96,7 @@ Une seule pièce, un seul niveau.
 
 - **Écran de fin** : score, étoiles animées, récap' IA lu à voix haute, bouton **Rejouer**.
 
-> ⚠️ **Équilibrage à faire (Phase 4).** Avec la cuisine actuelle, un plat prend environ 13 s (≈ 9 s de marche et 4 s de transformation). Sur 90 s, ça donne environ 6 à 7 plats **sans** rat, donc 3 étoiles (15 plats) sont **inatteignables**. Il faudra ajuster ensemble la durée de la manche, les temps de découpe et de cuisson, la vitesse du joueur, les distances et les paliers. Objectif : ★ facile, ★★ en jouant bien, ★★★ uniquement si on gère bien le rat.
+> ⚠️ **Équilibrage à faire (Phase 4).** Avec la cuisine actuelle, un plat prend environ 13 s (≈ 9 s de marche et 4 s de transformation). Le premier objectif de 5 plats est donc exigeant avec le rat ; vérifier les valeurs sur téléphone et ajuster ensemble les durées, déplacements et accélération du rat. Objectif : la progression doit rester possible, mais chaque niveau doit demander une meilleure gestion du temps et du rat.
 
 ## 8. Le rat
 

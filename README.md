@@ -28,7 +28,8 @@ Un commentateur IA réagit en direct à la partie et un juge IA note les plats (
 - **Vue** : 3D en plongée façon *Overcooked*. La caméra ne tourne jamais ; elle suit le joueur en glissant quand il s'éloigne du centre de l'écran.
 - **Boucle** : prendre une tomate au bac → la **découper** → la **cuire** → la **livrer** au comptoir → **+1 point**.
 - **L'ennemi** : un **rat** sort d'un trou dans le mur pour saboter (éteindre la plaque, renverser le plat, voler un ingrédient…). Le joueur peut le **taper** pour le faire fuir.
-- **Fin de manche** : quand le temps est écoulé, le score donne des étoiles :
+- **Progression** : servir 5 plats valide le niveau 1, puis chaque niveau demande 5 plats de plus au score cumulé. Le chrono baisse de 5 s par niveau (90 s au départ, minimum 60 s) et le rat devient plus agressif. Trois vies sont disponibles ; en perdre une au chrono ou lors d'un coup direct du rat coûte une vie. Réussir un niveau en rend une, jusqu'à trois.
+- **Étoiles** : le score cumulé donne des étoiles :
 
 | Étoiles | Points nécessaires |
 |:-------:|:------------------:|
