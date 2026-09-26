@@ -7,7 +7,7 @@
 
 ## 1. Le pitch
 
-**Ratoir** est un jeu de cuisine en 3D pour téléphone. Le joueur est un cuisinier qui doit servir **le plus de plats possible avant la fin du chrono**. Un **rat** sort régulièrement d'un trou dans le mur pour **saboter** la cuisine. Le joueur peut **le taper** pour le faire fuir, mais chaque seconde passée à chasser le rat est une seconde de moins pour cuisiner.
+**Ratoir** est un jeu de cuisine en 3D pour téléphone. Le joueur est un cuisinier qui doit servir **le plus de plats possible avant la fin du chrono**. Un **rat** sort régulièrement d'un trou dans le mur pour **saboter** la cuisine. **Pour l'instant, le chef ne peut rien faire contre le rat** : il doit l'éviter et réparer ses dégâts. Le bouton pour le taper est prévu mais désactivé (voir §8.3).
 
 Pendant la partie, un **commentateur IA** façon commentateur sportif réagit à ce qui se passe, avec une voix de synthèse. Un **juge IA** donne un nom absurde et une critique à chaque plat livré. À la fin, l'IA rédige un **récap' personnalisé** de la partie.
 
@@ -35,8 +35,8 @@ Quand il faut trancher, on suit ces priorités dans l'ordre :
 
 - **Déplacement** : joystick **flottant** et **plein écran**. Le pouce se pose n'importe où, le joystick apparaît sous le doigt et on glisse. Le déplacement reste toujours à plat, sur le sol.
 - **Interactions de cuisine** : **automatiques au contact**. On marche jusqu'au tapis coloré devant un meuble et l'action se fait toute seule (ramasser, poser, reprendre, livrer).
-- **Un seul bouton à l'écran** : **TAPER**, dans le coin en bas à droite, facile à atteindre avec le pouce libre. Il sert uniquement à taper le rat quand il est à portée. *(Phase 3)*
-- Sur ordinateur (développement) : clic-glisser à la souris, ou <kbd>ZQSD</kbd>/<kbd>WASD</kbd>/flèches, et <kbd>Espace</kbd> pour taper.
+- **Aucun bouton à l'écran pour l'instant.** Le bouton **TAPER** (coin en bas à droite) est retiré : le chef ne peut rien contre le rat (§8.3).
+- Sur ordinateur (développement) : clic-glisser à la souris, ou <kbd>ZQSD</kbd>/<kbd>WASD</kbd>/flèches.
 
 ## 5. Caméra et vue
 
@@ -126,11 +126,14 @@ Ils reposent tous sur **un seul système commun** (une cible, une durée d'effet
 | Sabotage | Condition | Effet | Contre-mesure |
 |----------|-----------|-------|---------------|
 | **Éteindre la plaque** | Un aliment cuit sur la plaque | La cuisson se met en pause, la plaque devient grise et fume | Le joueur touche la plaque (contact) pour la rallumer |
-| **Renverser le plat** | Le joueur porte un objet et le rat le percute | L'objet tombe et est perdu (flaque au sol) | Taper le rat avant qu'il arrive ; éviter son chemin |
-| **Voler un ingrédient** | Un objet est posé sur une station | Le rat l'emporte vers son trou | Le taper pendant sa fuite : il lâche l'objet au sol, qu'on peut ramasser |
+| **Renverser le plat** | Le joueur porte un objet et le rat le percute | L'objet tombe et est perdu (flaque au sol) | Éviter son chemin |
+| **Voler un ingrédient** | Un objet est posé sur une station | Le rat l'emporte vers son trou | Ne pas laisser d'objet sans surveillance |
 | **Flaque glissante** *(optionnel)* | Aucune | Une flaque au sol fait glisser et ralentir le joueur pendant quelques secondes | La contourner |
 
-### 8.3 Taper le rat
+### 8.3 Taper le rat — ⏸️ désactivé pour l'instant
+
+> **Décision du 2026-09-26 : le chef ne peut rien faire contre le rat pour le moment.** Le bouton TAPER est retiré de l'écran et la touche Espace ne fait plus rien. Le code est conservé : pour réactiver, mettre `can_hit_rat = true` sur le joueur (`scripts/player.gd`) et remettre `scenes/hit_button.tscn` dans `main.tscn` (sous `UI`, avec `ignore_zones` du joystick pointant dessus). Règles prévues si on le réactive :
+
 
 - Bouton **TAPER** : si le rat est à moins d'environ **1,5 m**, il est **assommé**, s'enfuit dans son trou et reste caché plus longtemps.
 - Petit *cooldown* du bouton (environ 0,8 s) pour empêcher le martelage.
@@ -193,3 +196,4 @@ Le jeu tourne dans le navigateur : **toute clé mise dans le jeu est publique**.
 | 2026-09-26 | **Portrait**, cuisine droite en plongée à 55° (au lieu d'une vue isométrique en losange), **caméra qui suit** le joueur | Conseil du jury, et la carte était trop petite en paysage |
 | 2026-09-26 | Score transformé en **étoiles** en fin de manche (5 / 10 / 15 points) | Objectif clair et rejouabilité |
 | 2026-09-26 | Nom du jeu : **Ratoir** | Nom du dépôt |
+| 2026-09-26 | **Bouton TAPER retiré** : le chef ne peut rien contre le rat pour l'instant (code conservé, désactivé) | Choix de design, à réévaluer à l'équilibrage |
