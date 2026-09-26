@@ -48,12 +48,17 @@ func _ready() -> void:
 func _on_difficulty_changed(_level: int, scale: float) -> void:
 	_difficulty_scale = scale
 
+
+func travel_speed() -> float:
+	var base_speed := profile.speed if profile else 4.0
+	return base_speed * GameState.difficulty_scale()
+
 func _on_round_started() -> void:
 	_difficulty_scale = GameState.difficulty_scale()
 	# Un objet volé reste récupérable lors du passage de niveau.
 	if carried_item:
 		_drop_item_on_floor()
-	_protected_time = 5.0
+	_protected_time = GameState.protection_time()
 	_anti_stuck_timer = 0.0
 	model.scale = Vector3.ONE
 	_enter_hidden(profile.get_next_hidden_delay() / _difficulty_scale)

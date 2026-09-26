@@ -22,11 +22,20 @@ var _elapsed := 0.0
 
 func _ready() -> void:
 	add_to_group("stations")
+	GameState.round_started.connect(_apply_round_duration)
+	_apply_round_duration()
 	var rug_material := StandardMaterial3D.new()
 	rug_material.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
 	rug_material.albedo_color = rug_color
 	if has_node("Rug"):
 		$Rug.material_override = rug_material
+
+
+func _apply_round_duration() -> void:
+	if produces == Item.State.CHOPPED:
+		duration = GameState.chop_duration()
+	elif produces == Item.State.COOKED:
+		duration = GameState.cook_duration()
 
 
 func _physics_process(delta: float) -> void:
@@ -65,7 +74,7 @@ func _interact(cook: Cook) -> void:
 			elif produces == Item.State.COOKED:
 				GameState.log_event("cook_started", "tomate sur la plaque")
 	# 3. Récupérer l'ingrédient transformé
-	elif _item.state == produces and cook.held_item == null:
+	elif _item.state == produces and cook.held_item == null and cook.held_trap == null:
 		cook.hold(_item)
 		_item = null
 

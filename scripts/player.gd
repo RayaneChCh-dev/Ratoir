@@ -56,6 +56,25 @@ func _physics_process(delta: float) -> void:
 	_update_animation()
 
 
+func _unhandled_input(event: InputEvent) -> void:
+	if event.is_action_pressed("place_trap"):
+		place_trap()
+
+
+func place_trap() -> void:
+	if held_trap == null:
+		return
+	clear_trap()
+	var trap := preload("res://scenes/rat_trap.tscn").instantiate()
+	get_parent().add_child(trap)
+	var pos := global_position
+	pos.y = 0.0
+	pos.x = clampf(pos.x, -5.2, 5.2)
+	pos.z = clampf(pos.z, -9.5, 9.5)
+	trap.global_position = pos
+	GameState.log_event("trap_placed", "piège posé")
+
+
 ## Choisit idle / walk / run selon la vitesse, et cale la cadence des pas sur la vitesse réelle.
 func _update_animation() -> void:
 	if _anim == null:

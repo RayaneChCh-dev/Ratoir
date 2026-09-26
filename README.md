@@ -29,7 +29,8 @@ Un critique affamé commente la partie à voix haute (voix Gradium). Le juge IA 
 - **Vue** : 3D en plongée façon *Overcooked*. La caméra ne tourne jamais ; elle suit le joueur en glissant quand il s'éloigne du centre de l'écran.
 - **Boucle** : prendre une tomate au bac → la **découper** → la **cuire** → la **livrer** au comptoir → **+1 point**.
 - **L'ennemi** : un **rat** sort d'un trou dans le mur pour saboter (éteindre la plaque, renverser le plat, voler un ingrédient…). Pour l'instant, le chef ne peut rien contre lui : il faut l'éviter et réparer ses dégâts.
-- **Progression** : servir 5 plats valide le niveau 1, puis chaque niveau demande 5 plats de plus au score cumulé. Le chrono baisse de 5 s par niveau (90 s au départ, minimum 60 s) et le rat devient plus agressif. Trois vies sont disponibles ; en perdre une au chrono ou lors d'un coup direct du rat coûte une vie. Réussir un niveau en rend une, jusqu'à trois.
+- **Progression** : une partie dure 3 manches, à 5, 10 puis 15 plats cumulés. Le chrono passe de 90 s à 75 s puis 60 s, la recette accélère un peu, et le rat court plus vite. Pas de vies : si le chrono arrive à 0 avant l'objectif, la partie se termine. La 3e manche réussie gagne la partie. Un plat renversé est perdu, sans autre pénalité.
+- **Musique** : le morceau monte d'intensité à chaque manche — une minute de soundtrack par manche, bouclée tant que le chrono de la manche dure.
 - **Étoiles** : le score cumulé donne des étoiles :
 
 | Étoiles | Points nécessaires |
@@ -47,7 +48,7 @@ Un critique affamé commente la partie à voix haute (voix Gradium). Le juge IA 
 | 1 | Squelette : scène 3D, caméra, joueur, joystick tactile, export Web | ✅ Terminé |
 | 2 | Boucle de cuisine complète (ramasser, découper, cuire, livrer, score) + passage en portrait | ✅ Terminé |
 | 3 | Le rat et ses sabotages (le coup pour le taper est désactivé pour l'instant) | ✅ Terminé |
-| 4 | Manche complète : écran titre, chrono, écran de fin avec étoiles, équilibrage | ⏳ À faire |
+| 4 | Manche complète : partie à 3 manches jouable ; écran titre et écran de fin illustré à faire | ⏳ En cours |
 | 5 | Critique vocal : phrase selon l'action dominante + voix Gradium | ✅ Démo jouable |
 | 6 | Juge de plats + personnalité du rat + récap' final IA | ⏳ À faire |
 | 7 | Polish : vrais modèles 3D, animations, sons, effets | ⏳ À faire |
