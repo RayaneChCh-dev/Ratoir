@@ -45,6 +45,10 @@ func _interact(cook: Cook) -> void:
 			_elapsed = 0.0
 			_progress.set_value(0.0)
 			_progress.show()
+			if produces == Item.State.CHOPPED:
+				GameState.log_event("chop_started", "tomate sur la planche")
+			elif produces == Item.State.COOKED:
+				GameState.log_event("cook_started", "tomate sur la plaque")
 	elif _item.state == produces and cook.held_item == null:
 		cook.hold(_item)
 		_item = null
