@@ -35,8 +35,6 @@ var _pending: Array[Dictionary] = []
 var _line_index := {}
 var _http: HTTPRequest
 var _player: AudioStreamPlayer
-var _panel: Panel
-var _label: Label
 var _hide_timer: Timer
 var _window_timer: Timer
 
@@ -61,7 +59,6 @@ func _ready() -> void:
 	_window_timer.timeout.connect(_on_window)
 	add_child(_window_timer)
 
-	_build_subtitle()
 	GameState.event_logged.connect(_on_event)
 	# F5 seul doit produire une voix : F6 est déjà le raccourci Godot « jouer la scène ».
 	get_tree().create_timer(0.8).timeout.connect(_speak_boot)
@@ -113,7 +110,6 @@ func _speak_batch(batch: Array[Dictionary]) -> void:
 
 
 func _request_voice(text: String) -> void:
-	_show_text(text)
 	print("critic: ", text)
 	if proxy_url.is_empty():
 		_hide_timer.start(TEXT_ONLY_SECONDS)
@@ -173,11 +169,6 @@ func _on_response(result: int, code: int, _headers: PackedStringArray, body: Pac
 	_hide_timer.start(SAFETY_SECONDS)
 
 
-func _show_text(text: String) -> void:
-	_label.text = text
-	_panel.visible = true
-
-
 func _on_voice_finished() -> void:
 	if not _playing_voice:
 		return
@@ -188,52 +179,12 @@ func _on_voice_finished() -> void:
 func _on_line_done() -> void:
 	_busy = false
 	_playing_voice = false
-	_panel.visible = false
 	_hide_timer.stop()
 	if _pending.is_empty():
 		return
 	var batch: Array[Dictionary] = _pending.duplicate()
 	_pending.clear()
 	_speak_batch(batch)
-
-
-func _build_subtitle() -> void:
-	var layer := CanvasLayer.new()
-	layer.layer = 20
-	add_child(layer)
-
-	_panel = Panel.new()
-	_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	_panel.visible = false
-	_panel.set_anchors_preset(Control.PRESET_TOP_WIDE)
-	_panel.offset_left = 24
-	_panel.offset_right = -24
-	_panel.offset_top = 104
-	_panel.offset_bottom = 210
-	var style := StyleBoxFlat.new()
-	style.bg_color = Color(0.08, 0.05, 0.04, 0.82)
-	style.corner_radius_top_left = 16
-	style.corner_radius_top_right = 16
-	style.corner_radius_bottom_left = 16
-	style.corner_radius_bottom_right = 16
-	style.content_margin_left = 16
-	style.content_margin_right = 16
-	style.content_margin_top = 12
-	style.content_margin_bottom = 12
-	_panel.add_theme_stylebox_override("panel", style)
-	layer.add_child(_panel)
-
-	_label = Label.new()
-	_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	_label.set_anchors_preset(Control.PRESET_FULL_RECT)
-	_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	_label.add_theme_font_size_override("font_size", 32)
-	_label.add_theme_color_override("font_color", Color.WHITE)
-	_label.add_theme_color_override("font_outline_color", Color.BLACK)
-	_label.add_theme_constant_override("outline_size", 10)
-	_panel.add_child(_label)
 
 
 func _wav_stream(bytes: PackedByteArray) -> AudioStreamWAV:
