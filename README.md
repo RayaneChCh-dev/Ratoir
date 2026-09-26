@@ -95,9 +95,9 @@ Terminal 2 :
 godot --path .
 ```
 
-Après environ deux secondes, le sous-titre « I'm hungry. The chef had better hurry. » s'affiche et la voix le lit. Ensuite, joue : la phrase suivante suit l'action la plus fréquente sur environ 4 secondes.
+Après environ deux secondes, la voix dit « I'm hungry. The chef had better hurry. » Il n'y a pas de sous-titre. Ensuite, joue : la phrase suivante suit l'action la plus fréquente sur environ 4 secondes.
 
-Si le proxy est arrêté, le sous-titre s'affiche quand même et la cuisine continue.
+Si le proxy est arrêté, la cuisine continue, sans voix.
 
 ## Contrôles
 
@@ -145,7 +145,7 @@ Ratoir/
 │   └── delivery_counter.tscn# comptoir de livraison
 ├── scripts/
 │   ├── game_state.gd        # autoload : score, étoiles, journal d'événements
-│   ├── ai/commentator.gd    # autoload : critique vocal (fenêtre d'actions + sous-titre)
+│   ├── ai/commentator.gd    # autoload : critique vocal (fenêtre d'actions, voix seule)
 │   ├── cook.gd              # base du cuisinier : objet tenu en main
 │   ├── player.gd            # déplacement du joueur (joystick + clavier)
 │   ├── touch_joystick.gd    # joystick tactile flottant plein écran
