@@ -23,9 +23,9 @@ Un jeu **en ligne sur itch.io**, qui marche **sur les téléphones du jury**, et
 ## 3. Déployer sur itch.io
 
 ### Première fois (à faire **dès maintenant**, pour valider la chaîne)
-1. `./tools/export_web.sh` → `build/ratoir-web.zip`.
+1. `./tools/export_web.sh` → `build/tomato-wars-web.zip`.
 2. itch.io → *Upload new project* :
-   - **Title** : Ratoir
+   - **Title** : Tomato Wars
    - **Kind of project** : **HTML**
    - **Uploads** : envoyer le zip et cocher **« This file will be played in the browser »**
    - **Embed options** : taille **360 × 640**, cocher **Mobile friendly** (orientation **Portrait**), cocher **Fullscreen button**
@@ -35,7 +35,7 @@ Un jeu **en ligne sur itch.io**, qui marche **sur les téléphones du jury**, et
 
 ### Mises à jour
 - Soit **renvoyer le zip** sur la page (supprimer l'ancien fichier).
-- Soit utiliser **butler**, l'outil en ligne de commande d'itch.io (`butler login` une fois, puis `butler push build/web <compte>/ratoir:html5`). Pratique pour pousser en 10 secondes pendant le hackathon.
+- Soit utiliser **butler**, l'outil en ligne de commande d'itch.io (`butler login` une fois, puis `butler push build/web sapphirdev/tomatowars:html5`). Pratique pour pousser en 10 secondes pendant le hackathon.
 
 ### Relais IA (Phases 5 et 6)
 - Le relais doit être **déployé** (pas sur un PC de l'équipe) et son URL renseignée dans le jeu (`proxy_url`).

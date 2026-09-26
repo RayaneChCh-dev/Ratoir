@@ -64,7 +64,7 @@ C'est le plus rapide, le plus sûr côté licence, et le style est cohérent. Po
 
 ### Sources conseillées
 
-| Source | Licence habituelle | Ce qu'on y trouve pour Ratoir |
+| Source | Licence habituelle | Ce qu'on y trouve pour Tomato Wars |
 |--------|--------------------|-------------------------------|
 | **KayKit** (Kay Lousberg), `kaylousberg.itch.io` | CC0 (domaine public) | Packs low-poly très cohérents, dont un pack de **cuisine/restaurant** (meubles, ustensiles, nourriture) et des **personnages animés**. **Premier choix pour le style.** |
 | **Kenney**, `kenney.nl/assets` | CC0 | *Food Kit* (plein d'aliments dont tomates et assiettes), *Furniture Kit*, personnages simples, **packs de sons** |
@@ -375,12 +375,12 @@ Pas de conversion 3D : on les utilise dans l'interface ou comme texture. Demande
 | `ui/judge.png` | Portrait sur la carte du juge (Phase 6) | `cartoon portrait of a snobbish food critic judge, bust shot, thin mustache, monocle, raised eyebrow, holding a small scorecard, bold outlines, flat colors, sticker style, transparent background` |
 | `ui/star.png` | Étoiles de l'écran de fin (Phase 4) | `game UI icon, a golden star with a thick dark outline, glossy, cartoon, flat, centered, transparent background` |
 | `ui/hit_button.png` | Bouton TAPER (Phase 3) | `game UI round button icon, cartoon frying pan hitting with motion lines, white icon on a bold orange circle, thick outline, flat, centered, transparent background` |
-| `ui/logo.png` | Écran titre (Phase 4) | `game logo text "RATOIR", chunky rounded bold cartoon letters, cream and tomato red colors, a small rat tail curling out of the letter R, a chef hat on the letter O, thick dark outline, transparent background` |
+| `ui/logo.png` | Écran titre (Phase 4) | `game logo text "TOMATO WARS", chunky rounded bold cartoon letters, cream and tomato red colors, a small rat tail curling out of the letter W, a chef hat on the first letter O, thick dark outline, transparent background` |
 | `textures/floor_tiles.png` | Sol (remplace le shader de damier) | `seamless tileable texture, top-down view, cartoon kitchen floor with cream and beige checkered tiles, flat colors, subtle grout lines, no perspective` |
 | `textures/wall_bricks.png` | Murs | `seamless tileable texture, front view, warm terracotta cartoon kitchen wall with subtle brick pattern, flat colors, no perspective` |
 | `textures/sauce_splash.png` | Flaque du plat renversé (Phase 3) | `top-down view of a cartoon red tomato sauce splash puddle, flat colors, simple shape, transparent background` |
 
-Les générateurs d'images écrivent souvent mal le texte : pour le logo, vérifier l'orthographe de **RATOIR**, ou générer le logo sans texte et ajouter les lettres dans Godot avec une police.
+Les générateurs d'images écrivent souvent mal le texte : pour le logo, vérifier l'orthographe de **TOMATO WARS**, ou générer le logo sans texte et ajouter les lettres dans Godot avec une police.
 
 ### 11.7 Avant de passer à la 3D
 - [ ] Toutes les images ont le **même style** que l'image de référence.

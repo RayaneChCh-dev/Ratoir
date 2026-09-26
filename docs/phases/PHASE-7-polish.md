@@ -71,7 +71,7 @@ Que le jeu soit **agréable à regarder et à écouter**, pas seulement fonction
 
 ### Étape 5 — Habillage de l'interface
 - [ ] Une **police** ronde et grasse, lisible sur téléphone (ex. une police de Google Fonts sous licence OFL). L'importer et la définir dans un **thème** (`assets/ui/theme.tres`) appliqué à `UI`.
-- [ ] Bouton TAPER avec une icône de poêle, écrans titre et fin aux couleurs du jeu, logo « RATOIR ».
+- [ ] Bouton TAPER avec une icône de poêle, écrans titre et fin aux couleurs du jeu, logo « TOMATO WARS ».
 
 ## 4. Retours visuels et sonores par action
 
@@ -105,7 +105,7 @@ Que le jeu soit **agréable à regarder et à écouter**, pas seulement fonction
   2. réduire le nombre de particules ;
   3. décimer les modèles trop lourds ;
   4. fusionner les matériaux (une texture palette pour tout).
-- Vérifier le poids du build : `ls -lh build/ratoir-web.zip` (le moteur seul fait ≈ 10 Mo).
+- Vérifier le poids du build : `ls -lh build/tomato-wars-web.zip` (le moteur seul fait ≈ 10 Mo).
 
 ## 6. Pièges connus
 - **Modèle qui regarde du mauvais côté** : il doit regarder vers +Z. Corriger la rotation du **nœud du modèle**, jamais de `Model` (le script le fait tourner).

@@ -17,8 +17,8 @@ Une ligne par asset (ou par pack) utilisé. **Obligatoire pour les licences CC-B
 |-------|--------------------------|--------|--------------|---------|
 | *(exemple)* Pack cuisine | `assets/models/kitchen/*.glb` | *Auteur* | *https://…* | CC0 |
 | KayKit Restaurant Bits (meubles, ustensiles, aliments) | `assets/kaykit/**` | Kay Lousberg | https://kaylousberg.itch.io | CC0 |
-| Icônes d'aliments et de soupes | `assets/ui/icons/*.png` | Équipe Ratoir | — | *À compléter* |
-| Shaders carrelage, parquet, tapis, flou, vignettage | `shaders/*.gdshader` | Équipe Ratoir | — | — |
+| Icônes d'aliments et de soupes | `assets/ui/icons/*.png` | Équipe Tomato Wars | — | *À compléter* |
+| Shaders carrelage, parquet, tapis, flou, vignettage | `shaders/*.gdshader` | Équipe Tomato Wars | — | — |
 | Meubles et objets : plan de travail, découpe, cuisinière, caisse de tomates, comptoir de livraison, poêle ; assiette cuisinée | `assets/models/kitchen/*.glb`, `assets/models/food/plate_dish.glb` | Générés par l'équipe avec Meshy AI | https://www.meshy.ai | *À compléter : conditions de l'abonnement Meshy utilisé* |
 | Juge (modèle et squelette) | `assets/models/characters/judge.glb` | Généré par l'équipe avec Meshy AI | https://www.meshy.ai | *À compléter : conditions de l'abonnement Meshy utilisé* |
 | Rat « Whiskerwink » (modèle, squelette, animation de course) et version assommée | `assets/models/characters/rat.glb`, `rat_stunned.glb` | Généré par l'équipe avec Meshy AI | https://www.meshy.ai | *À compléter : conditions de l'abonnement Meshy utilisé* |

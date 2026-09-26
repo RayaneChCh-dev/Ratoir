@@ -1,9 +1,9 @@
 ---
 name: phase-workflow
-description: À utiliser dès qu'on commence, reprend ou termine une phase de Ratoir (docs/phases/PHASE-N-*.md) ou toute tâche qui modifie le dépôt. Impose une branche dédiée, partie de staging et poussée sur le remote pour relecture en Pull Request vers staging ; ne jamais pousser sur main ni sur staging.
+description: À utiliser dès qu'on commence, reprend ou termine une phase de Tomato Wars (docs/phases/PHASE-N-*.md) ou toute tâche qui modifie le dépôt. Impose une branche dédiée, partie de staging et poussée sur le remote pour relecture en Pull Request vers staging ; ne jamais pousser sur main ni sur staging.
 ---
 
-# Workflow git d'une phase Ratoir
+# Workflow git d'une phase Tomato Wars
 
 ## Modèle de branches
 
