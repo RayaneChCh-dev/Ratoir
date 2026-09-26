@@ -271,11 +271,10 @@ Pour **chaque** modèle intégré :
 
 ## 10 bis. Icônes du HUD (remplacement automatique)
 
-Le HUD dessine aujourd'hui ses icônes en code. Il suffit de déposer ces fichiers (PNG carrés à fond transparent, 256 ou 512 px) pour qu'ils les remplacent, sans toucher au code (`scripts/ui/hud_icon.gd`) :
+Le HUD utilise ces fichiers (✅ fournis : toque, chrono, étoile). S'il en manque un, il dessine une icône de secours en code. Pour en changer, il suffit de remplacer le fichier (PNG carrés à fond transparent, 256 ou 512 px) pour qu'ils les remplacent, sans toucher au code (`scripts/ui/hud_icon.gd`) :
 
 | Fichier | Icône |
 |---------|-------|
-| `assets/ui/icons/heart.png` | Cœur (vies) — la version « perdue » est grisée automatiquement |
 | `assets/ui/icons/timer.png` | Chrono |
 | `assets/ui/icons/star.png` | Étoile (objectif du niveau) |
 | `assets/ui/icons/chef_hat.png` | Toque (niveau) |

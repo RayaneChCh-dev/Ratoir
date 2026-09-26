@@ -1,5 +1,5 @@
 extends Control
-## HUD de jeu : niveau, chrono, vies (cœurs) et progression en étoiles vers l'objectif du niveau.
+## HUD de jeu : niveau, chrono et progression en étoiles vers l'objectif du niveau.
 
 const CREAM := Color(1.0, 0.94, 0.82)
 const BROWN := Color(0.24, 0.11, 0.06)
@@ -8,12 +8,10 @@ const RED := Color(1.0, 0.36, 0.3)
 var _level_label: Label
 var _time_label: Label
 var _time_icon: HudIcon
-var _hearts: Array[HudIcon] = []
 var _star_icon: HudIcon
 var _score_label: Label
 var _progress_fill: Control
 var _progress_back: Control
-var _last_health := -1
 var _last_score := -1
 
 
@@ -24,7 +22,6 @@ func _ready() -> void:
 	_build()
 	GameState.score_changed.connect(_refresh.unbind(1))
 	GameState.level_changed.connect(_refresh.unbind(2))
-	GameState.health_changed.connect(_refresh.unbind(1))
 	GameState.time_changed.connect(_refresh_time.unbind(1))
 	GameState.round_state_changed.connect(_refresh.unbind(1))
 	_refresh()
@@ -33,12 +30,6 @@ func _ready() -> void:
 
 func _refresh() -> void:
 	_level_label.text = "NIV. %d" % GameState.level
-	for i in _hearts.size():
-		var alive := i < GameState.health
-		if _hearts[i].filled and not alive and _last_health != -1:
-			_hearts[i].pop()
-		_hearts[i].filled = alive
-	_last_health = GameState.health
 	var target: int = GameState.target_score()
 	_score_label.text = "%d / %d" % [GameState.score, target]
 	if GameState.score > _last_score and _last_score != -1:
@@ -68,15 +59,6 @@ func _build() -> void:
 	level_row.add_child(_level_label)
 	_anchor(level_pill, Control.PRESET_TOP_LEFT, Vector2(14, 22))
 
-	var hearts_pill := _pill()
-	var hearts_row := _row(hearts_pill)
-	hearts_row.add_theme_constant_override("separation", 2)
-	for i in GameState.STARTING_HEALTH:
-		var heart := _icon(HudIcon.Kind.HEART, 38)
-		_hearts.append(heart)
-		hearts_row.add_child(heart)
-	_anchor(hearts_pill, Control.PRESET_TOP_RIGHT, Vector2(-14, 22))
-
 	var time_pill := _pill()
 	var time_row := _row(time_pill)
 	_time_icon = _icon(HudIcon.Kind.TIMER, 44)
@@ -93,18 +75,18 @@ func _build() -> void:
 	_score_label = _label(28)
 	goal_row.add_child(_score_label)
 	_progress_back = Panel.new()
-	_progress_back.custom_minimum_size = Vector2(150, 16)
+	_progress_back.custom_minimum_size = Vector2(70, 14)
 	_progress_back.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	_progress_back.add_theme_stylebox_override("panel", _box(Color(0, 0, 0, 0.35), 8, 0))
 	_progress_back.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_progress_fill = Panel.new()
 	_progress_fill.add_theme_stylebox_override("panel", _box(Color(1.0, 0.8, 0.2), 8, 0))
-	_progress_fill.size = Vector2(0, 16)
+	_progress_fill.size = Vector2(0, 14)
 	_progress_fill.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_progress_back.add_child(_progress_fill)
 	_progress_back.resized.connect(_refresh)
 	goal_row.add_child(_progress_back)
-	_anchor(goal_pill, Control.PRESET_CENTER_TOP, Vector2(0, 98))
+	_anchor(goal_pill, Control.PRESET_TOP_RIGHT, Vector2(-14, 22))
 
 
 ## Ancre une pastille (taille = son contenu) sur un bord de l'écran, avec un décalage.
